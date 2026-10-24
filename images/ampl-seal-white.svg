@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="t">
+  <title id="t">Association of Muslims in Politics and Law, National</title>
+  <defs>
+    <path id="ring-top" d="M33.4 170 A100 100 0 1 1 206.6 170"/>
+    <path id="ring-bottom" d="M58 214 A104 104 0 0 0 182 214"/>
+  </defs>
+  <g fill="#ffffff" font-family="Tinos, 'Times New Roman', Times, serif" font-weight="700" text-anchor="middle">
+    <text font-size="15"><textPath href="#ring-top" startOffset="50%" textLength="408" lengthAdjust="spacing">ASSOCIATION OF MUSLIMS IN POLITICS AND LAW</textPath></text>
+    <text font-size="17"><textPath href="#ring-bottom" startOffset="50%" textLength="104" lengthAdjust="spacing">NATIONAL</textPath></text>
+  </g>
+  <svg x="42" y="36" width="156" height="156" viewBox="30 22 140 140">
+  <g fill="#ffffff" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Crescent, horns up: outer circle c(100,90) r66, inner circle c(100,79.9) r60.1, meeting at the horns -->
+    <path d="M49.1 48 A66 66 0 1 0 150.9 48 A60.1 60.1 0 1 1 49.1 48 Z" stroke="none"/>
+    <!-- Scales -->
+    <circle cx="100" cy="31" r="4" stroke="none"/>
+    <path d="M100 34 V134" fill="none" stroke-width="5"/>
+    <path d="M86 140 H114 L107 131 H93 Z" stroke="none"/>
+    <path d="M76 50 H124" fill="none" stroke-width="4.5"/>
+    <path d="M76 50 C70 50 68 44 72 42 M124 50 C130 50 132 44 128 42" fill="none" stroke-width="3"/>
+    <path d="M76 50 L63 92 M76 50 L89 92 M124 50 L111 92 M124 50 L137 92" fill="none" stroke-width="2"/>
+    <path d="M60 92 Q76 104 92 92 Z M108 92 Q124 104 140 92 Z" stroke-width="2"/>
+  </g>
+  </svg>
+</svg>

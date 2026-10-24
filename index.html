@@ -2,713 +2,801 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AMPL National - Association of Muslims in Politics and Law</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMPL · Association of Muslims in Politics and Law</title>
+  <meta name="description" content="AMPL connects Muslim students at six University of California campuses with law and policy through speaker panels, policy workshops, mock trials, and community." />
+  <link rel="icon" href="images/ampl-mark.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="images/logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,600;0,800;0,900;1,400&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --ink: #0d1b2e;
-      --cream: #d3cab7;
-      --gold: #d3cab7;
-      --gold-light: #e8e0d0;
-      --forest: #363e62;
-      --sage: #5a78b8;
-      --white: #ffffff;
-      --muted: #7a7a8a;
-      --border: #c8c0b0;
+      --paper: #fdfdfb;
+      --ink: #121214;
+      --ink-2: #47474d;
+      --ink-3: #6b6b72;
+      --blue: #1a3cc8;
+      --blue-deep: #12298f;
+      --on-blue: #ffffff;
+      --on-blue-2: #d9e0ff;
+      --red: #c4211a;
+      --margin: 4.5rem;
+      --line: 2rem;
+      --gutter: clamp(1.25rem, 4vw, 4rem);
+      --sans: 'Public Sans', system-ui, sans-serif;
+      --serif: 'Tinos', 'Times New Roman', serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); overflow-x: hidden; }
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-    .nav-logo { display:flex; align-items:center; gap:0.7rem; text-decoration:none; }
-    .nav-logo span { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:900; color:var(--forest); }
-    .nav-logo span em { color:var(--gold); font-style:normal; }
-    .nav-links { display:flex; gap:2.5rem; list-style:none; }
-    .nav-links a { font-size:0.85rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink); text-decoration:none; transition:color 0.2s; }
-    .nav-links a:hover { color:var(--forest); }
-    .nav-cta { background:var(--forest)!important; color:var(--cream)!important; padding:0.55rem 1.4rem; border-radius:2px; }
-    .page { display:none; min-height:100vh; padding-top:72px; }
-    .page.active { display:block; animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-    .hero { min-height:calc(100vh - 72px); display:grid; grid-template-columns:1fr 1fr; position:relative; overflow:hidden; }
-    .hero-left { background:var(--forest); padding:6rem 4rem 6rem 5rem; display:flex; flex-direction:column; justify-content:center; position:relative; }
-    .hero-left::after { content:''; position:absolute; top:0; right:-60px; bottom:0; width:120px; background:var(--forest); transform:skewX(-4deg); z-index:2; }
-    .hero-eyebrow { font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--cream); margin-bottom:1.5rem; opacity:0; animation:fadeUp 0.8s 0.2s forwards; }
-    .hero-title { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,4.5vw,4.2rem); font-weight:900; line-height:1.08; color:#fff; margin-bottom:1.8rem; opacity:0; animation:fadeUp 0.8s 0.4s forwards; }
-    .hero-title em { font-style:italic; color:var(--cream); }
-    .hero-desc { font-size:1.05rem; line-height:1.7; color:rgba(255,255,255,0.75); max-width:420px; margin-bottom:2.5rem; opacity:0; animation:fadeUp 0.8s 0.6s forwards; }
-    .hero-actions { display:flex; gap:1rem; opacity:0; animation:fadeUp 0.8s 0.8s forwards; }
-    .btn-primary { background:var(--cream); color:var(--forest); padding:0.85rem 2rem; font-weight:600; font-size:0.9rem; letter-spacing:0.04em; text-decoration:none; border:none; cursor:pointer; transition:all 0.2s; display:inline-block; }
-    .btn-primary:hover { background:var(--gold-light); transform:translateY(-2px); }
-    .btn-outline { background:transparent; color:#fff; padding:0.85rem 2rem; font-weight:500; font-size:0.9rem; letter-spacing:0.04em; text-decoration:none; border:1px solid rgba(255,255,255,0.35); cursor:pointer; transition:all 0.2s; display:inline-block; }
-    .btn-outline:hover { border-color:var(--cream); color:var(--cream); }
-    .hero-right { background:var(--cream); position:relative; overflow:hidden; }
-    .hero-right-inner { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:3rem; }
-    .hero-tagline { position:absolute; top:35%; left:50%; transform:translate(-50%,-50%); text-align:center; z-index:1; display:flex; flex-direction:column; align-items:center; gap:1.2rem; }
-    .hero-tagline-text { font-family:'Playfair Display',serif; font-size:1.3rem; font-style:italic; color:var(--forest); opacity:0.7; }
-    .hero-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); border:1px solid var(--border); position:relative; z-index:1; }
-    .hero-stat { background:var(--white); padding:2rem; }
-    .hero-stat-num { font-family:'Playfair Display',serif; font-size:3rem; font-weight:900; color:var(--forest); line-height:1; margin-bottom:0.4rem; }
-    .hero-stat-num span { color:var(--sage); }
-    .hero-stat-label { font-size:0.82rem; color:var(--muted); font-weight:500; letter-spacing:0.04em; }
-    .mission-strip { background:var(--cream); overflow:hidden; padding:0; }
-    .marquee-track { display:flex; width:100%; overflow:hidden; padding:1.2rem 0; }
-    .marquee-content { display:flex; align-items:center; gap:3rem; white-space:nowrap; animation:marquee 30s linear infinite; flex-shrink:0; }
-    @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-    .marquee-track:hover .marquee-content { animation-play-state:paused; }
-    .mission-strip-text { font-family:'Playfair Display',serif; font-size:1rem; font-style:italic; color:var(--forest); white-space:nowrap; }
-    .mission-strip-dot { width:4px; height:4px; background:var(--forest); border-radius:50%; flex-shrink:0; opacity:0.5; }
-    .section { padding:6rem 5rem; }
-    .section-label { font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; }
-    .section-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,3.5vw,3rem); font-weight:900; line-height:1.1; color:var(--forest); margin-bottom:1.5rem; }
-    .section-body { font-size:1.05rem; line-height:1.75; color:#444; max-width:640px; }
-    .pillars { background:var(--forest); padding:6rem 5rem; }
-    .pillars-header { margin-bottom:4rem; }
-    .pillars-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:rgba(255,255,255,0.1); }
-    .flip-card { background:transparent; perspective:1000px; min-height:280px; cursor:pointer; }
-    .flip-inner { position:relative; width:100%; height:100%; min-height:280px; transition:transform 0.7s cubic-bezier(0.4,0.2,0.2,1); transform-style:preserve-3d; }
-    .flip-card:hover .flip-inner { transform:rotateY(180deg); }
-    .flip-front, .flip-back { position:absolute; inset:0; padding:3rem 2.5rem; backface-visibility:hidden; -webkit-backface-visibility:hidden; border:1px solid rgba(255,255,255,0.1); }
-    .flip-front { background:var(--forest); display:flex; flex-direction:column; justify-content:flex-end; }
-    .flip-back { background:var(--sage); transform:rotateY(180deg); display:flex; flex-direction:column; justify-content:center; }
-    .pillar-num { font-family:'Playfair Display',serif; font-size:3.5rem; font-weight:900; color:rgba(211,202,183,0.2); line-height:1; margin-bottom:1.5rem; }
-    .pillar-title { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:var(--cream); margin-bottom:1rem; }
-    .pillar-body { font-size:0.92rem; line-height:1.7; color:rgba(255,255,255,0.85); }
-    .chapters-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:3rem; }
-    .chapter-card { border:1px solid var(--border); padding:2.5rem; position:relative; transition:all 0.3s; background:var(--white); }
-    .chapter-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--cream); transform:scaleX(0); transition:transform 0.3s; }
-    .chapter-card:hover { box-shadow:0 8px 40px rgba(54,62,98,0.1); transform:translateY(-3px); }
-    .chapter-card:hover::before { transform:scaleX(1); }
-    .chapter-school { font-family:'DM Mono',monospace; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--sage); margin-bottom:0.6rem; }
-    .chapter-name { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; color:var(--forest); margin-bottom:1rem; line-height:1.2; }
-    .chapter-detail { font-size:0.88rem; color:var(--muted); margin-bottom:0.4rem; display:flex; align-items:center; gap:0.5rem; }
-    .chapter-links { margin-top:1.5rem; display:flex; gap:0.75rem; }
-    .chapter-link { font-size:0.78rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--forest); text-decoration:none; border-bottom:1px solid var(--cream); padding-bottom:2px; transition:color 0.2s; }
-    .chapter-link:hover { color:var(--sage); }
-    .events-list { margin-top:3rem; }
-    .event-item { display:grid; grid-template-columns:80px 1fr auto; gap:2rem; align-items:center; padding:2rem 0; border-bottom:1px solid var(--border); }
-    .event-item:first-child { border-top:1px solid var(--border); }
-    .event-date { text-align:center; }
-    .event-date-month { font-family:'DM Mono',monospace; font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--sage); }
-    .event-date-day { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:900; color:var(--forest); line-height:1; }
-    .event-info-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--forest); margin-bottom:0.35rem; }
-    .event-info-meta { font-size:0.85rem; color:var(--muted); }
-    .event-tag { font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; padding:0.3rem 0.75rem; border:1px solid var(--border); color:var(--muted); white-space:nowrap; }
-    .event-tag.featured { background:var(--forest); color:var(--cream); border-color:var(--forest); }
-    .involved-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--border); margin-top:3rem; }
-    .involved-card { background:var(--white); padding:3.5rem; }
-    .involved-card.dark { background:var(--forest); }
-    .involved-icon { font-size:2.5rem; margin-bottom:1.5rem; }
-    .involved-title { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; color:var(--forest); margin-bottom:1rem; }
-    .involved-card.dark .involved-title { color:var(--cream); }
-    .involved-body { font-size:0.95rem; line-height:1.7; color:var(--muted); margin-bottom:2rem; }
-    .involved-card.dark .involved-body { color:rgba(211,202,183,0.8); }
-    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:6rem; margin-top:3rem; }
-    .contact-form { display:flex; flex-direction:column; gap:1.2rem; }
-    .form-group { display:flex; flex-direction:column; gap:0.4rem; }
-    .form-label { font-size:0.78rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); }
-    .form-input, .form-textarea, .form-select { padding:0.85rem 1rem; border:1px solid var(--border); background:var(--white); font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--ink); transition:border-color 0.2s; outline:none; width:100%; }
-    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color:var(--forest); }
-    .form-textarea { resize:vertical; min-height:140px; }
-    .contact-info-item { margin-bottom:2rem; }
-    .contact-info-label { font-family:'DM Mono',monospace; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--sage); margin-bottom:0.4rem; }
-    .contact-info-value { font-size:1rem; color:var(--ink); font-weight:500; }
-    .contact-info-value a { color:var(--forest); text-decoration:none; border-bottom:1px solid var(--border); }
-    .about-hero { background:var(--forest); padding:5rem 5rem 4rem; position:relative; overflow:hidden; }
-    .about-hero::before { content:'AMPL'; position:absolute; right:-2rem; top:50%; transform:translateY(-50%); font-family:'Playfair Display',serif; font-size:18rem; font-weight:900; color:rgba(211,202,183,0.06); line-height:1; pointer-events:none; }
-    .about-hero-title { font-family:'Playfair Display',serif; font-size:clamp(2.5rem,5vw,4.5rem); font-weight:900; color:var(--cream); max-width:700px; line-height:1.1; position:relative; }
-    .about-hero-title em { font-style:italic; color:#fff; }
-    .about-hero-sub { font-size:1.1rem; color:rgba(211,202,183,0.8); max-width:520px; line-height:1.7; margin-top:1.5rem; position:relative; }
-    .about-two-col { display:grid; grid-template-columns:1fr 1fr; gap:5rem; padding:6rem 5rem; }
-    footer { background:var(--ink); padding:4rem 5rem 2rem; }
-    .footer-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:3rem; margin-bottom:3rem; padding-bottom:3rem; border-bottom:1px solid rgba(255,255,255,0.1); }
-    .footer-brand-name { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; color:var(--cream); margin-bottom:0.5rem; display:flex; align-items:center; gap:0.6rem; }
-    .footer-brand-tagline { font-size:0.88rem; color:rgba(211,202,183,0.6); line-height:1.6; margin-bottom:1.5rem; }
-    .footer-socials { display:flex; gap:1rem; }
-    .footer-social { width:36px; height:36px; border:1px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; color:rgba(211,202,183,0.6); text-decoration:none; font-size:0.85rem; transition:all 0.2s; }
-    .footer-social:hover { border-color:var(--cream); color:var(--cream); }
-    .footer-col-title { font-size:0.75rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--cream); margin-bottom:1.2rem; }
-    .footer-links { list-style:none; }
-    .footer-links li { margin-bottom:0.6rem; }
-    .footer-links a { font-size:0.88rem; color:rgba(211,202,183,0.55); text-decoration:none; transition:color 0.2s; }
-    .footer-links a:hover { color:var(--cream); }
-    .footer-bottom { display:flex; justify-content:space-between; align-items:center; }
-    .footer-copy { font-size:0.8rem; color:rgba(211,202,183,0.3); }
-    .gallery-item:hover .gallery-overlay { opacity:1!important; }
-    .campus-dot:hover { fill:#d3cab7!important; }
-    .nav-toggle { display:none; background:none; border:none; cursor:pointer; padding:0.5rem; flex-direction:column; gap:5px; }
-    .nav-toggle span { display:block; width:24px; height:2px; background:var(--forest); transition:transform 0.25s, opacity 0.25s; }
-    nav.open .nav-toggle span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
-    nav.open .nav-toggle span:nth-child(2) { opacity:0; }
-    nav.open .nav-toggle span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
-    @media (max-width:900px) {
-      nav { padding:1rem 1.5rem; }
-      .nav-toggle { display:flex; }
-      .nav-links { display:none; position:absolute; top:100%; left:0; right:0; flex-direction:column; gap:0; background:var(--white); border-bottom:1px solid var(--border); box-shadow:0 12px 30px rgba(54,62,98,0.12); }
-      nav.open .nav-links { display:flex; }
-      .nav-links li { border-top:1px solid var(--border); }
-      .nav-links a { display:block; padding:1rem 1.5rem; }
-      .nav-cta { margin:1rem 1.5rem; text-align:center; }
-      .m-pad { padding-left:1.5rem!important; padding-right:1.5rem!important; }
-      .gallery-cols { columns:2!important; }
-      .map-box { height:auto!important; }
-      .map-canvas { width:100%!important; height:auto!important; aspect-ratio:600/480; }
-      .hero { grid-template-columns:1fr; }
-      .hero-right { display:none; }
-      .hero-left { padding:4rem 2rem; }
-      .hero-left::after { display:none; }
-      .section, .pillars, .about-two-col { padding:3rem 1.5rem; }
-      .pillars-grid, .chapters-grid, .involved-grid, .contact-grid, .about-two-col, .footer-top { grid-template-columns:1fr; gap:1rem; }
-      footer { padding:3rem 1.5rem 1.5rem; }
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body { background: var(--paper); color: var(--ink); font-family: var(--serif); font-size: 1.125rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    ::selection { background: var(--blue); color: var(--on-blue); }
+    :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+    .on-blue :focus-visible { outline-color: var(--on-blue); }
+    html { scrollbar-color: var(--ink-3) var(--paper); }
+    input, select, textarea { caret-color: var(--blue); }
+    a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 0.06em; }
+    img { display: block; max-width: 100%; height: auto; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip { position: absolute; left: 1rem; top: -4rem; background: var(--ink); color: var(--paper); padding: 0.75rem 1rem; font-family: var(--sans); font-weight: 600; z-index: 200; }
+    .skip:focus { top: 1rem; }
+
+    /* Amendments: struck text in red, inserted text in blue italic */
+    del, ins { text-decoration: none; position: relative; }
+    /* The strike is a background so it crosses every line a wrapped phrase occupies */
+    del { color: var(--red); background: linear-gradient(currentColor, currentColor) no-repeat 0 58% / 100% 0.08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+    ins { color: var(--blue); font-family: var(--serif); font-style: italic; font-weight: 700; }
+    .on-blue del { color: var(--on-blue-2); }
+    .on-blue ins { color: var(--on-blue); }
+    .js.motion [data-amend] del { background-size: 0% 0.08em; transition: background-size 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .js.motion [data-amend] ins { opacity: 0; filter: blur(6px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s, filter 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s; }
+    .js.motion [data-amend].amended del { background-size: 100% 0.08em; }
+    .js.motion [data-amend].amended ins { opacity: 1; filter: none; }
+
+    /* Header */
+    .masthead { position: sticky; top: 0; z-index: 100; background: var(--paper); border-top: 6px solid var(--blue); }
+    .masthead-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 0.9rem var(--gutter) 0.9rem calc(var(--gutter) + var(--margin)); }
+    .brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; font-family: var(--sans); font-weight: 900; font-size: 1.35rem; letter-spacing: -0.02em; }
+    .brand .mark { width: 40px; height: 40px; color: var(--blue); flex: none; }
+    .brand small { font-family: var(--serif); font-weight: 400; font-size: 0.95rem; letter-spacing: 0; color: var(--ink-2); }
+    .nav { display: flex; align-items: center; gap: 1.75rem; list-style: none; font-family: var(--sans); font-size: 0.95rem; font-weight: 600; }
+    .nav a { text-decoration: none; padding: 0.35rem 0; }
+    .nav a:hover { color: var(--blue); }
+    .nav a[aria-current="true"] { color: var(--blue); text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 0.45em; }
+    .nav .login { font-weight: 400; color: var(--ink-2); }
+    .menu-btn { display: none; align-items: center; gap: 0.5rem; background: none; border: 0; font: 600 0.95rem/1.3 var(--sans); color: var(--ink); cursor: pointer; padding: 0.5rem 0; }
+    .menu-btn svg { width: 22px; height: 22px; }
+
+    /* Margin line numbers, the bill's ruled margin */
+    .bill { position: relative; }
+    .linenos { position: absolute; top: 0; bottom: 0; left: var(--gutter); width: calc(var(--margin) - 1.25rem); overflow: hidden; pointer-events: none; user-select: none; font-family: var(--serif); font-size: 0.8rem; line-height: var(--line); color: rgba(18, 18, 20, 0.5); text-align: right; font-variant-numeric: tabular-nums; z-index: 1; }
+    .linenos span { display: block; height: var(--line); }
+    .linenos span.b { color: var(--on-blue-2); }
+    .col { padding-left: calc(var(--gutter) + var(--margin)); padding-right: var(--gutter); }
+
+    /* Bill face (first viewport) */
+    .face { padding-top: clamp(1rem, 2.5vh, 2rem); }
+    .face-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem; font-family: var(--sans); font-size: 0.95rem; color: var(--ink-2); }
+    .face-meta strong { color: var(--ink); font-weight: 800; letter-spacing: 0.02em; }
+    .face-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 27%); gap: clamp(1.5rem, 4vw, 4rem); align-items: end; margin-top: clamp(0.75rem, 2vh, 1.5rem); }
+        h1 { font-family: var(--sans); font-weight: 900; font-size: clamp(2rem, min(5.6vw, 8.6vh), 5.25rem); line-height: 1; letter-spacing: -0.035em; text-wrap: balance; }
+    h1 ins { font-weight: 700; letter-spacing: -0.02em; }
+    .face-photo figure { position: relative; }
+    .face-photo img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: 50% 62%; max-height: 42vh; }
+    .face-photo-m { display: none; }
+    figcaption { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-2); margin-top: 0.5rem; }
+    figcaption b { font-family: var(--sans); font-weight: 800; color: var(--ink); }
+
+    /* Digest band with the campus picker */
+    .band { background: var(--blue); color: var(--on-blue); position: relative; }
+    .band .col { padding-top: 1.75rem; padding-bottom: 2rem; }
+    .digest { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: start; }
+    .digest h2 { font-family: var(--sans); font-weight: 800; font-size: 1.6rem; letter-spacing: -0.01em; margin-bottom: 0.6rem; }
+    .digest p { color: var(--on-blue-2); max-width: 60ch; }
+    .digest p strong { color: var(--on-blue); }
+    .picker label { display: block; font-family: var(--sans); font-weight: 800; font-size: 1.35rem; letter-spacing: -0.01em; margin-bottom: 0.7rem; }
+    .picker-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .select-wrap { position: relative; flex: 1 1 14rem; }
+    .select-wrap svg { position: absolute; right: 1rem; top: 50%; width: 14px; height: 14px; transform: translateY(-50%); pointer-events: none; }
+    select.campus { appearance: none; width: 100%; font: 600 1.05rem/1.3 var(--sans); padding: 0.95rem 2.75rem 0.95rem 1rem; background: var(--on-blue); color: var(--ink); border: 0; border-radius: 0; cursor: pointer; }
+    .result { margin-top: 1rem; min-height: 4.5rem; }
+    .result-empty { color: var(--on-blue-2); font-style: italic; }
+    .result-name { font-family: var(--sans); font-weight: 800; font-size: 1.2rem; }
+    .result-city { color: var(--on-blue-2); }
+    .result-links { display: flex; flex-wrap: wrap; gap: 0.6rem 1.25rem; margin-top: 0.6rem; font-family: var(--sans); font-weight: 600; }
+    .result-links a { color: var(--on-blue); }
+
+    /* Buttons: square statute actions */
+    .btn { display: inline-flex; align-items: center; gap: 0.6rem; font: 700 1rem/1.3 var(--sans); padding: 0.85rem 1.1rem; background: var(--ink); color: var(--paper); text-decoration: none; border: 0; border-radius: 0; cursor: pointer; transition: background-color 0.2s; }
+    .btn:hover { background: var(--blue); }
+    .btn svg { width: 16px; height: 16px; }
+    .btn::before, .btn::after { font-family: var(--serif); font-weight: 400; font-size: 1.35em; line-height: 0; opacity: 0.7; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+    .btn::before { content: '['; margin-right: -0.15rem; }
+    .btn::after { content: ']'; margin-left: -0.15rem; }
+    .btn:hover::before { transform: translateX(-3px); }
+    .btn:hover::after { transform: translateX(3px); }
+    .btn.light { background: var(--on-blue); color: var(--blue); }
+    .btn.light:hover { background: var(--on-blue-2); }
+    .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+    .btn.ghost:hover { background: var(--ink); color: var(--paper); }
+    .on-blue .btn.ghost { color: var(--on-blue); box-shadow: inset 0 0 0 2px var(--on-blue); }
+    .on-blue .btn.ghost:hover { background: var(--on-blue); color: var(--blue); }
+
+    /* Sections */
+    .sec { padding-top: clamp(4rem, 9vw, 7.5rem); padding-bottom: clamp(3rem, 6vw, 5rem); }
+    .sec-head { max-width: 62rem; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
+    .sec-no { font-family: var(--sans); font-weight: 900; }
+    h2.sec-title { font-family: var(--sans); font-weight: 800; font-size: clamp(1.9rem, 3.6vw, 3.1rem); line-height: 1.05; letter-spacing: -0.03em; text-wrap: balance; }
+    h2.sec-title .sec-no { color: var(--blue); margin-right: 0.35em; }
+    .on-blue h2.sec-title .sec-no { color: var(--on-blue-2); }
+    .sec-lede { font-size: 1.3rem; line-height: 1.5; margin-top: 1rem; max-width: 46ch; color: var(--ink-2); }
+    .sec-lede.amend { color: var(--ink); font-size: clamp(1.35rem, 2.4vw, 1.8rem); line-height: 1.35; }
+
+    /* SEC. 1 programs: lettered subsections */
+    .programs { display: grid; gap: clamp(2.5rem, 4.5vw, 3.5rem); }
+    .program { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr) clamp(16rem, 32vw, 28rem); gap: 0 clamp(1.25rem, 3vw, 3rem); align-items: start; }
+    .exhibit-amend { font-family: var(--serif); font-style: italic; font-weight: 700; color: var(--blue); font-size: clamp(1.3rem, 2vw, 1.6rem); line-height: 1.35; align-self: center; }
+    .program-letter { font-family: var(--serif); font-size: 1.6rem; font-weight: 700; color: var(--blue); line-height: 1.4; }
+    .program h3 { font-family: var(--sans); font-weight: 800; font-size: clamp(1.5rem, 2.6vw, 2.2rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .program p { font-size: 1.2rem; line-height: 1.6; max-width: 58ch; }
+    .photo-btn { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; text-align: left; color: inherit; }
+    .photo-btn img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: filter 0.3s; }
+    .photo-btn:hover img { filter: brightness(1.06) contrast(1.04); }
+
+    .record { margin-top: clamp(4rem, 8vw, 6rem); }
+    .record h3 { font-family: var(--sans); font-weight: 800; font-size: 1.6rem; margin-bottom: 1.25rem; }
+    .record-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+    .record-grid .photo-btn img { aspect-ratio: 4 / 3; }
+    .record-grid figcaption { font-size: 0.85rem; }
+
+    /* SEC. 2 speakers: enumerated paragraphs */
+    .speakers { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 3rem) clamp(2rem, 5vw, 5rem); max-width: 70rem; }
+    .speakers li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); }
+    .speakers .n { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: var(--blue); line-height: 1.5; }
+    .speakers .who { font-family: var(--sans); font-weight: 800; font-size: clamp(1.45rem, 2.6vw, 2.1rem); line-height: 1.12; letter-spacing: -0.02em; }
+    .speakers .who.titled { font-weight: 600; font-style: normal; }
+    .speakers .role { color: var(--ink-2); margin-top: 0.35rem; }
+    .after-list { margin-top: clamp(2.5rem, 5vw, 3.5rem); display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: center; }
+    .after-list p { color: var(--ink-2); max-width: 44ch; }
+
+    /* SEC. 3 chapters: map + roll */
+    .chapters { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+    .map { position: relative; background: #eef1fb; aspect-ratio: 600 / 480; }
+    .map img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+    .map svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .map .route { stroke: var(--blue); stroke-width: 2; stroke-dasharray: 2 7; stroke-linecap: round; fill: none; opacity: 0.55; }
+    .map .dot { cursor: pointer; }
+    .map .dot circle.hit { fill: transparent; }
+    .map .dot circle.pin { fill: var(--paper); stroke: var(--blue); stroke-width: 3; transition: fill 0.2s; }
+    .map .dot text { font-family: var(--sans); font-size: 13px; font-weight: 800; fill: var(--ink); paint-order: stroke; stroke: #eef1fb; stroke-width: 5px; stroke-linejoin: round; }
+    .map .dot:hover circle.pin, .map .dot:focus-visible circle.pin, .map .dot.on circle.pin { fill: var(--blue); }
+    .map .dot:focus-visible { outline: none; }
+    .map .dot:focus-visible circle.pin { stroke: var(--ink); stroke-width: 4; }
+    .map-note { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-2); margin-top: 0.6rem; }
+    .roll { list-style: none; counter-reset: ch; }
+    .roll li { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) auto; gap: 0 1rem; align-items: baseline; padding: 0.95rem 0.75rem; margin: 0 -0.75rem; transition: background-color 0.25s; }
+    .roll li::before { counter-increment: ch; content: '(' counter(ch) ')'; font-family: var(--serif); font-weight: 700; color: var(--blue); }
+    .roll li.on { background: #e7ecff; }
+    .roll .school { font-family: var(--sans); font-weight: 800; font-size: 1.3rem; letter-spacing: -0.01em; }
+    .roll .city { color: var(--ink-2); font-size: 1rem; }
+    .roll .links { display: flex; gap: 1rem; font-family: var(--sans); font-size: 0.95rem; font-weight: 600; white-space: nowrap; }
+    .roll .links a { color: var(--blue); }
+    .origin { margin-top: 1.5rem; color: var(--ink-2); }
+
+    /* SEC. 4 motions, set on blue */
+    .on-blue { background: var(--blue); color: var(--on-blue); }
+    .on-blue .sec-lede { color: var(--on-blue-2); }
+    .on-blue .sec-lede.amend { color: var(--on-blue); }
+    .motions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 5vw, 5rem); }
+    .motion-item { display: grid; grid-template-columns: 3rem minmax(0, 1fr); }
+    .motion-item .n { font-family: var(--serif); font-weight: 700; font-size: 1.4rem; color: var(--on-blue-2); line-height: 1.3; }
+    .motion-item h3 { font-family: var(--sans); font-weight: 800; font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.6rem; }
+    .motion-item p { color: var(--on-blue-2); max-width: 40ch; margin-bottom: 1.25rem; }
+    .motion-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .status { display: inline-block; font: 800 0.8rem var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); background: var(--on-blue); padding: 0.25rem 0.55rem; margin-left: 0.6rem; vertical-align: 0.35em; }
+
+    /* SEC. 5 contact */
+    .contact { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+    form.message { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { font: 700 0.95rem var(--sans); }
+    .field .hint { font-size: 0.95rem; color: var(--ink-2); }
+    .field input, .field select, .field textarea { font: 400 1.05rem/1.4 var(--serif); color: var(--ink); background: #ffffff; padding: 0.85rem 0.9rem; border: 2px solid #c9c9cf; border-radius: 0; width: 100%; transition: border-color 0.2s; }
+    .field select { font-family: var(--sans); appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2 5l5 5 5-5' fill='none' stroke='%23121214' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.9rem center / 14px; padding-right: 2.5rem; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--blue); outline: none; }
+    .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+    .field input:user-invalid, .field textarea:user-invalid { border-color: var(--red); }
+    .field textarea { min-height: 9rem; resize: vertical; }
+    .field ::placeholder { color: var(--ink-3); opacity: 1; }
+    .form-foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+    .form-status { font-family: var(--sans); font-weight: 600; }
+    .form-status.ok { color: var(--blue); }
+    .form-status.err { color: var(--red); }
+    .btn[disabled] { opacity: 0.6; cursor: progress; }
+    .contact-aside dl { display: grid; gap: 1.5rem; }
+    .contact-aside dt { font: 800 0.95rem var(--sans); margin-bottom: 0.15rem; }
+    .contact-aside dd { color: var(--ink-2); }
+    .contact-aside dd a { color: var(--blue); font-weight: 700; }
+
+    /* Footer, the enacting clause */
+    footer { background: var(--blue); color: var(--on-blue-2); }
+    footer .col { padding-top: 3.5rem; padding-bottom: 2.5rem; }
+    .foot-top { display: flex; align-items: center; gap: clamp(1.5rem, 4vw, 3rem); }
+    .seal { width: clamp(96px, 11vw, 140px); height: auto; flex: none; }
+    .enact { font-family: var(--serif); font-size: clamp(1.25rem, 2.4vw, 1.75rem); line-height: 1.4; max-width: 46ch; color: var(--on-blue); }
+    .enact em { color: var(--on-blue-2); }
+    .foot-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; margin-top: 2.5rem; font-family: var(--sans); font-size: 0.95rem; }
+    .foot-row nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+    .foot-row a { color: var(--on-blue); text-decoration: none; }
+    .foot-row a:hover { text-decoration: underline; }
+    footer :focus-visible { outline-color: var(--on-blue); }
+    footer ::selection { background: var(--on-blue); color: var(--blue); }
+
+    /* Lightbox */
+    dialog.viewer { border: 0; padding: 0; background: transparent; max-width: min(92vw, 1100px); max-height: 92vh; margin: auto; color: #fff; }
+    dialog.viewer::backdrop { background: rgba(10, 14, 32, 0.92); }
+    dialog.viewer img { max-height: 80vh; width: auto; margin: 0 auto; }
+    dialog.viewer figcaption { color: #e3e3ea; text-align: center; }
+    dialog.viewer figcaption b { color: #fff; }
+    .viewer-close { position: fixed; top: 1rem; right: 1rem; display: inline-flex; align-items: center; gap: 0.4rem; background: #fff; color: var(--ink); border: 0; font: 700 0.95rem/1.3 var(--sans); padding: 0.6rem 0.9rem; cursor: pointer; }
+    .viewer-close svg { width: 14px; height: 14px; }
+
+    @media (max-width: 960px) {
+      :root { --margin: 2.4rem; }
+      .linenos { font-size: 0.7rem; width: calc(var(--margin) - 0.6rem); }
+      .face-grid, .digest, .chapters, .contact { grid-template-columns: 1fr; }
+      .face-photo { display: none; }
+      .digest .picker { order: -1; }
+      .face-meta span:last-child { font-size: 0.85rem; }
+      .face-photo-m { display: block; padding-top: 1.5rem; }
+      .face-photo-m img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 62%; }
+      .program { grid-template-columns: 2.5rem minmax(0, 1fr); }
+      .program .photo-btn, .program .exhibit-amend { grid-column: 2; margin-top: 1.25rem; }
+      .speakers, .motions { grid-template-columns: 1fr; }
+      .record-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 860px) {
+      .menu-btn { display: inline-flex; }
+      .nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--paper); padding: 0.5rem var(--gutter) 1.25rem calc(var(--gutter) + var(--margin)); box-shadow: 0 18px 30px -12px rgba(18, 18, 20, 0.25); }
+      .masthead.open .nav { display: flex; }
+      .nav a { display: block; padding: 0.85rem 0; font-size: 1.1rem; }
+      .masthead-inner { padding-left: calc(var(--gutter) + var(--margin)); }
+    }
+    @media (max-width: 560px) {
+      :root { --margin: 1.9rem; --gutter: 1rem; }
+      .brand small { display: none; }
+      form.message { grid-template-columns: 1fr; }
+      .foot-top { flex-direction: column; align-items: flex-start; }
+      .roll li { grid-template-columns: 2.2rem minmax(0, 1fr); }
+      .roll .links { grid-column: 2; margin-top: 0.35rem; }
+      .status { margin-left: 0; margin-top: 0.4rem; vertical-align: 0; }
     }
   </style>
 </head>
 <body>
-<nav>
-  <a href="#" class="nav-logo" onclick="showPage('home')">
-    <img src="images/logo.jpg" style="height:46px;width:46px;object-fit:cover;border-radius:50%;box-shadow:0 2px 8px rgba(54,62,98,0.18)" />
-    <span>AMPL<em>.</em></span>
-  </a>
-  <button class="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="toggleNav()"><span></span><span></span><span></span></button>
-  <ul class="nav-links">
-    <li><a href="#" onclick="showPage('home')">Home</a></li>
-    <li><a href="#" onclick="showPage('about')">About</a></li>
-    <li><a href="#" onclick="showPage('chapters')">Chapters</a></li>
-    <li><a href="#" onclick="showPage('events')">Events</a></li>
-    <li><a href="#" onclick="showPage('involved')">Get Involved</a></li>
-    <li><a href="portal.html">Chapter Login</a></li>
-    <li><a href="#" class="nav-cta" onclick="showPage('contact')">Contact</a></li>
-  </ul>
-</nav>
+<a class="skip" href="#main">Skip to content</a>
 
-<div id="page-home" class="page active">
-  <section class="hero">
-    <div class="hero-left">
-      <p class="hero-eyebrow">Association of Muslims in Politics and Law</p>
-      <h1 class="hero-title">Building a <em>home</em> for Muslims in policy &amp; law.</h1>
-      <p class="hero-desc">We turn ambition into public service through mentorship, training, and real placements in law and policy across 6 UC campuses and growing.</p>
-      <div class="hero-actions">
-        <a href="#" class="btn-primary" onclick="showPage('involved')">Get Involved</a>
-        <a href="#" class="btn-outline" onclick="showPage('about')">Our Mission</a>
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="brand" href="#top" aria-label="AMPL, back to top">
+      <svg class="mark" viewBox="30 22 140 140" aria-hidden="true"><g fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M49.1 48 A66 66 0 1 0 150.9 48 A60.1 60.1 0 1 1 49.1 48 Z" stroke="none"/><circle cx="100" cy="31" r="4" stroke="none"/><path d="M100 34 V134" fill="none" stroke-width="5"/><path d="M86 140 H114 L107 131 H93 Z" stroke="none"/><path d="M76 50 H124" fill="none" stroke-width="4.5"/><path d="M76 50 C70 50 68 44 72 42 M124 50 C130 50 132 44 128 42" fill="none" stroke-width="3"/><path d="M76 50 L63 92 M76 50 L89 92 M124 50 L111 92 M124 50 L137 92" fill="none" stroke-width="2"/><path d="M60 92 Q76 104 92 92 Z M108 92 Q124 104 140 92 Z" stroke-width="2"/></g></svg>
+      <span>AMPL</span><small>Association of Muslims in Politics and Law</small>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="site-nav">
+      <svg viewBox="0 0 22 22" aria-hidden="true"><path d="M2 5h18M2 11h18M2 17h18" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      Menu
+    </button>
+    <ul class="nav" id="site-nav">
+      <li><a href="#programs">Programs</a></li>
+      <li><a href="#speakers">Speakers</a></li>
+      <li><a href="#chapters">Chapters</a></li>
+      <li><a href="#get-involved">Get involved</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a class="login" href="portal.html">Chapter login</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main" class="bill">
+  <div class="linenos" aria-hidden="true"></div>
+
+  <section id="top" class="face" aria-labelledby="headline">
+    <div class="col">
+      <div class="face-meta">
+        <span><strong>AMPL BILL No. 1.</strong> An act relating to representation in law and policy.</span>
+        <span>Introduced by students at six University of California campuses</span>
+      </div>
+      <div class="face-grid">
+        <div>
+          <h1 id="headline" data-amend aria-label="Muslim students belong in every courtroom, legislature, and policy room.">
+            Muslim students <del>are underrepresented in</del> <ins>belong in</ins> every courtroom, legislature, and policy room.
+          </h1>
+        </div>
+        <div class="face-photo">
+          <figure>
+            <img src="images/moektails-mock-trials.jpg" alt="Six AMPL members at night under string lights, holding a chalkboard sign that reads Mocktails and Mock Trials" width="900" height="675" fetchpriority="high" />
+            <figcaption><b>Mocktails &amp; Mock Trials,</b> our signature night.</figcaption>
+          </figure>
+        </div>
       </div>
     </div>
-    <div class="hero-right" style="position:relative">
-      <img src="images/moektails-mock-trials.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.45" />
-      <div style="position:absolute;inset:0;z-index:1;background:repeating-linear-gradient(45deg,transparent,transparent 30px,rgba(211,202,183,0.04) 30px,rgba(211,202,183,0.04) 31px)"></div>
-      <div class="hero-tagline">
-        <img src="images/logo.jpg" style="width:220px;height:220px;object-fit:cover;border-radius:50%;box-shadow:0 8px 40px rgba(54,62,98,0.3)" />
-        <p class="hero-tagline-text">"Justice. Representation. Leadership."</p>
-      </div>
-      <div class="hero-right-inner">
-        <div class="hero-stat-grid">
-          <div class="hero-stat" onclick="showPage('chapters');setTimeout(()=>document.querySelector('.chapters-grid').scrollIntoView({behavior:'smooth'}),300)" style="cursor:pointer;transition:background 0.2s" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background=''">
-            <div class="hero-stat-num">6<span>+</span></div><div class="hero-stat-label">UC Chapters</div>
+    <div class="band" style="margin-top:clamp(1.5rem,4vh,2.75rem)">
+      <div class="col">
+        <div class="digest">
+          <div>
+            <h2>Digest</h2>
+            <p><strong>AMPL, the Association of Muslims in Politics and Law,</strong> is a student network that began at UC San Diego and now has chapters at six UC campuses. Members meet the people who work in law and policy, practice the skills, and find each other. Membership is free and open to all students.</p>
           </div>
-          <div class="hero-stat" onclick="showPage('contact')" style="cursor:pointer;transition:background 0.2s" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background=''">
-            <div class="hero-stat-num" style="font-size:1.8rem">Get In<span> Touch</span></div><div class="hero-stat-label">amplnational@gmail.com</div>
+          <div class="picker">
+            <label for="campus">Find your chapter</label>
+            <div class="picker-row">
+              <div class="select-wrap">
+                <select id="campus" class="campus">
+                  <option value="">Choose your campus</option>
+                  <option value="ucsd">UC San Diego</option>
+                  <option value="berkeley">UC Berkeley</option>
+                  <option value="uci">UC Irvine</option>
+                  <option value="ucla">UCLA</option>
+                  <option value="ucsc">UC Santa Cruz</option>
+                  <option value="davis">UC Davis</option>
+                  <option value="none">My campus isn't listed</option>
+                </select>
+                <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" fill="none" stroke="#121214" stroke-width="2"/></svg>
+              </div>
+            </div>
+            <div class="result" id="campus-result" aria-live="polite">
+              <p class="result-empty">Pick your campus to see how to join.</p>
+            </div>
           </div>
-          <div class="hero-stat" onclick="document.querySelector('.pillars').scrollIntoView({behavior:'smooth'})" style="cursor:pointer;transition:background 0.2s" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background=''">
-            <div class="hero-stat-num">3<span>+</span></div><div class="hero-stat-label">Core Pillars</div>
+        </div>
+      </div>
+    </div>
+    <div class="col face-photo-m">
+      <figure>
+        <img src="images/moektails-mock-trials.jpg" alt="Six AMPL members at night under string lights, holding a chalkboard sign that reads Mocktails and Mock Trials" width="900" height="675" loading="lazy" />
+        <figcaption><b>Mocktails &amp; Mock Trials,</b> our signature night.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="programs" class="sec" aria-labelledby="programs-title">
+    <div class="col">
+      <div class="sec-head">
+        <h2 class="sec-title" id="programs-title"><span class="sec-no">SEC. 1.</span>Signature programs</h2>
+        <p class="sec-lede amend" data-amend>Law and policy, <del>studied alone</del> <ins>practiced together</ins>.</p>
+      </div>
+      <div class="programs">
+        <article class="program">
+          <div class="program-letter" aria-hidden="true">(a)</div>
+          <div class="program-text">
+            <h3>Mocktails &amp; Mock Trials</h3>
+            <p>Our signature night: a mock trial, a mocktail bar, and a room of students who want to argue a case and meet each other.</p>
           </div>
-          <div class="hero-stat" onclick="document.querySelector('.gallery-item').scrollIntoView({behavior:'smooth'})" style="cursor:pointer;transition:background 0.2s" onmouseover="this.style.background='#f0f0f0'" onmouseout="this.style.background=''">
-            <div class="hero-stat-num">📸</div><div class="hero-stat-label">Community in Action</div>
+          <button class="photo-btn" data-photo="images/moektails-night.jpg" data-title="Mocktails Night" data-caption="Community building over mocktails">
+            <img src="images/moektails-night.jpg" alt="Two AMPL members serving drinks at an outdoor Mocktails night" loading="lazy" width="900" height="675" />
+          </button>
+        </article>
+        <article class="program">
+          <div class="program-letter" aria-hidden="true">(b)</div>
+          <div class="program-text">
+            <h3>Speaker panels</h3>
+            <p>People working in government, the courts, and legal education talk with students about the paths they took.</p>
+          </div>
+          <button class="photo-btn" data-photo="images/large-lecture.jpg" data-title="Speaker event" data-caption="Students at a speaker panel">
+            <img src="images/large-lecture.jpg" alt="Two speakers at the front of a hall addressing rows of seated students" loading="lazy" width="900" height="675" />
+          </button>
+        </article>
+        <article class="program">
+          <div class="program-letter" aria-hidden="true">(c)</div>
+          <div class="program-text">
+            <h3>Policy workshops</h3>
+            <p>Skill-building sessions for students heading into law and policy, such as writing for policy change.</p>
+          </div>
+          <p class="exhibit-amend">Policy, written by the people it affects.</p>
+        </article>
+        <article class="program">
+          <div class="program-letter" aria-hidden="true">(d)</div>
+          <div class="program-text">
+            <h3>Community nights</h3>
+            <p>General meetings, movie nights, and socials. The part where a chapter becomes the people you call.</p>
+          </div>
+          <button class="photo-btn" data-photo="images/ampl-movie-night.jpg" data-title="Community night" data-caption="AMPL members together">
+            <img src="images/ampl-movie-night.jpg" alt="Eight AMPL members standing together in a row in an event hall" loading="lazy" width="900" height="675" />
+          </button>
+        </article>
+      </div>
+
+      <div class="record">
+        <h3>From the record</h3>
+        <div class="record-grid">
+          <figure><button class="photo-btn" data-photo="images/panel-discussion.jpg" data-title="Panel Discussion" data-caption="Speakers on law and policy"><img src="images/panel-discussion.jpg" alt="Panelists seated at the front of a room during an AMPL panel" loading="lazy" width="900" height="675" /></button><figcaption>Panel discussion</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/speaker-series.jpg" data-title="Speaker series" data-caption="Two speakers at a chapter event"><img src="images/speaker-series.jpg" alt="Two speakers seated in front of a projection screen" loading="lazy" width="900" height="675" /></button><figcaption>Speaker series</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/general-meeting.jpg" data-title="General Meeting" data-caption="UCI chapter outdoor gathering"><img src="images/general-meeting.jpg" alt="UC Irvine chapter members at an outdoor general meeting" loading="lazy" width="900" height="675" /></button><figcaption>General meeting, UCI</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/chapter-members.jpg" data-title="Speaker event" data-caption="Two speakers addressing a full room"><img src="images/chapter-members.jpg" alt="Two speakers at the front of a hall addressing a seated audience" loading="lazy" width="900" height="601" /></button><figcaption>Speaker event</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/networking-night.jpg" data-title="Networking Night" data-caption="Students connecting after a panel"><img src="images/networking-night.jpg" alt="Students standing and talking in a dim room at a networking night" loading="lazy" width="900" height="675" /></button><figcaption>Networking night</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/movie-night-zootopia.jpg" data-title="Movie Night" data-caption="Zootopia 2 screening"><img src="images/movie-night-zootopia.jpg" alt="Five AMPL members holding a hand-lettered sign reading AMPL Movie Night ft. Zootopia" loading="lazy" width="900" height="675" /></button><figcaption>Movie night</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/movie-night.jpg" data-title="Movie Night" data-caption="Members in the lounge"><img src="images/movie-night.jpg" alt="AMPL members seated together in a lounge" loading="lazy" width="900" height="675" /></button><figcaption>Lounge night</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/about-banner.jpg" data-title="AMPL" data-caption="AMPL members together"><img src="images/about-banner.jpg" alt="AMPL members talking outdoors beside a table under a flowering tree" loading="lazy" width="900" height="675" /></button><figcaption>Outdoor gathering</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="speakers" class="sec" aria-labelledby="speakers-title">
+    <div class="col">
+      <div class="sec-head">
+        <h2 class="sec-title" id="speakers-title"><span class="sec-no">SEC. 2.</span>Who has spoken to AMPL</h2>
+        <p class="sec-lede amend" data-amend>Advice from people <del>you only read about</del> <ins>who came to speak with us</ins>.</p>
+      </div>
+      <ol class="speakers">
+        <li><span class="n" aria-hidden="true">(1)</span><div><p class="who">Farah Khan</p><p class="role">Former Mayor of Irvine</p></div></li>
+        <li><span class="n" aria-hidden="true">(2)</span><div><p class="who">Haaris M. Syed</p><p class="role">Commissioner, Los Angeles County Superior Court</p></div></li>
+        <li><span class="n" aria-hidden="true">(3)</span><div><p class="who titled">Assistant Dean of Admissions</p><p class="role">UC Irvine School of Law</p></div></li>
+        <li><span class="n" aria-hidden="true">(4)</span><div><p class="who">Siraj Bajwa</p><p class="role">JD candidate, UC Irvine School of Law</p></div></li>
+      </ol>
+      <div class="after-list">
+        <a class="btn" href="#contact" data-topic="Speaking at AMPL">Speak at AMPL
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
+        <p>Work in law, policy, or public service? We'd like to hear your path.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="chapters" class="sec" aria-labelledby="chapters-title" style="padding-top:clamp(2rem,5vw,4rem)">
+    <div class="col">
+      <div class="sec-head">
+        <h2 class="sec-title" id="chapters-title"><span class="sec-no">SEC. 3.</span>Chapters</h2>
+        <p class="sec-lede amend" data-amend>One chapter at UC San Diego, <ins>now six across the UC system</ins>.</p>
+      </div>
+      <div class="chapters">
+        <div>
+          <div class="map">
+            <img src="images/california-map-tint.png" alt="" width="600" height="480" />
+            <svg viewBox="0 0 600 480" role="group" aria-label="Map of AMPL chapters in California">
+              <polyline class="route" points="260,185 232,205 210,252 345,355 372,378 385,420" />
+              <g class="dot" data-ch="davis" tabindex="0" role="button" aria-label="UC Davis"><circle class="hit" cx="260" cy="185" r="22"/><circle class="pin" cx="260" cy="185" r="9"/><text x="276" y="181">UC Davis</text></g>
+              <g class="dot" data-ch="berkeley" tabindex="0" role="button" aria-label="UC Berkeley"><circle class="hit" cx="232" cy="205" r="22"/><circle class="pin" cx="232" cy="205" r="9"/><text x="248" y="222">UC Berkeley</text></g>
+              <g class="dot" data-ch="ucsc" tabindex="0" role="button" aria-label="UC Santa Cruz"><circle class="hit" cx="210" cy="252" r="22"/><circle class="pin" cx="210" cy="252" r="9"/><text x="226" y="257">UC Santa Cruz</text></g>
+              <g class="dot" data-ch="ucla" tabindex="0" role="button" aria-label="UCLA"><circle class="hit" cx="345" cy="355" r="22"/><circle class="pin" cx="345" cy="355" r="9"/><text x="290" y="340">UCLA</text></g>
+              <g class="dot" data-ch="uci" tabindex="0" role="button" aria-label="UC Irvine"><circle class="hit" cx="372" cy="378" r="22"/><circle class="pin" cx="372" cy="378" r="9"/><text x="388" y="375">UC Irvine</text></g>
+              <g class="dot" data-ch="ucsd" tabindex="0" role="button" aria-label="UC San Diego"><circle class="hit" cx="385" cy="420" r="22"/><circle class="pin" cx="385" cy="420" r="9"/><text x="401" y="425">UC San Diego</text></g>
+            </svg>
+          </div>
+          <p class="map-note">Select a campus on the map to find it in the list.</p>
+        </div>
+        <div>
+          <ol class="roll" id="roll"></ol>
+          <p class="origin">Each chapter is an independent student organization at its university, joined by a shared mission. AMPL began at UC San Diego.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="get-involved" class="sec on-blue" aria-labelledby="involved-title">
+    <div class="col">
+      <div class="sec-head">
+        <h2 class="sec-title" id="involved-title"><span class="sec-no">SEC. 4.</span>Get involved</h2>
+        <p class="sec-lede amend" data-amend>Your seat at the table <del>is somewhere else</del> <ins>starts here</ins>.</p>
+      </div>
+      <div class="motions">
+        <div class="motion-item">
+          <span class="n" aria-hidden="true">(a)</span>
+          <div>
+            <h3>Join a chapter</h3>
+            <p>Find your campus, follow the chapter, and come to the next meeting. Free and open to all students.</p>
+            <div class="motion-actions"><a class="btn light" href="#top" data-focus="campus">Find your chapter</a></div>
+          </div>
+        </div>
+        <div class="motion-item">
+          <span class="n" aria-hidden="true">(b)</span>
+          <div>
+            <h3>Start a chapter</h3>
+            <p>No AMPL at your school yet? Tell us your campus and what you have in mind, and we'll help you get it started.</p>
+            <div class="motion-actions"><a class="btn light" href="#contact" data-topic="Starting a chapter">Start a chapter</a></div>
+          </div>
+        </div>
+        <div class="motion-item">
+          <span class="n" aria-hidden="true">(c)</span>
+          <div>
+            <h3>Speak or partner with us</h3>
+            <p>Professionals and organizations who want to speak at a chapter or work with AMPL can reach the national team directly.</p>
+            <div class="motion-actions">
+              <a class="btn light" href="#contact" data-topic="Speaking at AMPL">Speak at AMPL</a>
+              <a class="btn ghost" href="#contact" data-topic="Partnerships and collaboration">Partner with us</a>
+            </div>
+          </div>
+        </div>
+        <div class="motion-item">
+          <span class="n" aria-hidden="true">(d)</span>
+          <div>
+            <h3>Mentorship <span class="status">Pending</span></h3>
+            <p>We're building a mentorship program pairing students with Muslim legal and policy professionals. It hasn't launched yet. Join the interest list and we'll reach out when it does.</p>
+            <div class="motion-actions">
+              <a class="btn light" href="#contact" data-topic="Mentorship interest: I'd like to mentor">I'd like to mentor</a>
+              <a class="btn ghost" href="#contact" data-topic="Mentorship interest: I'd like a mentor">I'd like a mentor</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="mission-strip">
-    <div class="marquee-track">
-      <div class="marquee-content">
-        <span class="mission-strip-text">Empowering the next generation of Muslim lawyers and policymakers</span>
-        <span class="mission-strip-dot"></span>
-        <span class="mission-strip-text">UC San Diego - UC Berkeley - UC Irvine - UCLA - UC Santa Cruz - UC Davis</span>
-        <span class="mission-strip-dot"></span>
-        <span class="mission-strip-text">Education - Mentorship - Advocacy</span>
-        <span class="mission-strip-dot"></span>
-        <span class="mission-strip-text">Justice - Representation - Leadership</span>
-        <span class="mission-strip-dot"></span>
-        <span class="mission-strip-text">Empowering the next generation of Muslim lawyers and policymakers</span>
-        <span class="mission-strip-dot"></span>
-        <span class="mission-strip-text">UC San Diego - UC Berkeley - UC Irvine - UCLA - UC Santa Cruz - UC Davis</span>
-        <span class="mission-strip-dot"></span>
-        <span class="mission-strip-text">Education - Mentorship - Advocacy</span>
-        <span class="mission-strip-dot"></span>
-        <span class="mission-strip-text">Justice - Representation - Leadership</span>
-        <span class="mission-strip-dot"></span>
+  <section id="contact" class="sec" aria-labelledby="contact-title">
+    <div class="col">
+      <div class="sec-head">
+        <h2 class="sec-title" id="contact-title"><span class="sec-no">SEC. 5.</span>Contact</h2>
+        <p class="sec-lede amend" data-amend>Every chapter <del>started</del> <ins>starts</ins> with a message.</p>
       </div>
-    </div>
-  </div>
-
-  <section class="pillars">
-    <div class="pillars-header">
-      <p class="section-label">What We Do</p>
-      <h2 class="section-title" style="color:var(--cream)">Three pillars.<br>One mission.</h2>
-    </div>
-    <div class="pillars-grid">
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front"><div class="pillar-num">01</div><div class="pillar-title">Education</div></div>
-          <div class="flip-back"><div class="pillar-title" style="margin-bottom:1rem">Education</div><div class="pillar-body">We provide our members with rigorous programming on legal systems, policy processes, and the role of Muslim communities in shaping just governance. Through workshops, panels, and speaker series, we build informed advocates.</div></div>
-        </div>
-      </div>
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front"><div class="pillar-num">02</div><div class="pillar-title">Mentorship</div></div>
-          <div class="flip-back"><div class="pillar-title" style="margin-bottom:1rem">Mentorship</div><div class="pillar-body">We connect students with practicing Muslim attorneys, policymakers, and public servants who have navigated the same path. Our mentors provide guidance, networks, and real-world perspective that textbooks cannot offer.</div></div>
-        </div>
-      </div>
-      <div class="flip-card">
-        <div class="flip-inner">
-          <div class="flip-front"><div class="pillar-num">03</div><div class="pillar-title">Advocacy</div></div>
-          <div class="flip-back"><div class="pillar-title" style="margin-bottom:1rem">Advocacy</div><div class="pillar-body">We amplify Muslim voices in spaces where they are underrepresented. From campus policy to state legislation, we train our members to engage meaningfully with the systems that shape their communities.</div></div>
-        </div>
+      <div class="contact">
+        <form class="message" id="contact-form" action="https://formspree.io/f/mkokqvkl" method="POST" novalidate>
+          <input type="hidden" name="_subject" value="New AMPL contact form submission" />
+          <div class="field"><label for="f-name">Full name</label><input id="f-name" name="name" type="text" autocomplete="name" required /></div>
+          <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required /></div>
+          <div class="field"><label for="f-uni">University or organization</label><input id="f-uni" name="university" type="text" placeholder="e.g. UC Riverside" /></div>
+          <div class="field">
+            <label for="f-topic">What's this about?</label>
+            <select id="f-topic" name="topic" required>
+              <option value="">Choose a topic</option>
+              <option>Joining a chapter</option>
+              <option>Starting a chapter</option>
+              <option>Speaking at AMPL</option>
+              <option>Mentorship interest: I'd like to mentor</option>
+              <option>Mentorship interest: I'd like a mentor</option>
+              <option>Partnerships and collaboration</option>
+              <option>Media and press</option>
+              <option>General question</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="f-msg">Message</label>
+            <span class="hint" id="f-msg-hint">Starting a chapter? Mention your campus.</span>
+            <textarea id="f-msg" name="message" aria-describedby="f-msg-hint" required></textarea>
+          </div>
+          <div class="form-foot">
+            <button class="btn" type="submit">Send message</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+        <aside class="contact-aside">
+          <dl>
+            <div><dt>Email</dt><dd><a href="mailto:amplnational@gmail.com">amplnational@gmail.com</a></dd></div>
+            <div><dt>Instagram</dt><dd><a href="https://www.instagram.com/amplnational" target="_blank" rel="noopener">@amplnational</a></dd></div>
+            <div><dt>Chapter officers</dt><dd>Sign in to the <a href="portal.html">chapter portal</a> for resources, reports, and budgets.</dd></div>
+          </dl>
+        </aside>
       </div>
     </div>
   </section>
+</main>
 
-  <section class="section">
-    <p class="section-label">Our Network</p>
-    <h2 class="section-title">6 chapters.<br>And growing.</h2>
-    <p class="section-body">AMPL operates across the University of California system, bringing together Muslim students who are passionate about law, politics, and public service.</p>
-    <div style="margin-top:2rem"><a href="#" class="btn-primary" onclick="showPage('chapters')">View All Chapters</a></div>
-  </section>
-
-  <section class="m-pad" style="padding:5rem 5rem 2rem;background:#f7f8fc">
-    <p class="section-label">Community in Action</p>
-    <h2 class="section-title">Real students.<br>Real impact.</h2>
-    <p class="section-body" style="margin-top:1rem">From mock trials to speaker panels to movie nights - AMPL is where community meets purpose.</p>
-  </section>
-  <div class="m-pad" style="background:#f7f8fc;padding:0 5rem 5rem">
-    <div class="gallery-cols" style="columns:3;column-gap:12px">
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/panel-discussion.jpg','Panel Discussion','Expert speakers on law and policy')">
-        <img src="images/panel-discussion.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">Panel Discussion</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">Expert speakers on law and policy</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/moektails-mock-trials.jpg','Moektails and Mock Trials','AMPL signature networking event')">
-        <img src="images/moektails-mock-trials.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">Moektails and Mock Trials</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">AMPL signature networking event</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/general-meeting.jpg','General Meeting','UCI chapter outdoor gathering')">
-        <img src="images/general-meeting.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">General Meeting</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">UCI chapter outdoor gathering</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/speaker-series.jpg','Speaker Series','Live Q&A with Muslim professionals')">
-        <img src="images/speaker-series.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">Speaker Series</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">Live Q&A with Muslim professionals</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/networking-night.jpg','Networking Night','Students connecting after a panel')">
-        <img src="images/networking-night.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">Networking Night</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">Students connecting after a panel</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/moektails-night.jpg','Moektails Night','Community building at its best')">
-        <img src="images/moektails-night.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">Moektails Night</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">Community building at its best</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/large-lecture.jpg','Large Lecture Event','UC-wide speaker event')">
-        <img src="images/large-lecture.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">Large Lecture Event</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">UC-wide speaker event</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/movie-night.jpg','Movie Night','Community movie screening')">
-        <img src="images/movie-night.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">Movie Night</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">Community movie screening</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/movie-night-zootopia.jpg','Movie Night','Zootopia 2 screening')">
-        <img src="images/movie-night-zootopia.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">Movie Night</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">Zootopia 2 screening</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/ampl-movie-night.jpg','AMPL Movie Night','Zootopia 2 ft. AMPL')">
-        <img src="images/ampl-movie-night.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">AMPL Movie Night</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">Zootopia 2 ft. AMPL</div>
-        </div>
-      </div>
-      <div style="break-inside:avoid;margin-bottom:12px;position:relative;overflow:hidden;cursor:pointer" class="gallery-item" onclick="openLightbox('images/chapter-members.jpg','Chapter Members','AMPL members after an event')">
-        <img src="images/chapter-members.jpg" style="width:100%;display:block;transition:transform 0.4s" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'" />
-        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(54,62,98,0.85));padding:1.5rem 1rem 0.8rem;opacity:0;transition:opacity 0.3s" class="gallery-overlay">
-          <div style="font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:#fff">Chapter Members</div>
-          <div style="font-size:0.75rem;color:rgba(255,255,255,0.75);margin-top:2px">AMPL members after an event</div>
-        </div>
-      </div>
+<footer class="on-blue">
+  <div class="col">
+    <div class="foot-top">
+      <img class="seal" src="images/ampl-seal-white.svg" alt="AMPL seal: a crescent holding the scales of justice, ringed by Association of Muslims in Politics and Law, National" width="140" height="140" loading="lazy" />
+      <p class="enact">The students of UC San Diego, UC Berkeley, UC Irvine, UCLA, UC Santa Cruz, and UC Davis <em>do enact as follows:</em> show up, speak up, and bring each other along.</p>
     </div>
-  </div>
-
-  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(10,20,50,0.95);z-index:999;align-items:center;justify-content:center;flex-direction:column" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" style="max-width:90vw;max-height:80vh;object-fit:contain" />
-    <div style="margin-top:1.2rem;text-align:center">
-      <div id="lightbox-title" style="font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;font-weight:700"></div>
-      <div id="lightbox-caption" style="font-size:0.85rem;color:rgba(255,255,255,0.6);margin-top:4px"></div>
+    <div class="foot-row">
+      <p>&copy; <span id="year">2026</span> Association of Muslims in Politics and Law</p>
+      <nav aria-label="Footer">
+        <a href="#programs">Programs</a>
+        <a href="#chapters">Chapters</a>
+        <a href="#contact">Contact</a>
+        <a href="https://www.instagram.com/amplnational" target="_blank" rel="noopener">Instagram</a>
+        <a href="portal.html">Chapter login</a>
+      </nav>
     </div>
-    <div style="position:absolute;top:1.5rem;right:2rem;color:rgba(255,255,255,0.5);font-size:2rem;cursor:pointer" onclick="closeLightbox()">x</div>
-  </div>
-</div>
-
-<div id="page-about" class="page">
-  <div class="about-hero">
-    <h1 class="about-hero-title">We exist to <em>represent</em>, to lead, and to serve.</h1>
-    <p class="about-hero-sub">AMPL was founded on a simple belief: that Muslim students belong in every courtroom, legislature, and policy room in America.</p>
-  </div>
-  <div class="m-pad" style="padding:0 5rem">
-    <img src="images/about-banner.jpg" style="width:100%;max-height:420px;object-fit:cover;object-position:center 30%" />
-  </div>
-  <div class="about-two-col">
-    <div>
-      <p class="section-label">Our Story</p>
-      <h2 class="section-title">Born from a need for representation.</h2>
-      <p class="section-body" style="margin-bottom:1.5rem">The Association of Muslims in Politics and Law was founded by students who saw a gap - Muslim communities profoundly affected by legal and political systems, yet underrepresented in the very institutions that shape them.</p>
-      <p class="section-body">Starting at UC San Diego, AMPL grew into a UC-wide network united by a shared commitment to justice, leadership, and the belief that representation is not just symbolic - it changes outcomes.</p>
-    </div>
-    <div>
-      <p class="section-label">Our Philosophy</p>
-      <h2 class="section-title">Skill. Network. Purpose.</h2>
-      <p class="section-body" style="margin-bottom:1.5rem">We do not just build resumes. We build leaders. Our approach combines practical skill development - legal writing, policy analysis, public speaking - with deep mentorship networks and a clear sense of civic purpose.</p>
-      <p class="section-body">Every program we run is designed to produce the next generation of Muslim attorneys, judges, legislators, and advocates who will shape a fairer, more inclusive America.</p>
-    </div>
-  </div>
-</div>
-
-<div id="page-chapters" class="page">
-  <section class="section">
-    <p class="section-label">Our Network</p>
-    <h2 class="section-title">Six chapters.<br>Across the UC system.</h2>
-    <p class="section-body">Each AMPL chapter is an independent student organization at its university, united by a shared mission and national identity.</p>
-    <div class="chapters-grid">
-      <div class="chapter-card">
-        <div class="chapter-school">UC San Diego</div>
-        <div class="chapter-name">AMPL UCSD</div>
-        <div class="chapter-detail"><span>📍</span><span>La Jolla, CA</span></div>
-        <div class="chapter-detail"><span>✉️</span><span><strong>amplnational@gmail.com</strong></span></div>
-        <div class="chapter-links"><a href="https://www.instagram.com/amplatucsd" target="_blank" class="chapter-link">Instagram</a><a href="https://studentorg.ucsd.edu/Home/Details/18815" target="_blank" class="chapter-link">Student Org</a></div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-school">UC Berkeley</div>
-        <div class="chapter-name">AMPL Berkeley</div>
-        <div class="chapter-detail"><span>📍</span><span>Berkeley, CA</span></div>
-        <div class="chapter-links"><a href="https://www.instagram.com/amplberkeley" target="_blank" class="chapter-link">Instagram</a></div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-school">UC Irvine</div>
-        <div class="chapter-name">AMPL UCI</div>
-        <div class="chapter-detail"><span>📍</span><span>Irvine, CA</span></div>
-        <div class="chapter-detail"><span>✉️</span><span><strong>uciampoliticslaw@gmail.com</strong></span></div>
-        <div class="chapter-links"><a href="https://www.instagram.com/amplucirvine" target="_blank" class="chapter-link">Instagram</a></div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-school">UC Los Angeles</div>
-        <div class="chapter-name">AMPL UCLA</div>
-        <div class="chapter-detail"><span>📍</span><span>Los Angeles, CA</span></div>
-        <div class="chapter-links"><a href="https://www.instagram.com/amplucla" target="_blank" class="chapter-link">Instagram</a></div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-school">UC Santa Cruz</div>
-        <div class="chapter-name">AMPL UCSC</div>
-        <div class="chapter-detail"><span>📍</span><span>Santa Cruz, CA</span></div>
-        <div class="chapter-links"><a href="https://www.instagram.com/amplucsc" target="_blank" class="chapter-link">Instagram</a></div>
-      </div>
-      <div class="chapter-card">
-        <div class="chapter-school">UC Davis</div>
-        <div class="chapter-name">AMPL UC Davis</div>
-        <div class="chapter-detail"><span>📍</span><span>Davis, CA</span></div>
-        <div class="chapter-links"><a href="https://www.instagram.com/amplucdavis" target="_blank" class="chapter-link">Instagram</a></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="m-pad" style="padding:4rem 5rem 2rem">
-    <p class="section-label">Find Us</p>
-    <h2 class="section-title">AMPL across California.</h2>
-    <p class="section-body">Six UC campuses. One network. Click any marker to learn more about that chapter.</p>
-  </section>
-  <div class="m-pad" style="padding:0 5rem 5rem">
-    <div class="map-box" style="position:relative;background:#dde4f0;border:1px solid var(--border);overflow:hidden;height:560px;display:flex;align-items:center;justify-content:center">
-      <div class="map-canvas" style="position:relative;width:600px;height:480px;flex-shrink:0">
-        <img src="images/california-map.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:invert(1) sepia(1) saturate(3) hue-rotate(190deg) brightness(0.55) opacity(0.35)" />
-        <svg viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%">
-          <line x1="260" y1="185" x2="232" y2="205" stroke="#d3cab7" stroke-width="1.5" stroke-dasharray="5,6" opacity="0.7"/>
-          <line x1="232" y1="205" x2="210" y2="252" stroke="#d3cab7" stroke-width="1.5" stroke-dasharray="5,6" opacity="0.7"/>
-          <line x1="210" y1="252" x2="345" y2="355" stroke="#d3cab7" stroke-width="1.5" stroke-dasharray="5,6" opacity="0.7"/>
-          <line x1="345" y1="355" x2="372" y2="378" stroke="#d3cab7" stroke-width="1.5" stroke-dasharray="5,6" opacity="0.7"/>
-          <line x1="372" y1="378" x2="385" y2="420" stroke="#d3cab7" stroke-width="1.5" stroke-dasharray="5,6" opacity="0.7"/>
-          <circle cx="260" cy="185" r="20" fill="#363e62" opacity="0.18"/>
-          <circle cx="260" cy="185" r="10" fill="#363e62" stroke="white" stroke-width="2.5" style="cursor:pointer" onclick="showChapter('davis')" class="campus-dot"/>
-          <rect x="275" y="175" width="72" height="20" rx="2" fill="white" opacity="0.9"/>
-          <text x="311" y="189" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#363e62" text-anchor="middle" style="pointer-events:none">UC Davis</text>
-          <circle cx="232" cy="205" r="20" fill="#363e62" opacity="0.18"/>
-          <circle cx="232" cy="205" r="10" fill="#363e62" stroke="white" stroke-width="2.5" style="cursor:pointer" onclick="showChapter('berkeley')" class="campus-dot"/>
-          <rect x="247" y="195" width="84" height="20" rx="2" fill="white" opacity="0.9"/>
-          <text x="289" y="209" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#363e62" text-anchor="middle" style="pointer-events:none">UC Berkeley</text>
-          <circle cx="210" cy="252" r="20" fill="#363e62" opacity="0.18"/>
-          <circle cx="210" cy="252" r="10" fill="#363e62" stroke="white" stroke-width="2.5" style="cursor:pointer" onclick="showChapter('ucsc')" class="campus-dot"/>
-          <rect x="225" y="242" width="98" height="20" rx="2" fill="white" opacity="0.9"/>
-          <text x="274" y="256" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#363e62" text-anchor="middle" style="pointer-events:none">UC Santa Cruz</text>
-          <circle cx="345" cy="355" r="20" fill="#363e62" opacity="0.18"/>
-          <circle cx="345" cy="355" r="10" fill="#363e62" stroke="white" stroke-width="2.5" style="cursor:pointer" onclick="showChapter('ucla')" class="campus-dot"/>
-          <rect x="360" y="345" width="50" height="20" rx="2" fill="white" opacity="0.9"/>
-          <text x="385" y="359" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#363e62" text-anchor="middle" style="pointer-events:none">UCLA</text>
-          <circle cx="372" cy="378" r="20" fill="#363e62" opacity="0.18"/>
-          <circle cx="372" cy="378" r="10" fill="#363e62" stroke="white" stroke-width="2.5" style="cursor:pointer" onclick="showChapter('uci')" class="campus-dot"/>
-          <rect x="387" y="368" width="70" height="20" rx="2" fill="white" opacity="0.9"/>
-          <text x="422" y="382" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#363e62" text-anchor="middle" style="pointer-events:none">UC Irvine</text>
-          <circle cx="385" cy="420" r="20" fill="#363e62" opacity="0.18"/>
-          <circle cx="385" cy="420" r="10" fill="#363e62" stroke="white" stroke-width="2.5" style="cursor:pointer" onclick="showChapter('ucsd')" class="campus-dot"/>
-          <rect x="400" y="410" width="92" height="20" rx="2" fill="white" opacity="0.9"/>
-          <text x="446" y="424" font-family="DM Sans,sans-serif" font-size="11" font-weight="700" fill="#363e62" text-anchor="middle" style="pointer-events:none">UC San Diego</text>
-          <text x="18" y="24" font-family="DM Mono,monospace" font-size="10" fill="#6b7a96" letter-spacing="2">CALIFORNIA</text>
-          <text x="18" y="38" font-family="DM Mono,monospace" font-size="9" fill="#9baac0" letter-spacing="1">AMPL CHAPTER MAP</text>
-          <text x="95" y="310" font-family="DM Mono,monospace" font-size="9" fill="#8898b8" letter-spacing="1" transform="rotate(-75 95 310)" opacity="0.6">PACIFIC OCEAN</text>
-        </svg>
-      </div>
-      <div id="chapter-panel" style="position:absolute;top:20px;right:20px;width:250px;background:white;border:1px solid var(--border);padding:1.5rem;box-shadow:0 8px 30px rgba(54,62,98,0.14);display:none;z-index:10">
-        <div id="cp-name" style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:#363e62;margin-bottom:4px"></div>
-        <div id="cp-city" style="font-size:0.82rem;color:#6b7a96;margin-bottom:12px"></div>
-        <a id="cp-ig" href="#" target="_blank" style="display:inline-block;background:#363e62;color:#d3cab7;padding:6px 14px;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;text-decoration:none;text-transform:uppercase;margin-bottom:6px"></a>
-        <div id="cp-email"></div>
-        <div style="position:absolute;top:10px;right:12px;cursor:pointer;color:#9baac0;font-size:1.3rem" onclick="document.getElementById('chapter-panel').style.display='none'">x</div>
-      </div>
-      <div id="map-hint" style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(54,62,98,0.72);color:rgba(255,255,255,0.9);padding:7px 18px;font-size:0.78rem;font-family:'DM Sans',sans-serif;letter-spacing:0.05em;pointer-events:none;white-space:nowrap;border-radius:2px">Click a campus dot to learn more</div>
-    </div>
-  </div>
-
-  <section class="pillars m-pad" style="padding:5rem">
-    <p class="section-label" style="color:var(--cream)">Expand AMPL</p>
-    <h2 class="section-title" style="color:var(--cream);margin-bottom:1.5rem">Don't see your campus?</h2>
-    <p style="color:rgba(211,202,183,0.7);font-size:1.05rem;line-height:1.7;max-width:560px;margin-bottom:2.5rem">Every movement begins with a spark. If you want to bring AMPL to your university, we will support you every step of the way.</p>
-    <a href="#" class="btn-primary" onclick="showPage('contact')">Start a Chapter</a>
-  </section>
-</div>
-
-<div id="page-events" class="page">
-  <section class="section">
-    <p class="section-label">Upcoming and Past</p>
-    <h2 class="section-title">Events and Programs</h2>
-    <p class="section-body">From panel discussions to networking nights, AMPL hosts events that connect, educate, and inspire Muslim students across the UC system.</p>
-    <div class="events-list">
-      <div class="event-item">
-        <div class="event-date"><div class="event-date-month">May</div><div class="event-date-day">10</div></div>
-        <div class="event-info"><div class="event-info-title">Law School Panel: Navigating the Path to JD</div><div class="event-info-meta">UC Irvine - In Person - 6:00 PM</div></div>
-        <div class="event-tag featured">Featured</div>
-      </div>
-      <div class="event-item">
-        <div class="event-date"><div class="event-date-month">May</div><div class="event-date-day">18</div></div>
-        <div class="event-info"><div class="event-info-title">Policy Workshop: Writing for Change</div><div class="event-info-meta">Virtual - All Chapters - 5:30 PM</div></div>
-        <div class="event-tag">Workshop</div>
-      </div>
-      <div class="event-item">
-        <div class="event-date"><div class="event-date-month">Jun</div><div class="event-date-day">03</div></div>
-        <div class="event-info"><div class="event-info-title">AMPL Networking Night End of Year</div><div class="event-info-meta">UCLA - In Person - 7:00 PM</div></div>
-        <div class="event-tag featured">Networking</div>
-      </div>
-      <div class="event-item">
-        <div class="event-date"><div class="event-date-month">Jun</div><div class="event-date-day">15</div></div>
-        <div class="event-info"><div class="event-info-title">Summer Mentorship Program Applications Open</div><div class="event-info-meta">All Chapters - Rolling Deadline</div></div>
-        <div class="event-tag">Program</div>
-      </div>
-      <div class="event-item">
-        <div class="event-date"><div class="event-date-month">Sep</div><div class="event-date-day">05</div></div>
-        <div class="event-info"><div class="event-info-title">Fall Welcome and General Interest Meeting</div><div class="event-info-meta">All Chapters - In Person</div></div>
-        <div class="event-tag">General</div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<div id="page-involved" class="page">
-  <section class="section">
-    <p class="section-label">Join AMPL</p>
-    <h2 class="section-title">Your seat at the table<br>starts here.</h2>
-    <p class="section-body">Whether you are a pre-law student, a political science major, or simply someone who believes Muslim voices belong in every level of governance - there is a place for you in AMPL.</p>
-  </section>
-  <div class="involved-grid">
-    <div class="involved-card">
-      <div class="involved-icon">🎓</div>
-      <div class="involved-title">Join a Chapter</div>
-      <div class="involved-body">Find your campus chapter and become a member. Attend events, join committees, and plug into a network of Muslim students passionate about law and public service. Membership is free and open to all students.</div>
-      <a href="#" class="btn-primary" onclick="showPage('chapters')">Find Your Chapter</a>
-    </div>
-    <div class="involved-card dark">
-      <div class="involved-icon">🤝</div>
-      <div class="involved-title">Become a Mentor</div>
-      <div class="involved-body">Are you a Muslim attorney, policy professional, or public servant? Our members need guides who have walked this path. Mentors meet with students regularly and help shape the next generation of Muslim leaders.</div>
-      <a href="#" class="btn-primary" onclick="showPage('contact')">Apply to Mentor</a>
-    </div>
-    <div class="involved-card dark">
-      <div class="involved-icon">🏫</div>
-      <div class="involved-title">Start a Chapter</div>
-      <div class="involved-body">Do not see AMPL at your university? We will help you build it. We provide founding templates, chapter support, national resources, and a community of chapter leaders to help you launch successfully.</div>
-      <a href="#" class="btn-primary" onclick="showPage('contact')">Get Started</a>
-    </div>
-    <div class="involved-card">
-      <div class="involved-icon">📣</div>
-      <div class="involved-title">Partner With Us</div>
-      <div class="involved-body">We welcome partnerships with law firms, nonprofits, government offices, and advocacy organizations who share our mission. From co-hosting events to offering internships - lets build something together.</div>
-      <a href="#" class="btn-primary" onclick="showPage('contact')">Reach Out</a>
-    </div>
-  </div>
-</div>
-
-<div id="page-contact" class="page">
-  <section class="section">
-    <p class="section-label">Get In Touch</p>
-    <h2 class="section-title">We would love to hear from you.</h2>
-    <p class="section-body">Whether you are looking to join, start a chapter, partner with us, or just learn more - reach out and we will get back to you shortly.</p>
-    <div class="contact-grid">
-      <form class="contact-form" action="https://formspree.io/f/mkokqvkl" method="POST">
-        <input type="hidden" name="_next" value="https://amplnational.com" />
-        <input type="hidden" name="_subject" value="New AMPL Contact Form Submission" />
-        <div class="form-group"><label class="form-label">Full Name</label><input type="text" name="name" class="form-input" required placeholder="Your name" /></div>
-        <div class="form-group"><label class="form-label">Email Address</label><input type="email" name="email" class="form-input" required placeholder="your@email.com" /></div>
-        <div class="form-group"><label class="form-label">University / Affiliation</label><input type="text" name="university" class="form-input" placeholder="e.g. UC Irvine, Independent" /></div>
-        <div class="form-group">
-          <label class="form-label">I am reaching out about...</label>
-          <select name="topic" class="form-select">
-            <option value="">Select a topic</option>
-            <option>Joining a chapter</option>
-            <option>Starting a chapter</option>
-            <option>Mentorship opportunities</option>
-            <option>Partnerships and collaboration</option>
-            <option>Media and press</option>
-            <option>General inquiry</option>
-          </select>
-        </div>
-        <div class="form-group"><label class="form-label">Message</label><textarea name="message" class="form-textarea" required placeholder="Tell us a bit about yourself and what you are looking for..."></textarea></div>
-        <button type="submit" class="btn-primary" style="width:fit-content">Send Message</button>
-      </form>
-      <div>
-        <div class="contact-info-item">
-          <div class="contact-info-label">Email</div>
-          <div class="contact-info-value"><a href="mailto:amplnational@gmail.com">amplnational@gmail.com</a></div>
-        </div>
-        <div class="contact-info-item">
-          <div class="contact-info-label">Instagram</div>
-          <div class="contact-info-value"><a href="https://www.instagram.com/amplnational" target="_blank">@amplnational</a></div>
-        </div>
-        <div class="contact-info-item">
-          <div class="contact-info-label">Chapter Inquiries</div>
-          <div class="contact-info-value" style="font-size:0.92rem;color:var(--muted);line-height:1.6">If you are reaching out to open a chapter, please mention your campus and a brief description of your interest in the message above.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<footer>
-  <div class="footer-top">
-    <div>
-      <div class="footer-brand-name"><img src="images/logo.jpg" style="height:40px;width:40px;object-fit:cover;border-radius:50%;opacity:0.9" /> AMPL<span style="color:var(--cream)">.</span></div>
-      <div class="footer-brand-tagline">Association of Muslims in Politics and Law.<br>Building a home for Muslims in policy and law across the UC system and beyond.</div>
-      <div class="footer-socials">
-        <a href="https://www.instagram.com/amplnational" target="_blank" class="footer-social">ig</a>
-        <a href="mailto:amplnational@gmail.com" class="footer-social">✉</a>
-      </div>
-    </div>
-    <div>
-      <div class="footer-col-title">Navigate</div>
-      <ul class="footer-links">
-        <li><a href="#" onclick="showPage('home')">Home</a></li>
-        <li><a href="#" onclick="showPage('about')">About</a></li>
-        <li><a href="#" onclick="showPage('chapters')">Chapters</a></li>
-        <li><a href="#" onclick="showPage('events')">Events</a></li>
-        <li><a href="#" onclick="showPage('involved')">Get Involved</a></li>
-        <li><a href="#" onclick="showPage('contact')">Contact</a></li>
-        <li><a href="portal.html">Chapter Login</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Chapters</div>
-      <ul class="footer-links">
-        <li><a href="#" onclick="showPage('chapters')">UC San Diego</a></li>
-        <li><a href="#" onclick="showPage('chapters')">UC Berkeley</a></li>
-        <li><a href="#" onclick="showPage('chapters')">UC Irvine</a></li>
-        <li><a href="#" onclick="showPage('chapters')">UCLA</a></li>
-        <li><a href="#" onclick="showPage('chapters')">UC Santa Cruz</a></li>
-        <li><a href="#" onclick="showPage('chapters')">UC Davis</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-col-title">Contact</div>
-      <ul class="footer-links">
-        <li><a href="mailto:amplnational@gmail.com">amplnational@gmail.com</a></li>
-        <li><a href="https://www.instagram.com/amplnational" target="_blank">@amplnational</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-copy"><span id="year">2025</span> Association of Muslims in Politics and Law. All rights reserved.</div>
-    <div class="footer-copy">Non-profit student organization - UC System</div>
   </div>
 </footer>
 
+<dialog class="viewer" id="viewer" aria-label="Photo viewer">
+  <button class="viewer-close" type="button" id="viewer-close">
+    <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2"/></svg>
+    Close
+  </button>
+  <figure id="viewer-figure">
+    <figcaption><b id="viewer-title"></b> <span id="viewer-caption"></span></figcaption>
+  </figure>
+</dialog>
+
 <script>
-  function toggleNav(force) {
-    var nav = document.querySelector('nav');
-    var open = nav.classList.toggle('open', force);
-    document.querySelector('.nav-toggle').setAttribute('aria-expanded', open);
-  }
+  var root = document.documentElement;
+  root.classList.add('js');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!reduceMotion.matches) root.classList.add('motion');
+
   document.getElementById('year').textContent = new Date().getFullYear();
-  function showPage(id) {
-    toggleNav(false);
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const target = document.getElementById('page-' + id);
-    if (target) { target.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
-  }
-  function openLightbox(src, title, caption) {
-    document.getElementById('lightbox-img').src = src;
-    document.getElementById('lightbox-title').textContent = title;
-    document.getElementById('lightbox-caption').textContent = caption;
-    document.getElementById('lightbox').style.display = 'flex';
-  }
-  function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-  var chapterData = {
-    davis:    { name: 'AMPL UC Davis',      city: 'Davis, CA',       ig: 'https://www.instagram.com/amplucdavis',  igHandle: '@amplucdavis',  email: '' },
-    berkeley: { name: 'AMPL UC Berkeley',   city: 'Berkeley, CA',    ig: 'https://www.instagram.com/amplberkeley', igHandle: '@amplberkeley', email: '' },
-    ucsc:     { name: 'AMPL UC Santa Cruz', city: 'Santa Cruz, CA',  ig: 'https://www.instagram.com/amplucsc',     igHandle: '@amplucsc',     email: '' },
-    ucla:     { name: 'AMPL UCLA',          city: 'Los Angeles, CA', ig: 'https://www.instagram.com/amplucla',     igHandle: '@amplucla',     email: '' },
-    uci:      { name: 'AMPL UC Irvine',     city: 'Irvine, CA',      ig: 'https://www.instagram.com/amplucirvine', igHandle: '@amplucirvine', email: 'uciampoliticslaw@gmail.com' },
-    ucsd:     { name: 'AMPL UC San Diego',  city: 'La Jolla, CA',    ig: 'https://www.instagram.com/amplatucsd',   igHandle: '@amplatucsd',   email: 'amplnational@gmail.com' }
+
+  var chapters = {
+    ucsd:     { school: 'UC San Diego',  city: 'La Jolla, CA',     ig: 'amplatucsd',   email: 'amplnational@gmail.com', org: 'https://studentorg.ucsd.edu/Home/Details/18815' },
+    berkeley: { school: 'UC Berkeley',   city: 'Berkeley, CA',     ig: 'amplberkeley' },
+    uci:      { school: 'UC Irvine',     city: 'Irvine, CA',       ig: 'amplucirvine', email: 'uciampoliticslaw@gmail.com' },
+    ucla:     { school: 'UCLA',          city: 'Los Angeles, CA',  ig: 'amplucla' },
+    ucsc:     { school: 'UC Santa Cruz', city: 'Santa Cruz, CA',   ig: 'amplucsc' },
+    davis:    { school: 'UC Davis',      city: 'Davis, CA',        ig: 'amplucdavis' }
   };
-  function showChapter(id) {
-    var ch = chapterData[id];
-    document.getElementById('cp-name').textContent = ch.name;
-    document.getElementById('cp-city').textContent = '📍 ' + ch.city;
-    document.getElementById('cp-ig').textContent = ch.igHandle;
-    document.getElementById('cp-ig').href = ch.ig;
-    document.getElementById('cp-email').innerHTML = ch.email ? '<a href="mailto:' + ch.email + '" style="color:#5a78b8;font-size:0.8rem">' + ch.email + '</a>' : '';
-    document.getElementById('chapter-panel').style.display = 'block';
-    document.getElementById('map-hint').style.display = 'none';
+  var order = ['ucsd', 'berkeley', 'uci', 'ucla', 'ucsc', 'davis'];
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function chapterLinks(ch) {
+    var out = '<a href="https://www.instagram.com/' + ch.ig + '" target="_blank" rel="noopener">Instagram @' + esc(ch.ig) + '</a>';
+    if (ch.email) out += '<a href="mailto:' + ch.email + '">' + esc(ch.email) + '</a>';
+    if (ch.org) out += '<a href="' + ch.org + '" target="_blank" rel="noopener">Student org page</a>';
+    return out;
   }
+
+  // Chapter roll (SEC. 3)
+  var roll = document.getElementById('roll');
+  roll.innerHTML = order.map(function (id) {
+    var ch = chapters[id];
+    return '<li id="chapter-' + id + '"><div><div class="school">' + ch.school + '</div><div class="city">' + ch.city + '</div></div>' +
+      '<div class="links"><a href="https://www.instagram.com/' + ch.ig + '" target="_blank" rel="noopener">Instagram</a>' +
+      (ch.email ? '<a href="mailto:' + ch.email + '">Email</a>' : '') + '</div></li>';
+  }).join('');
+
+  function highlight(id) {
+    document.querySelectorAll('.roll li').forEach(function (li) { li.classList.toggle('on', li.id === 'chapter-' + id); });
+    document.querySelectorAll('.map .dot').forEach(function (d) {
+      var on = d.dataset.ch === id;
+      d.classList.toggle('on', on);
+      d.setAttribute('aria-pressed', on);
+    });
+  }
+  document.querySelectorAll('.map .dot').forEach(function (dot) {
+    function pick() {
+      highlight(dot.dataset.ch);
+      document.getElementById('chapter-' + dot.dataset.ch).scrollIntoView({ block: 'nearest', behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    }
+    dot.addEventListener('click', pick);
+    dot.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+  });
+
+  // Campus picker (first viewport)
+  var campus = document.getElementById('campus');
+  var result = document.getElementById('campus-result');
+  function showCampus(id) {
+    if (!id) { result.innerHTML = '<p class="result-empty">Pick your campus to see how to join.</p>'; return; }
+    if (id === 'none') {
+      result.innerHTML = '<p class="result-name">Bring AMPL to your campus.</p><p class="result-city">We\'ll help you start a chapter.</p>' +
+        '<div class="result-links"><a href="#contact" data-topic="Starting a chapter">Start a chapter</a></div>';
+      return;
+    }
+    var ch = chapters[id];
+    result.innerHTML = '<p class="result-name">AMPL at ' + ch.school + '</p><p class="result-city">' + ch.city + '. Follow the chapter to hear about the next meeting.</p>' +
+      '<div class="result-links">' + chapterLinks(ch) + '</div>';
+    highlight(id);
+  }
+  campus.addEventListener('change', function () {
+    showCampus(campus.value);
+    if (campus.value && campus.value !== 'none') history.replaceState(null, '', '#join-' + campus.value);
+  });
+
+  // Links that preset the contact topic
+  var topic = document.getElementById('f-topic');
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-topic]');
+    if (a) { topic.value = a.dataset.topic; }
+    var f = e.target.closest('[data-focus]');
+    if (f) { setTimeout(function () { document.getElementById(f.dataset.focus).focus({ preventScroll: true }); }, reduceMotion.matches ? 0 : 450); }
+  });
+
+  // Deep links: #join-uci selects that campus
+  function fromHash() {
+    var m = location.hash.match(/^#join-(\w+)$/);
+    if (m && chapters[m[1]]) { campus.value = m[1]; showCampus(m[1]); }
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
+
+  // Mobile menu
+  var masthead = document.querySelector('.masthead');
+  var menuBtn = document.querySelector('.menu-btn');
+  menuBtn.addEventListener('click', function () {
+    var open = masthead.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open);
+  });
+  document.querySelectorAll('.nav a').forEach(function (a) {
+    a.addEventListener('click', function () { masthead.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && masthead.classList.contains('open')) { masthead.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.focus(); }
+  });
+
+  // Current section in the nav
+  var navLinks = {};
+  document.querySelectorAll('.nav a[href^="#"]').forEach(function (a) { navLinks[a.getAttribute('href').slice(1)] = a; });
+  var sectionObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      Object.keys(navLinks).forEach(function (id) { navLinks[id].removeAttribute('aria-current'); });
+      if (navLinks[entry.target.id]) navLinks[entry.target.id].setAttribute('aria-current', 'true');
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('main > section').forEach(function (s) { sectionObserver.observe(s); });
+
+  // Signature motion: each section's key line performs its amendment once
+  var amendObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) { entry.target.classList.add('amended'); amendObserver.unobserve(entry.target); }
+    });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-amend]').forEach(function (el) { amendObserver.observe(el); });
+
+  // Margin line numbers
+  var linenos = document.querySelector('.linenos');
+  function drawLinenos() {
+    var step = parseFloat(getComputedStyle(linenos).lineHeight) || 32;
+    var main = document.getElementById('main');
+    var count = Math.ceil(main.scrollHeight / step);
+    var top = main.getBoundingClientRect().top;
+    var bands = Array.prototype.map.call(document.querySelectorAll('.band, .on-blue'), function (b) {
+      var r = b.getBoundingClientRect(); return [r.top - top, r.bottom - top];
+    });
+    var html = '';
+    for (var i = 1; i <= count; i++) {
+      var y = (i - 0.5) * step, cls = '', edge = false;
+      bands.forEach(function (b) {
+        if (y > b[0] && y < b[1]) cls = ' class="b"';
+        if (Math.abs(y - b[0]) < step * 0.75 || Math.abs(y - b[1]) < step * 0.75) edge = true;
+      });
+      html += '<span' + cls + '>' + ((i % 5 === 0 || i === 1) && !edge ? i : '') + '</span>';
+    }
+    linenos.innerHTML = html;
+  }
+  drawLinenos();
+  window.addEventListener('resize', drawLinenos);
+  window.addEventListener('load', drawLinenos);
+
+  // Photo viewer
+  var viewer = document.getElementById('viewer');
+  var opener = null;
+  document.querySelectorAll('.photo-btn').forEach(function (btn) {
+    btn.setAttribute('aria-label', 'View photo: ' + btn.dataset.title);
+    btn.addEventListener('click', function () {
+      opener = btn;
+      var img = document.getElementById('viewer-img') || document.getElementById('viewer-figure').insertBefore(document.createElement('img'), document.querySelector('#viewer-figure figcaption'));
+      img.id = 'viewer-img';
+      img.src = btn.dataset.photo;
+      img.alt = btn.querySelector('img').alt;
+      document.getElementById('viewer-title').textContent = btn.dataset.title + '.';
+      document.getElementById('viewer-caption').textContent = btn.dataset.caption;
+      viewer.showModal();
+    });
+  });
+  document.getElementById('viewer-close').addEventListener('click', function () { viewer.close(); });
+  viewer.addEventListener('click', function (e) { if (e.target === viewer) viewer.close(); });
+  viewer.addEventListener('close', function () { if (opener) opener.focus(); });
+
+  // Contact form: send in place, keep the message on failure
+  var form = document.getElementById('contact-form');
+  var formStatus = document.getElementById('form-status');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    formStatus.className = 'form-status';
+    var firstBad = Array.prototype.find.call(form.elements, function (el) { return el.willValidate && !el.checkValidity(); });
+    if (firstBad) {
+      formStatus.classList.add('err');
+      formStatus.textContent = firstBad.type === 'email' && firstBad.value ? 'That email address looks incomplete.' : 'Please fill in ' + (form.querySelector('label[for="' + firstBad.id + '"]').textContent.toLowerCase()) + '.';
+      firstBad.focus();
+      return;
+    }
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } })
+      .then(function (r) {
+        if (!r.ok) throw new Error();
+        form.reset();
+        formStatus.classList.add('ok');
+        formStatus.textContent = 'Sent. Thank you, we\'ll get back to you by email.';
+      })
+      .catch(function () {
+        formStatus.classList.add('err');
+        formStatus.innerHTML = 'Your message didn\'t send. Try again, or email <a href="mailto:amplnational@gmail.com">amplnational@gmail.com</a>.';
+      })
+      .finally(function () { btn.disabled = false; btn.textContent = 'Send message'; });
+  });
 </script>
 </body>
 </html>
-
-
