@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapter Portal - AMPL National</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #0d1b2e;
+      --cream: #d3cab7;
+      --gold-light: #e8e0d0;
+      --forest: #363e62;
+      --sage: #5a78b8;
+      --white: #ffffff;
+      --muted: #7a7a8a;
+      --border: #c8c0b0;
+      --bg: #f7f8fc;
+      --ok: #2f7a4f;
+      --warn: #a0701a;
+      --bad: #a33a3a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { display:flex; align-items:center; gap:0.7rem; text-decoration:none; }
+    .nav-logo img { height:46px; width:46px; object-fit:cover; border-radius:50%; box-shadow:0 2px 8px rgba(54,62,98,0.18); }
+    .nav-logo span { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:900; color:var(--forest); }
+    .nav-logo span em { color:var(--cream); font-style:normal; }
+    .nav-logo small { font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--sage); margin-left:0.4rem; }
+    .nav-right { display:flex; align-items:center; gap:1.5rem; }
+    .nav-right a, .nav-right button { font-size:0.8rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink); text-decoration:none; background:none; border:none; cursor:pointer; font-family:inherit; }
+    .nav-right a:hover, .nav-right button:hover { color:var(--sage); }
+    .nav-user { font-size:0.82rem; color:var(--muted); }
+
+    main { padding-top:88px; }
+    .hidden { display:none !important; }
+
+    .auth-wrap { max-width:440px; margin:4rem auto; background:var(--white); border:1px solid var(--border); padding:3rem; }
+    .section-label { font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--sage); margin-bottom:0.8rem; }
+    .section-title { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; line-height:1.15; color:var(--forest); margin-bottom:1rem; }
+    .muted { color:var(--muted); font-size:0.92rem; line-height:1.6; }
+    .auth-tabs { display:flex; border-bottom:1px solid var(--border); margin:1.5rem 0; }
+    .auth-tab { flex:1; padding:0.8rem; background:none; border:none; border-bottom:2px solid transparent; font-family:inherit; font-size:0.82rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); cursor:pointer; }
+    .auth-tab.active { color:var(--forest); border-bottom-color:var(--forest); }
+    .link-btn { background:none; border:none; color:var(--sage); font-family:inherit; font-size:0.85rem; cursor:pointer; text-decoration:underline; padding:0; }
+
+    form.stack { display:flex; flex-direction:column; gap:1rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-group { display:flex; flex-direction:column; gap:0.4rem; }
+    .form-label { font-size:0.74rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); }
+    .form-input, .form-textarea, .form-select { padding:0.75rem 0.9rem; border:1px solid var(--border); background:var(--white); font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--ink); outline:none; width:100%; }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color:var(--forest); }
+    .form-textarea { resize:vertical; min-height:110px; }
+    .btn { background:var(--forest); color:var(--cream); padding:0.75rem 1.6rem; font-weight:600; font-size:0.85rem; letter-spacing:0.04em; border:none; cursor:pointer; font-family:inherit; width:fit-content; transition:opacity 0.2s; }
+    .btn:hover { opacity:0.88; }
+    .btn:disabled { opacity:0.5; cursor:default; }
+    .btn-sm { padding:0.4rem 0.9rem; font-size:0.75rem; }
+    .btn-light { background:var(--cream); color:var(--forest); }
+    .btn-ok { background:var(--ok); color:#fff; }
+    .btn-bad { background:var(--bad); color:#fff; }
+    .btn-ghost { background:transparent; color:var(--bad); border:1px solid var(--border); }
+    .msg { font-size:0.88rem; padding:0.7rem 0.9rem; border-left:3px solid var(--sage); background:var(--bg); }
+    .msg.error { border-color:var(--bad); color:var(--bad); }
+
+    .layout { display:grid; grid-template-columns:230px 1fr; min-height:calc(100vh - 88px); }
+    .sidebar { background:var(--forest); padding:2rem 0; }
+    .sidebar-chapter { padding:0 1.6rem 1.5rem; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:1rem; }
+    .sidebar-chapter .section-label { color:rgba(211,202,183,0.6); margin-bottom:0.3rem; }
+    .sidebar-chapter div { font-family:'Playfair Display',serif; color:var(--cream); font-size:1.15rem; font-weight:700; }
+    .tab-btn { display:block; width:100%; text-align:left; padding:0.85rem 1.6rem; background:none; border:none; border-left:3px solid transparent; color:rgba(211,202,183,0.75); font-family:inherit; font-size:0.9rem; cursor:pointer; }
+    .tab-btn:hover { color:var(--cream); background:rgba(255,255,255,0.04); }
+    .tab-btn.active { color:#fff; border-left-color:var(--cream); background:rgba(255,255,255,0.07); }
+    .tab-btn .count { background:var(--cream); color:var(--forest); font-size:0.7rem; font-weight:700; padding:1px 7px; border-radius:10px; margin-left:6px; }
+    .content { padding:2.5rem 3rem 4rem; max-width:1100px; }
+    .content-head { display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; flex-wrap:wrap; margin-bottom:2rem; }
+    .content-head .section-title { margin-bottom:0; }
+
+    .card { background:var(--white); border:1px solid var(--border); padding:1.8rem; margin-bottom:1.5rem; }
+    .card-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--forest); margin-bottom:1rem; }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-bottom:1.5rem; }
+    .stat { background:var(--white); padding:1.4rem; }
+    .stat-num { font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:900; color:var(--forest); line-height:1.1; }
+    .stat-label { font-size:0.76rem; color:var(--muted); font-weight:500; letter-spacing:0.04em; margin-top:0.3rem; }
+    .list-item { padding:1.1rem 0; border-bottom:1px solid var(--border); }
+    .list-item:last-child { border-bottom:none; }
+    .item-title { font-weight:600; color:var(--forest); }
+    .item-meta { font-size:0.8rem; color:var(--muted); margin-top:0.2rem; }
+    .item-body { font-size:0.92rem; line-height:1.65; color:#444; margin-top:0.5rem; white-space:pre-wrap; }
+    .item-row { display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
+    .item-actions { display:flex; gap:0.5rem; flex-shrink:0; flex-wrap:wrap; }
+    .empty { color:var(--muted); font-size:0.9rem; font-style:italic; padding:0.5rem 0; }
+
+    table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+    th { text-align:left; font-size:0.7rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding:0.6rem 0.5rem; border-bottom:1px solid var(--border); }
+    td { padding:0.75rem 0.5rem; border-bottom:1px solid #ebe6dc; vertical-align:top; }
+    td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+    .table-wrap { overflow-x:auto; }
+    .badge { display:inline-block; font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:0.2rem 0.6rem; border:1px solid currentColor; }
+    .badge.pending { color:var(--warn); }
+    .badge.approved, .badge.income { color:var(--ok); }
+    .badge.denied, .badge.expense { color:var(--bad); }
+    .badge.admin { color:var(--forest); }
+    .badge.chapter { color:var(--sage); }
+
+    .setup-notice { max-width:640px; margin:4rem auto; background:var(--white); border:1px solid var(--border); border-top:4px solid var(--warn); padding:2.5rem; }
+    .setup-notice code { font-family:'DM Mono',monospace; background:var(--bg); padding:1px 5px; font-size:0.85rem; }
+
+    @media (max-width:900px) {
+      nav { padding:1rem 1.25rem; }
+      .nav-logo small, .nav-user { display:none; }
+      main { padding-top:78px; }
+      .auth-wrap { margin:1.5rem 1rem; padding:2rem 1.5rem; }
+      .layout { grid-template-columns:1fr; }
+      .sidebar { padding:0; display:flex; overflow-x:auto; }
+      .sidebar-chapter { display:none; }
+      .tab-btn { white-space:nowrap; width:auto; border-left:none; border-bottom:3px solid transparent; padding:0.9rem 1rem; }
+      .tab-btn.active { border-bottom-color:var(--cream); }
+      .content { padding:1.5rem 1rem 3rem; }
+      .stats { grid-template-columns:1fr 1fr; }
+      .form-row { grid-template-columns:1fr; }
+      .item-row { flex-direction:column; }
+      .setup-notice { margin:1.5rem 1rem; padding:1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="images/logo.jpg" alt="AMPL logo" />
+    <span>AMPL<em>.</em></span><small>Chapter Portal</small>
+  </a>
+  <div class="nav-right">
+    <span id="nav-user" class="nav-user"></span>
+    <a href="index.html">Main Site</a>
+    <button id="signout-btn" class="hidden">Sign Out</button>
+  </div>
+</nav>
+
+<main>
+  <div id="view-loading" class="auth-wrap"><p class="muted">Loading…</p></div>
+
+  <div id="view-setup" class="setup-notice hidden">
+    <p class="section-label">Setup Needed</p>
+    <h1 class="section-title">The portal isn't connected yet.</h1>
+    <p class="muted">Fill in <code>firebase-config.js</code> with your Firebase project's web config. Instructions are in <code>PORTAL_SETUP.md</code>.</p>
+  </div>
+
+  <div id="view-auth" class="auth-wrap hidden">
+    <p class="section-label">Chapter Portal</p>
+    <h1 class="section-title">Welcome back.</h1>
+    <p class="muted">For AMPL chapter officers and National board members.</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth="signin">Sign In</button>
+      <button class="auth-tab" data-auth="signup">Request Access</button>
+    </div>
+    <form id="signin-form" class="stack">
+      <div class="form-group"><label class="form-label" for="si-email">Email</label><input id="si-email" type="email" class="form-input" required autocomplete="email" /></div>
+      <div class="form-group"><label class="form-label" for="si-pass">Password</label><input id="si-pass" type="password" class="form-input" required autocomplete="current-password" /></div>
+      <button class="btn" type="submit">Sign In</button>
+      <button class="link-btn" type="button" id="forgot-btn" style="width:fit-content">Forgot password?</button>
+    </form>
+    <form id="signup-form" class="stack hidden">
+      <div class="form-group"><label class="form-label" for="su-name">Full Name</label><input id="su-name" type="text" class="form-input" required autocomplete="name" /></div>
+      <div class="form-group"><label class="form-label" for="su-email">Email</label><input id="su-email" type="email" class="form-input" required autocomplete="email" /></div>
+      <div class="form-group"><label class="form-label" for="su-chapter">Your Chapter</label><select id="su-chapter" class="form-select" required></select></div>
+      <div class="form-group"><label class="form-label" for="su-pass">Password (8+ characters)</label><input id="su-pass" type="password" class="form-input" required minlength="8" autocomplete="new-password" /></div>
+      <button class="btn" type="submit">Request Access</button>
+      <p class="muted" style="font-size:0.82rem">AMPL National will review and approve your account.</p>
+    </form>
+    <div id="auth-msg" class="msg hidden" style="margin-top:1rem"></div>
+  </div>
+
+  <div id="view-pending" class="auth-wrap hidden">
+    <p class="section-label">Almost There</p>
+    <h1 class="section-title">Your account is awaiting approval.</h1>
+    <p class="muted">AMPL National has been notified of your request. Once an admin assigns you to your chapter, refresh this page to get in. Questions? Email <a href="mailto:amplnational@gmail.com" style="color:var(--sage)">amplnational@gmail.com</a>.</p>
+  </div>
+
+  <div id="view-app" class="layout hidden">
+    <aside class="sidebar">
+      <div class="sidebar-chapter"><p class="section-label" id="side-role"></p><div id="side-chapter"></div></div>
+      <button class="tab-btn" data-tab="overview">Announcements</button>
+      <button class="tab-btn" data-tab="resources">Resources</button>
+      <button class="tab-btn" data-tab="profile">Chapter Profile</button>
+      <button class="tab-btn" data-tab="reports">Event Reports</button>
+      <button class="tab-btn" data-tab="finances">Finances</button>
+      <button class="tab-btn hidden admin-only" data-tab="approvals">Approvals <span id="pending-count" class="count hidden"></span></button>
+      <button class="tab-btn hidden admin-only" data-tab="accounts">Accounts</button>
+      <button class="tab-btn hidden admin-only" data-tab="chapters">Chapters &amp; Budgets</button>
+    </aside>
+    <section class="content" id="content"></section>
+  </div>
+</main>
+
+<script type="module">
+  import { firebaseConfig } from './firebase-config.js';
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, collection, query, where, getDocs, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+  // Matches chapterData on the main site; used to seed Firestore and for the sign-up dropdown.
+  const DEFAULT_CHAPTERS = {
+    davis:    { name: 'AMPL UC Davis',      city: 'Davis, CA',       instagram: '@amplucdavis',  email: '' },
+    berkeley: { name: 'AMPL UC Berkeley',   city: 'Berkeley, CA',    instagram: '@amplberkeley', email: '' },
+    ucsc:     { name: 'AMPL UC Santa Cruz', city: 'Santa Cruz, CA',  instagram: '@amplucsc',     email: '' },
+    ucla:     { name: 'AMPL UCLA',          city: 'Los Angeles, CA', instagram: '@amplucla',     email: '' },
+    uci:      { name: 'AMPL UC Irvine',     city: 'Irvine, CA',      instagram: '@amplucirvine', email: 'uciampoliticslaw@gmail.com' },
+    ucsd:     { name: 'AMPL UC San Diego',  city: 'La Jolla, CA',    instagram: '@amplatucsd',   email: 'amplnational@gmail.com' }
+  };
+
+  const $ = (sel) => document.querySelector(sel);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  const money = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n || 0);
+  const fmtDate = (v) => {
+    if (!v) return '';
+    const d = v.toDate ? v.toDate() : new Date(v + (typeof v === 'string' && v.length === 10 ? 'T00:00:00' : ''));
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+  const ts = (v) => (v && v.toMillis ? v.toMillis() : 0);
+  const byNewest = (a, b) => ts(b.createdAt) - ts(a.createdAt);
+  const safeUrl = (u) => /^https?:\/\//i.test(u || '') ? u : '#';
+
+  const VIEWS = ['loading', 'setup', 'auth', 'pending', 'app'];
+  function showView(name) { VIEWS.forEach(v => $('#view-' + v).classList.toggle('hidden', v !== name)); }
+
+  function flash(el, text, isError) {
+    el.textContent = text;
+    el.classList.toggle('error', !!isError);
+    el.classList.remove('hidden');
+  }
+
+  function friendlyError(err) {
+    const map = {
+      'auth/invalid-credential': 'Incorrect email or password.',
+      'auth/wrong-password': 'Incorrect email or password.',
+      'auth/user-not-found': 'Incorrect email or password.',
+      'auth/email-already-in-use': 'An account with this email already exists. Try signing in.',
+      'auth/weak-password': 'Please choose a password with at least 8 characters.',
+      'auth/too-many-requests': 'Too many attempts. Please wait a few minutes and try again.',
+      'auth/unauthorized-domain': 'This website address is not authorized in Firebase yet (see PORTAL_SETUP.md).',
+      'permission-denied': "You don't have permission to do that."
+    };
+    return map[err.code] || err.message || 'Something went wrong.';
+  }
+
+  if (!firebaseConfig.apiKey) {
+    showView('setup');
+    throw new Error('Firebase config missing: fill in firebase-config.js');
+  }
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const state = { user: null, profile: null, chapters: {}, chapterId: null, tab: 'overview' };
+  const isAdmin = () => state.profile?.role === 'admin';
+
+  // ---------- Auth screens ----------
+  $('#su-chapter').innerHTML = '<option value="">Select your chapter</option>'
+    + Object.entries(DEFAULT_CHAPTERS).map(([id, c]) => `<option value="${id}">${esc(c.name)}</option>`).join('')
+    + '<option value="other">Other / New chapter</option><option value="national">AMPL National board</option>';
+
+  document.querySelectorAll('.auth-tab').forEach(btn => btn.onclick = () => {
+    document.querySelectorAll('.auth-tab').forEach(b => b.classList.toggle('active', b === btn));
+    $('#signin-form').classList.toggle('hidden', btn.dataset.auth !== 'signin');
+    $('#signup-form').classList.toggle('hidden', btn.dataset.auth !== 'signup');
+    $('#auth-msg').classList.add('hidden');
+  });
+
+  $('#signin-form').onsubmit = async (e) => {
+    e.preventDefault();
+    try { await signInWithEmailAndPassword(auth, $('#si-email').value.trim(), $('#si-pass').value); }
+    catch (err) { flash($('#auth-msg'), friendlyError(err), true); }
+  };
+
+  let signingUp = false;
+  const createProfile = (user, name, requestedChapter) => setDoc(doc(db, 'users', user.uid), {
+    email: user.email, name, role: 'pending', chapterId: null, requestedChapter, createdAt: serverTimestamp()
+  });
+
+  $('#signup-form').onsubmit = async (e) => {
+    e.preventDefault();
+    signingUp = true;
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, $('#su-email').value.trim(), $('#su-pass').value);
+      await createProfile(cred.user, $('#su-name').value.trim(), $('#su-chapter').value);
+      signingUp = false;
+      await loadSession(cred.user);
+    } catch (err) { flash($('#auth-msg'), friendlyError(err), true); }
+    finally { signingUp = false; }
+  };
+
+  $('#forgot-btn').onclick = async () => {
+    const email = $('#si-email').value.trim();
+    if (!email) return flash($('#auth-msg'), 'Enter your email above first, then click "Forgot password?".', true);
+    try { await sendPasswordResetEmail(auth, email); flash($('#auth-msg'), 'If that email has an account, a reset link is on its way.'); }
+    catch (err) { flash($('#auth-msg'), friendlyError(err), true); }
+  };
+
+  $('#signout-btn').onclick = () => signOut(auth);
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      Object.assign(state, { user: null, profile: null, chapters: {}, chapterId: null });
+      $('#signout-btn').classList.add('hidden');
+      $('#nav-user').textContent = '';
+      showView('auth');
+      return;
+    }
+    loadSession(user);
+  });
+
+  async function loadSession(user) {
+    state.user = user;
+    $('#signout-btn').classList.remove('hidden');
+    let snap = await getDoc(doc(db, 'users', user.uid));
+    if (!snap.exists()) {
+      // Sign-up writes the profile right after creating the account; it calls loadSession again when done.
+      if (signingUp) { showView('loading'); return; }
+      // Login exists without a profile (e.g. its access was removed): start over as pending.
+      await createProfile(user, '', '');
+      snap = await getDoc(doc(db, 'users', user.uid));
+    }
+    state.profile = snap.data();
+    $('#nav-user').textContent = state.profile.name || user.email;
+    if (state.profile.role !== 'chapter' && state.profile.role !== 'admin') { showView('pending'); return; }
+
+    await loadChapters();
+    state.chapterId = isAdmin() ? (state.chapterId || Object.keys(state.chapters)[0] || null) : state.profile.chapterId;
+    document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', !isAdmin()));
+    $('#side-role').textContent = isAdmin() ? 'AMPL National' : 'Your Chapter';
+    $('#side-chapter').textContent = isAdmin() ? 'Admin' : (state.chapters[state.chapterId]?.name || state.chapterId);
+    showView('app');
+    if (isAdmin()) refreshPendingCount();
+    openTab(state.tab);
+  }
+
+  async function loadChapters() {
+    const snap = await getDocs(collection(db, 'chapters'));
+    state.chapters = {};
+    snap.forEach(d => state.chapters[d.id] = { id: d.id, ...d.data() });
+  }
+
+  // ---------- Tabs ----------
+  const TABS = { overview: renderOverview, resources: renderResources, profile: renderProfile, reports: renderReports, finances: renderFinances, approvals: renderApprovals, accounts: renderAccounts, chapters: renderChapters };
+
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.onclick = () => openTab(btn.dataset.tab));
+
+  async function openTab(tab) {
+    state.tab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    const content = $('#content');
+    content.innerHTML = '<p class="muted">Loading…</p>';
+    try { await TABS[tab](content); }
+    catch (err) { content.innerHTML = `<div class="msg error">${esc(friendlyError(err))}</div>`; console.error(err); }
+  }
+  const rerender = () => openTab(state.tab);
+
+  async function run(fn) {
+    try { await fn(); rerender(); }
+    catch (err) { alert(friendlyError(err)); console.error(err); }
+  }
+
+  // Admins pick which chapter they're looking at on per-chapter tabs.
+  function chapterHeader(title, label) {
+    const picker = isAdmin() ? `
+      <div class="form-group" style="min-width:220px">
+        <label class="form-label" for="chapter-picker">Viewing chapter</label>
+        <select id="chapter-picker" class="form-select">
+          ${Object.values(state.chapters).map(c => `<option value="${esc(c.id)}" ${c.id === state.chapterId ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}
+        </select>
+      </div>` : '';
+    return `<div class="content-head"><div><p class="section-label">${esc(label)}</p><h1 class="section-title">${esc(title)}</h1></div>${picker}</div>`;
+  }
+  function bindChapterPicker() {
+    const picker = $('#chapter-picker');
+    if (picker) picker.onchange = () => { state.chapterId = picker.value; rerender(); };
+  }
+  function noChapter(content, title) {
+    content.innerHTML = chapterHeader(title, 'Chapter') + `<div class="card"><p class="empty">${isAdmin() ? 'No chapters exist yet. Add them under Chapters & Budgets.' : 'Your account is not linked to a chapter. Contact AMPL National.'}</p></div>`;
+  }
+
+  async function chapterDocs(name) {
+    const snap = await getDocs(query(collection(db, name), where('chapterId', '==', state.chapterId)));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
+  }
+  async function allDocs(name) {
+    const snap = await getDocs(collection(db, name));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
+  }
+  const formValues = (form) => Object.fromEntries(new FormData(form).entries());
+
+  // ---------- Announcements ----------
+  async function renderOverview(content) {
+    const items = await allDocs('announcements');
+    content.innerHTML = `
+      <div class="content-head"><div><p class="section-label">From AMPL National</p><h1 class="section-title">Announcements</h1></div></div>
+      ${isAdmin() ? `
+      <div class="card"><div class="card-title">Post an announcement</div>
+        <form id="ann-form" class="stack">
+          <div class="form-group"><label class="form-label">Title</label><input name="title" class="form-input" required /></div>
+          <div class="form-group"><label class="form-label">Message</label><textarea name="body" class="form-textarea" required></textarea></div>
+          <button class="btn">Post to all chapters</button>
+        </form></div>` : ''}
+      <div class="card">
+        ${items.length ? items.map(a => `
+          <div class="list-item"><div class="item-row">
+            <div><div class="item-title">${esc(a.title)}</div><div class="item-meta">${esc(fmtDate(a.createdAt))}${a.author ? ' · ' + esc(a.author) : ''}</div></div>
+            ${isAdmin() ? `<div class="item-actions"><button class="btn btn-sm btn-ghost" data-del="${a.id}">Delete</button></div>` : ''}
+          </div><div class="item-body">${esc(a.body)}</div></div>`).join('') : '<p class="empty">No announcements yet.</p>'}
+      </div>`;
+    if (!isAdmin()) return;
+    $('#ann-form').onsubmit = (e) => { e.preventDefault(); const v = formValues(e.target);
+      run(() => addDoc(collection(db, 'announcements'), { title: v.title.trim(), body: v.body.trim(), author: state.profile.name || '', createdAt: serverTimestamp() })); };
+    content.querySelectorAll('[data-del]').forEach(b => b.onclick = () => confirm('Delete this announcement?') && run(() => deleteDoc(doc(db, 'announcements', b.dataset.del))));
+  }
+
+  // ---------- Resources ----------
+  async function renderResources(content) {
+    const items = await allDocs('resources');
+    const groups = {};
+    items.forEach(r => (groups[r.category || 'General'] ??= []).push(r));
+    content.innerHTML = `
+      <div class="content-head"><div><p class="section-label">Toolkits &amp; Templates</p><h1 class="section-title">Resources</h1></div></div>
+      ${isAdmin() ? `
+      <div class="card"><div class="card-title">Add a resource</div>
+        <form id="res-form" class="stack">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Title</label><input name="title" class="form-input" required /></div>
+            <div class="form-group"><label class="form-label">Category</label><input name="category" class="form-input" placeholder="e.g. Templates, Branding, Guides" /></div>
+          </div>
+          <div class="form-group"><label class="form-label">Link (Google Drive, Doc, website…)</label><input name="url" type="url" class="form-input" required placeholder="https://" /></div>
+          <div class="form-group"><label class="form-label">Description (optional)</label><input name="description" class="form-input" /></div>
+          <button class="btn">Add resource</button>
+        </form></div>` : ''}
+      ${items.length ? Object.entries(groups).sort().map(([cat, list]) => `
+        <div class="card"><div class="card-title">${esc(cat)}</div>
+          ${list.map(r => `<div class="list-item"><div class="item-row">
+            <div><a class="item-title" href="${esc(safeUrl(r.url))}" target="_blank" rel="noopener" style="text-decoration:none">${esc(r.title)} ↗</a>
+            ${r.description ? `<div class="item-meta">${esc(r.description)}</div>` : ''}</div>
+            ${isAdmin() ? `<div class="item-actions"><button class="btn btn-sm btn-ghost" data-del="${r.id}">Delete</button></div>` : ''}
+          </div></div>`).join('')}
+        </div>`).join('') : '<div class="card"><p class="empty">No resources yet.</p></div>'}`;
+    if (!isAdmin()) return;
+    $('#res-form').onsubmit = (e) => { e.preventDefault(); const v = formValues(e.target);
+      run(() => addDoc(collection(db, 'resources'), { title: v.title.trim(), category: v.category.trim() || 'General', url: v.url.trim(), description: v.description.trim(), createdAt: serverTimestamp() })); };
+    content.querySelectorAll('[data-del]').forEach(b => b.onclick = () => confirm('Delete this resource?') && run(() => deleteDoc(doc(db, 'resources', b.dataset.del))));
+  }
+
+  // ---------- Chapter profile ----------
+  async function renderProfile(content) {
+    if (!state.chapterId) return noChapter(content, 'Chapter Profile');
+    const snap = await getDoc(doc(db, 'chapters', state.chapterId));
+    const c = snap.exists() ? snap.data() : {};
+    content.innerHTML = chapterHeader(c.name || state.chapterId, 'Chapter Profile') + `
+      <div class="card">
+        <form id="profile-form" class="stack">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">City</label><input name="city" class="form-input" value="${esc(c.city)}" /></div>
+            <div class="form-group"><label class="form-label">Instagram handle</label><input name="instagram" class="form-input" value="${esc(c.instagram)}" placeholder="@yourchapter" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Chapter email</label><input name="email" type="email" class="form-input" value="${esc(c.email)}" /></div>
+            <div class="form-group"><label class="form-label">President</label><input name="president" class="form-input" value="${esc(c.president)}" /></div>
+          </div>
+          <div class="form-group"><label class="form-label">Officer board (one per line: Name - Role)</label><textarea name="officers" class="form-textarea">${esc(c.officers)}</textarea></div>
+          <div class="form-group"><label class="form-label">About the chapter</label><textarea name="description" class="form-textarea">${esc(c.description)}</textarea></div>
+          <button class="btn">Save profile</button>
+          <div id="profile-msg" class="msg hidden"></div>
+        </form>
+      </div>`;
+    bindChapterPicker();
+    $('#profile-form').onsubmit = async (e) => {
+      e.preventDefault();
+      const v = formValues(e.target);
+      Object.keys(v).forEach(k => v[k] = v[k].trim());
+      try { await updateDoc(doc(db, 'chapters', state.chapterId), v); flash($('#profile-msg'), 'Saved.'); }
+      catch (err) { flash($('#profile-msg'), friendlyError(err), true); }
+    };
+  }
+
+  // ---------- Event reports ----------
+  async function renderReports(content) {
+    if (!state.chapterId) return noChapter(content, 'Event Reports');
+    const items = await chapterDocs('reports');
+    const canSubmit = !isAdmin();
+    content.innerHTML = chapterHeader('Event Reports', state.chapters[state.chapterId]?.name || '') + `
+      ${canSubmit ? `
+      <div class="card"><div class="card-title">Submit an event report</div>
+        <form id="report-form" class="stack">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Event name</label><input name="eventName" class="form-input" required /></div>
+            <div class="form-group"><label class="form-label">Date</label><input name="eventDate" type="date" class="form-input" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Attendance</label><input name="attendance" type="number" min="0" class="form-input" /></div>
+            <div class="form-group"><label class="form-label">Photos / materials link (optional)</label><input name="link" type="url" class="form-input" placeholder="https://" /></div>
+          </div>
+          <div class="form-group"><label class="form-label">Summary — what happened, speakers, outcomes</label><textarea name="summary" class="form-textarea" required></textarea></div>
+          <button class="btn">Submit report</button>
+        </form></div>` : ''}
+      <div class="card"><div class="card-title">Submitted reports</div>
+        ${items.length ? items.map(r => `
+          <div class="list-item"><div class="item-row">
+            <div><div class="item-title">${esc(r.eventName)}</div>
+              <div class="item-meta">${esc(fmtDate(r.eventDate))}${r.attendance !== '' && r.attendance != null ? ' · ' + esc(r.attendance) + ' attendees' : ''} · submitted by ${esc(r.submittedByName || '')}</div></div>
+            ${isAdmin() ? `<div class="item-actions"><button class="btn btn-sm btn-ghost" data-del="${r.id}">Delete</button></div>` : ''}
+          </div>
+          <div class="item-body">${esc(r.summary)}</div>
+          ${r.link ? `<div class="item-meta" style="margin-top:0.4rem"><a href="${esc(safeUrl(r.link))}" target="_blank" rel="noopener" style="color:var(--sage)">View photos / materials ↗</a></div>` : ''}
+          </div>`).join('') : '<p class="empty">No reports submitted yet.</p>'}
+      </div>`;
+    bindChapterPicker();
+    if (canSubmit) $('#report-form').onsubmit = (e) => { e.preventDefault(); const v = formValues(e.target);
+      run(() => addDoc(collection(db, 'reports'), {
+        chapterId: state.chapterId, eventName: v.eventName.trim(), eventDate: v.eventDate,
+        attendance: v.attendance === '' ? null : Number(v.attendance), link: v.link.trim(), summary: v.summary.trim(),
+        submittedBy: state.user.uid, submittedByName: state.profile.name || state.user.email, createdAt: serverTimestamp()
+      })); };
+    content.querySelectorAll('[data-del]').forEach(b => b.onclick = () => confirm('Delete this report?') && run(() => deleteDoc(doc(db, 'reports', b.dataset.del))));
+  }
+
+  // ---------- Finances ----------
+  function requestRows(list, opts = {}) {
+    if (!list.length) return '<p class="empty">No budget requests.</p>';
+    return `<div class="table-wrap"><table>
+      <tr>${opts.showChapter ? '<th>Chapter</th>' : ''}<th>Request</th><th>Needed by</th><th class="num">Amount</th><th>Status</th><th></th></tr>
+      ${list.map(r => `<tr>
+        ${opts.showChapter ? `<td>${esc(state.chapters[r.chapterId]?.name || r.chapterId)}</td>` : ''}
+        <td><div class="item-title">${esc(r.title)}</div><div class="item-meta">${esc(r.purpose)}</div>
+          <div class="item-meta">Submitted ${esc(fmtDate(r.createdAt))} by ${esc(r.submittedByName || '')}</div>
+          ${r.adminNote ? `<div class="item-meta"><strong>National:</strong> ${esc(r.adminNote)}</div>` : ''}</td>
+        <td>${esc(fmtDate(r.neededBy))}</td>
+        <td class="num">${money(r.amount)}</td>
+        <td><span class="badge ${esc(r.status)}">${esc(r.status)}</span></td>
+        <td><div class="item-actions">
+          ${isAdmin() && r.status === 'pending' ? `<button class="btn btn-sm btn-ok" data-decide="approved" data-id="${r.id}">Approve</button><button class="btn btn-sm btn-bad" data-decide="denied" data-id="${r.id}">Deny</button>` : ''}
+          ${isAdmin() && r.status !== 'pending' ? `<button class="btn btn-sm btn-ghost" data-decide="pending" data-id="${r.id}">Reopen</button>` : ''}
+          ${!isAdmin() && r.status === 'pending' ? `<button class="btn btn-sm btn-ghost" data-withdraw="${r.id}">Withdraw</button>` : ''}
+        </div></td>
+      </tr>`).join('')}
+    </table></div>`;
+  }
+  function bindRequestActions(root) {
+    root.querySelectorAll('[data-decide]').forEach(b => b.onclick = () => {
+      const status = b.dataset.decide;
+      const note = status === 'pending' ? '' : prompt(`Optional note to the chapter (${status}):`, '');
+      if (note === null) return;
+      run(async () => { await updateDoc(doc(db, 'budgetRequests', b.dataset.id), { status, adminNote: note.trim(), decidedAt: serverTimestamp() }); refreshPendingCount(); });
+    });
+    root.querySelectorAll('[data-withdraw]').forEach(b => b.onclick = () => confirm('Withdraw this request?') && run(() => deleteDoc(doc(db, 'budgetRequests', b.dataset.withdraw))));
+  }
+
+  async function renderFinances(content) {
+    if (!state.chapterId) return noChapter(content, 'Finances');
+    const [chapSnap, requests, txns] = await Promise.all([getDoc(doc(db, 'chapters', state.chapterId)), chapterDocs('budgetRequests'), chapterDocs('transactions')]);
+    const allocation = chapSnap.exists() ? (chapSnap.data().budgetAllocated || 0) : 0;
+    const sum = (list) => list.reduce((t, x) => t + (Number(x.amount) || 0), 0);
+    const approved = sum(requests.filter(r => r.status === 'approved'));
+    const pending = sum(requests.filter(r => r.status === 'pending'));
+    const spent = sum(txns.filter(t => t.type === 'expense'));
+    const income = sum(txns.filter(t => t.type === 'income'));
+    const remaining = allocation + approved + income - spent;
+    txns.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+    content.innerHTML = chapterHeader('Finances', state.chapters[state.chapterId]?.name || '') + `
+      <div class="stats">
+        <div class="stat"><div class="stat-num">${money(allocation)}</div><div class="stat-label">Base allocation from National</div></div>
+        <div class="stat"><div class="stat-num">${money(approved)}</div><div class="stat-label">Approved requests</div></div>
+        <div class="stat"><div class="stat-num">${money(spent)}</div><div class="stat-label">Spent${income ? ' (' + money(income) + ' income)' : ''}</div></div>
+        <div class="stat"><div class="stat-num" style="color:${remaining < 0 ? 'var(--bad)' : 'var(--forest)'}">${money(remaining)}</div><div class="stat-label">Remaining${pending ? ' · ' + money(pending) + ' pending' : ''}</div></div>
+      </div>
+
+      ${!isAdmin() ? `
+      <div class="card"><div class="card-title">Request funding from National</div>
+        <form id="req-form" class="stack">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">What is it for?</label><input name="title" class="form-input" required placeholder="e.g. Spring speaker panel" /></div>
+            <div class="form-group"><label class="form-label">Amount (USD)</label><input name="amount" type="number" min="0.01" step="0.01" class="form-input" required /></div>
+          </div>
+          <div class="form-group"><label class="form-label">Needed by</label><input name="neededBy" type="date" class="form-input" /></div>
+          <div class="form-group"><label class="form-label">Justification &amp; cost breakdown</label><textarea name="purpose" class="form-textarea" required></textarea></div>
+          <button class="btn">Submit request</button>
+        </form></div>` : ''}
+
+      <div class="card"><div class="card-title">Budget requests</div>${requestRows(requests)}</div>
+
+      <div class="card"><div class="card-title">Ledger</div>
+        <form id="txn-form" class="stack" style="margin-bottom:1.2rem">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Description</label><input name="description" class="form-input" required placeholder="e.g. Pizza for GBM" /></div>
+            <div class="form-group"><label class="form-label">Date</label><input name="date" type="date" class="form-input" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Type</label><select name="type" class="form-select"><option value="expense">Expense</option><option value="income">Income (dues, donations, fundraising)</option></select></div>
+            <div class="form-group"><label class="form-label">Amount (USD)</label><input name="amount" type="number" min="0.01" step="0.01" class="form-input" required /></div>
+          </div>
+          <button class="btn btn-light">Add entry</button>
+        </form>
+        ${txns.length ? `<div class="table-wrap"><table>
+          <tr><th>Date</th><th>Description</th><th>Type</th><th class="num">Amount</th><th></th></tr>
+          ${txns.map(t => `<tr><td>${esc(fmtDate(t.date))}</td><td>${esc(t.description)}</td><td><span class="badge ${esc(t.type)}">${esc(t.type)}</span></td>
+            <td class="num">${t.type === 'expense' ? '−' : '+'}${money(t.amount)}</td>
+            <td><button class="btn btn-sm btn-ghost" data-deltxn="${t.id}">Delete</button></td></tr>`).join('')}
+        </table></div>` : '<p class="empty">No ledger entries yet.</p>'}
+      </div>`;
+
+    bindChapterPicker();
+    bindRequestActions(content);
+    if (!isAdmin()) $('#req-form').onsubmit = (e) => { e.preventDefault(); const v = formValues(e.target);
+      run(() => addDoc(collection(db, 'budgetRequests'), {
+        chapterId: state.chapterId, title: v.title.trim(), amount: Number(v.amount), purpose: v.purpose.trim(), neededBy: v.neededBy,
+        status: 'pending', adminNote: '', submittedBy: state.user.uid, submittedByName: state.profile.name || state.user.email, createdAt: serverTimestamp()
+      })); };
+    $('#txn-form').onsubmit = (e) => { e.preventDefault(); const v = formValues(e.target);
+      run(() => addDoc(collection(db, 'transactions'), {
+        chapterId: state.chapterId, description: v.description.trim(), date: v.date, type: v.type, amount: Number(v.amount),
+        createdBy: state.user.uid, createdAt: serverTimestamp()
+      })); };
+    content.querySelectorAll('[data-deltxn]').forEach(b => b.onclick = () => confirm('Delete this ledger entry?') && run(() => deleteDoc(doc(db, 'transactions', b.dataset.deltxn))));
+  }
+
+  // ---------- Admin: approvals ----------
+  async function refreshPendingCount() {
+    let n;
+    try {
+      const [reqs, users] = await Promise.all([
+        getDocs(query(collection(db, 'budgetRequests'), where('status', '==', 'pending'))),
+        getDocs(query(collection(db, 'users'), where('role', '==', 'pending')))
+      ]);
+      n = reqs.size + users.size;
+    } catch (err) { console.error(err); return; }
+    const badge = $('#pending-count');
+    badge.textContent = n;
+    badge.classList.toggle('hidden', n === 0);
+  }
+
+  async function renderApprovals(content) {
+    const [reqSnap, userSnap] = await Promise.all([
+      getDocs(query(collection(db, 'budgetRequests'), where('status', '==', 'pending'))),
+      getDocs(query(collection(db, 'users'), where('role', '==', 'pending')))
+    ]);
+    const requests = reqSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
+    content.innerHTML = `
+      <div class="content-head"><div><p class="section-label">Needs Your Review</p><h1 class="section-title">Approvals</h1></div></div>
+      <div class="card"><div class="card-title">Pending budget requests</div>${requestRows(requests, { showChapter: true })}</div>
+      <div class="card"><div class="card-title">Pending account requests</div>
+        ${userSnap.size ? `<p class="muted">${userSnap.size} account${userSnap.size > 1 ? 's are' : ' is'} waiting. <button class="link-btn" id="go-accounts">Review in Accounts →</button></p>` : '<p class="empty">No pending accounts.</p>'}
+      </div>`;
+    bindRequestActions(content);
+    const go = $('#go-accounts');
+    if (go) go.onclick = () => openTab('accounts');
+  }
+
+  // ---------- Admin: accounts ----------
+  async function renderAccounts(content) {
+    const snap = await getDocs(collection(db, 'users'));
+    const users = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => (a.role === 'pending' ? -1 : 0) - (b.role === 'pending' ? -1 : 0) || (a.name || '').localeCompare(b.name || ''));
+    const requested = (u) => DEFAULT_CHAPTERS[u.requestedChapter]?.name || state.chapters[u.requestedChapter]?.name || u.requestedChapter || '';
+    const chapterOpts = (sel) => '<option value="">— none —</option>' + Object.values(state.chapters).map(c => `<option value="${esc(c.id)}" ${c.id === sel ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
+    content.innerHTML = `
+      <div class="content-head"><div><p class="section-label">Admin</p><h1 class="section-title">Accounts</h1></div></div>
+      <div class="card">
+        <p class="muted" style="margin-bottom:1rem">Approve a new account by assigning a chapter and setting the role to <strong>Chapter officer</strong>. Set <strong>National admin</strong> only for AMPL National board members.</p>
+        <div class="table-wrap"><table>
+          <tr><th>Name</th><th>Requested</th><th>Chapter</th><th>Role</th><th></th></tr>
+          ${users.map(u => `<tr data-uid="${u.id}">
+            <td><div class="item-title">${esc(u.name)}</div><div class="item-meta">${esc(u.email)}</div></td>
+            <td>${esc(requested(u))}</td>
+            <td><select class="form-select" data-field="chapterId">${chapterOpts(u.chapterId)}</select></td>
+            <td><select class="form-select" data-field="role">
+              ${[['pending', 'Pending'], ['chapter', 'Chapter officer'], ['admin', 'National admin']].map(([v, l]) => `<option value="${v}" ${u.role === v ? 'selected' : ''}>${l}</option>`).join('')}
+            </select></td>
+            <td><div class="item-actions"><button class="btn btn-sm" data-save>Save</button>${u.id !== state.user.uid ? '<button class="btn btn-sm btn-ghost" data-remove>Remove</button>' : ''}</div></td>
+          </tr>`).join('')}
+        </table></div>
+        <p class="muted" style="margin-top:1rem;font-size:0.82rem">"Remove" revokes portal access. To fully delete the login itself, also delete the user in Firebase console → Authentication.</p>
+      </div>`;
+    content.querySelectorAll('tr[data-uid]').forEach(row => {
+      const uid = row.dataset.uid;
+      row.querySelector('[data-save]').onclick = () => {
+        const role = row.querySelector('[data-field="role"]').value;
+        const chapterId = row.querySelector('[data-field="chapterId"]').value || null;
+        if (role === 'chapter' && !chapterId) return alert('Pick a chapter for a chapter officer.');
+        if (uid === state.user.uid && role !== 'admin' && !confirm('This removes your own admin access. Continue?')) return;
+        run(async () => { await updateDoc(doc(db, 'users', uid), { role, chapterId }); refreshPendingCount(); });
+      };
+      const rm = row.querySelector('[data-remove]');
+      if (rm) rm.onclick = () => confirm('Remove this account\'s portal access?') && run(() => deleteDoc(doc(db, 'users', uid)));
+    });
+  }
+
+  // ---------- Admin: chapters & budgets ----------
+  async function renderChapters(content) {
+    await loadChapters();
+    const missing = Object.keys(DEFAULT_CHAPTERS).filter(id => !state.chapters[id]);
+    const list = Object.values(state.chapters).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    content.innerHTML = `
+      <div class="content-head"><div><p class="section-label">Admin</p><h1 class="section-title">Chapters &amp; Budgets</h1></div></div>
+      ${missing.length ? `<div class="card"><p class="muted" style="margin-bottom:1rem">${missing.length} of the chapters listed on the main site ${missing.length > 1 ? "aren't" : "isn't"} in the portal yet.</p><button class="btn" id="seed-btn">Add ${missing.map(id => esc(DEFAULT_CHAPTERS[id].name)).join(', ')}</button></div>` : ''}
+      <div class="card"><div class="card-title">Base budget allocation per chapter</div>
+        ${list.length ? `<div class="table-wrap"><table>
+          <tr><th>Chapter</th><th>ID</th><th class="num">Allocation (USD)</th><th></th></tr>
+          ${list.map(c => `<tr data-cid="${esc(c.id)}">
+            <td class="item-title">${esc(c.name)}</td><td class="item-meta">${esc(c.id)}</td>
+            <td class="num"><input type="number" min="0" step="0.01" class="form-input" style="max-width:160px;text-align:right" value="${Number(c.budgetAllocated || 0)}" /></td>
+            <td><div class="item-actions"><button class="btn btn-sm" data-save>Save</button><button class="btn btn-sm btn-ghost" data-remove>Delete</button></div></td>
+          </tr>`).join('')}
+        </table></div>` : '<p class="empty">No chapters yet.</p>'}
+      </div>
+      <div class="card"><div class="card-title">Add a new chapter</div>
+        <form id="chapter-form" class="stack">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Chapter name</label><input name="name" class="form-input" required placeholder="AMPL UC Riverside" /></div>
+            <div class="form-group"><label class="form-label">Short ID (lowercase, no spaces)</label><input name="id" class="form-input" required pattern="[a-z0-9-]+" placeholder="ucr" /></div>
+          </div>
+          <div class="form-group"><label class="form-label">City</label><input name="city" class="form-input" placeholder="Riverside, CA" /></div>
+          <button class="btn">Add chapter</button>
+        </form></div>`;
+
+    const seed = $('#seed-btn');
+    if (seed) seed.onclick = () => run(async () => {
+      for (const id of missing) await setDoc(doc(db, 'chapters', id), { ...DEFAULT_CHAPTERS[id], budgetAllocated: 0 });
+      await loadChapters();
+      if (!state.chapterId) state.chapterId = Object.keys(state.chapters)[0];
+    });
+    content.querySelectorAll('tr[data-cid]').forEach(row => {
+      const cid = row.dataset.cid;
+      row.querySelector('[data-save]').onclick = () => run(() => updateDoc(doc(db, 'chapters', cid), { budgetAllocated: Number(row.querySelector('input').value) || 0 }));
+      row.querySelector('[data-remove]').onclick = () => confirm(`Delete ${state.chapters[cid].name}? Its reports and finances stay in the database but won't be shown.`) && run(async () => {
+        await deleteDoc(doc(db, 'chapters', cid));
+        if (state.chapterId === cid) state.chapterId = null;
+        await loadChapters();
+        state.chapterId ??= Object.keys(state.chapters)[0] || null;
+      });
+    });
+    $('#chapter-form').onsubmit = (e) => { e.preventDefault(); const v = formValues(e.target);
+      const id = v.id.trim().toLowerCase();
+      if (state.chapters[id]) return alert('A chapter with that ID already exists.');
+      run(async () => {
+        await setDoc(doc(db, 'chapters', id), { name: v.name.trim(), city: v.city.trim(), instagram: '', email: '', budgetAllocated: 0 });
+        await loadChapters();
+        state.chapterId ??= id;
+      });
+    };
+  }
+</script>
+</body>
+</html>
