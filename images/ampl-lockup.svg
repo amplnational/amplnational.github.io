@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 316 100" role="img" aria-labelledby="t">
   <title id="t">AMPL</title>
   <svg x="0" y="0" width="100" height="100" viewBox="30 22 140 140">
-  <g fill="#1a3cc8" stroke="#1a3cc8" stroke-linecap="round" stroke-linejoin="round">
+  <g fill="#26305e" stroke="#26305e" stroke-linecap="round" stroke-linejoin="round">
     <!-- Crescent, horns up: outer circle c(100,90) r66, inner circle c(100,79.9) r60.1, meeting at the horns -->
     <path d="M49.1 48 A66 66 0 1 0 150.9 48 A60.1 60.1 0 1 1 49.1 48 Z" stroke="none"/>
     <!-- Scales -->
@@ -14,5 +14,5 @@
     <path d="M60 92 Q76 104 92 92 Z M108 92 Q124 104 140 92 Z" stroke-width="2"/>
   </g>
   </svg>
-  <text x="112" y="74" fill="#1a3cc8" font-family="'Public Sans', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="68" letter-spacing="-2">AMPL</text>
+  <text x="112" y="74" fill="#26305e" font-family="'Public Sans', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="68" letter-spacing="-2">AMPL</text>
 </svg>

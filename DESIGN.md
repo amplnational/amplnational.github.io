@@ -2,17 +2,19 @@
 name: AMPL
 description: Association of Muslims in Politics and Law, set as an amended bill in California legislative print.
 colors:
-  bond-paper: "#fdfdfb"
-  ink: "#121214"
-  ink-secondary: "#47474d"
-  ink-tertiary: "#6b6b72"
-  insertion-blue: "#1a3cc8"
-  on-blue: "#ffffff"
-  on-blue-secondary: "#d9e0ff"
-  deletion-red: "#c4211a"
-  field-stroke: "#c9c9cf"
-  map-wash: "#eef1fb"
-  roll-highlight: "#e7ecff"
+  bond-paper: "#fbfbfc"
+  ink: "#151a2d"
+  ink-secondary: "#464c5e"
+  ink-tertiary: "#676d7d"
+  ampl-navy: "#26305e"
+  insertion-blue: "#3a4f9f"
+  on-navy: "#ffffff"
+  on-navy-secondary: "#c9ced9"
+  silver: "#c3c8d2"
+  silver-wash: "#e8eaef"
+  silver-pale: "#f1f2f5"
+  strike-gray: "#646b7b"
+  error-red: "#b3261e"
 typography:
   display:
     fontFamily: "Public Sans, system-ui, sans-serif"
@@ -119,7 +121,7 @@ Insertion blue is a field, not a trim color. It owns whole full-bleed bands (the
 This system replaces the earlier navy, gold and cream serif editorial look entirely. The rejected references are the "law nonprofit" navy-gold template and the broadsheet-editorial look.
 
 **Key Characteristics:**
-- Bond paper, black ink, one insertion blue that owns full-width bands, deletion red only on strikes.
+- Bond paper, black ink, AMPL navy owning full-width bands, silver for strikes and quiet surfaces.
 - Public Sans for headings, labels and controls; Tinos for statute text, insertions, enumerators and line numbers.
 - Line-numbered left margin running the full height of the page.
 - Hard rectangular edges everywhere; no radius, no elevation.
@@ -127,29 +129,26 @@ This system replaces the earlier navy, gold and cream serif editorial look entir
 
 ## Colors
 
-A three-ink print palette: paper and black for the statute, one saturated insertion blue for fields and marks, a red that exists only to strike.
+Blue and silver, from the AMPL emblem: AMPL navy for fields and marks, silver for every quiet surface and every strike, black ink for the statute. Chosen by the site owner over the first build's saturated blue and red.
 
 ### Primary
-- **Insertion Blue** (`insertion-blue`): the system's single voice. Full-bleed band backgrounds (digest, motions section, footer), the 6px rule along the top of the sticky masthead, section numbers, enumerators, inline links, active nav underline, focus outlines, text selection and caret. Inserted (`<ins>`) text is set in it.
+- **AMPL Navy** (`ampl-navy`): full-bleed band backgrounds (digest, motions section, footer), the 6px masthead rule, primary links, map pins, nav underline, focus outlines, selection, the mark in the masthead.
+- **Insertion Blue** (`insertion-blue`): inserted (`<ins>`) text on paper, section numbers, enumerators. Calmer than navy so insertions stay distinct from body ink.
 
 ### Secondary
-- **Deletion Red** (`deletion-red`): struck (`<del>`) text and its strike, plus invalid-field borders and form error text. Never a fill, never a button, never decoration.
+- **Silver** (`silver`): light buttons and the Pending tag on navy, form field borders, the footer seal.
+- **Strike Gray** (`strike-gray`): struck (`<del>`) text and its strike on paper. Inside navy fields, strikes use `on-navy-secondary`.
 
 ### Neutral
-- **Bond Paper** (`bond-paper`): page background and masthead; the ground of the bill.
-- **Ink** (`ink`): headings, body text, primary button fill.
-- **Ink Secondary** (`ink-secondary`): ledes, roles, captions, meta strip, secondary nav link.
-- **Ink Tertiary** (`ink-tertiary`): placeholders and scrollbar thumb.
-- **On Blue** (`on-blue`): text, light buttons, select and tags set on blue fields.
-- **On Blue Secondary** (`on-blue-secondary`): secondary copy, enumerators, struck text and line numbers inside blue fields; hover fill for light buttons.
-- **Field Stroke** (`field-stroke`): the 2px resting border of form inputs.
-- **Map Wash** (`map-wash`): the pale blue ground behind the California chapter map.
-- **Roll Highlight** (`roll-highlight`): the selected chapter row in the chapter roll.
+- **Bond Paper** (`bond-paper`), **Ink** (`ink`), **Ink Secondary** (`ink-secondary`), **Ink Tertiary** (`ink-tertiary`): ground, headings and body, ledes and captions, placeholders.
+- **On Navy** / **On Navy Secondary**: text and secondary copy, numerals and strikes inside navy fields.
+- **Silver Wash** (`silver-wash`): selected chapter row. **Silver Pale** (`silver-pale`): ground behind the chapter map (the silhouette asset is pre-tinted `#d9dce3`).
+- **Error Red** (`error-red`): validation errors only.
 
 ### Named Rules
-**The Blue Owns Bands Rule.** Insertion blue appears either as a full-bleed field that inverts its contents, or as small marks (numbers, links, insertions, focus). It is never a tinted card, a gradient or a partial panel.
+**The Navy Owns Bands Rule.** Navy appears either as a full-bleed field that inverts its contents, or as small marks. Never a tinted card, gradient or partial panel.
 
-**The Red Only Strikes Rule.** Deletion red is reserved for struck text and validation errors. If red appears anywhere else, it is wrong. Inside blue fields, strikes turn on-blue-secondary instead of red.
+**The Silver Strikes Rule.** Deletions are struck in silver-gray, never red. Red exists only for form errors.
 
 ## Typography
 
@@ -199,7 +198,7 @@ The system has no decorative divider rules. Structure is carried by section numb
 ### Buttons
 Bracketed statute actions: hard-edged, heavy and plain.
 - **Shape:** square corners (0px), Public Sans 700 at 1rem, 0.85rem by 1.1rem padding, label framed by Tinos brackets at 70% opacity.
-- **Primary:** ink fill, paper text; hover turns the fill insertion blue (0.2s) while the brackets step out 3px each way (cubic-bezier(0.16, 1, 0.3, 1)).
+- **Primary:** ink fill, paper text; hover turns the fill AMPL navy (0.2s) while the brackets step out 3px each way (cubic-bezier(0.16, 1, 0.3, 1)).
 - **Light (on blue):** white fill, blue text; hover goes on-blue-secondary.
 - **Ghost:** transparent with a 2px inset ink stroke; hover fills ink. On blue fields the stroke and text are white, and the hover fill is white with blue text.
 - **Disabled / sending:** 60% opacity with a progress cursor.
@@ -210,7 +209,7 @@ Bracketed statute actions: hard-edged, heavy and plain.
 
 ### Inputs / Fields
 - **Style:** white fill, 2px field-stroke border, square, Tinos 1.05rem input text; selects use Public Sans with a drawn chevron. Labels are Public Sans 700 above the field, with hints in ink-secondary.
-- **Focus:** border turns insertion blue, plus a 3px blue outline on keyboard focus.
+- **Focus:** border turns AMPL navy, plus a 3px navy outline on keyboard focus.
 - **Error:** border turns deletion red (`:user-invalid`); the status line reports errors in red and success in blue.
 
 ### Campus Picker
@@ -235,9 +234,9 @@ Each section's key line performs its amendment once when it enters view: the str
 The mark is the incumbent AMPL emblem redrawn as one-colour vector: a crescent, horns up, holding the scales of justice. The design is unchanged from `images/logo.jpg`; only the file and colouring are new.
 
 - `images/ampl-mark.svg`: crescent and scales only. Use at 40px and below (masthead, favicon). Inline it with `fill="currentColor"` so it takes `--blue` on paper and `--on-blue` on bands.
-- `images/ampl-seal.svg` / `images/ampl-seal-white.svg`: the full seal with "Association of Muslims in Politics and Law" on the ring and "National" below. Use at 96px and up (footer, social avatars, print). Ring text is live Tinos with a Times fallback; outline it in a design tool before sending it to print.
+- `images/ampl-seal.svg` (navy) / `images/ampl-seal-silver.svg`: the full seal with "Association of Muslims in Politics and Law" on the ring and "National" below. Use at 96px and up (footer, social avatars, print). Ring text is live Tinos with a Times fallback; outline it in a design tool before sending it to print.
 - `images/ampl-lockup.svg`: the mark beside "AMPL" in Public Sans 900.
-- One colour only: insertion blue on paper, white on blue, or cream `#d8cdb6` on the legacy navy. No gradients, outlines or drop shadows.
+- One colour only: AMPL navy on paper, silver `#c3c8d2` or white on navy (`images/ampl-seal-silver.svg` in the footer). No gradients, outlines or drop shadows.
 - `images/logo.jpg` stays as the legacy raster (favicon fallback, portal.html until it migrates).
 
 ## Do's and Don'ts

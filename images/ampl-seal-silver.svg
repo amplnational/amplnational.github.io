@@ -4,12 +4,12 @@
     <path id="ring-top" d="M33.4 170 A100 100 0 1 1 206.6 170"/>
     <path id="ring-bottom" d="M58 214 A104 104 0 0 0 182 214"/>
   </defs>
-  <g fill="#ffffff" font-family="Tinos, 'Times New Roman', Times, serif" font-weight="700" text-anchor="middle">
+  <g fill="#c3c8d2" font-family="Tinos, 'Times New Roman', Times, serif" font-weight="700" text-anchor="middle">
     <text font-size="15"><textPath href="#ring-top" startOffset="50%" textLength="408" lengthAdjust="spacing">ASSOCIATION OF MUSLIMS IN POLITICS AND LAW</textPath></text>
     <text font-size="17"><textPath href="#ring-bottom" startOffset="50%" textLength="104" lengthAdjust="spacing">NATIONAL</textPath></text>
   </g>
   <svg x="42" y="36" width="156" height="156" viewBox="30 22 140 140">
-  <g fill="#ffffff" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
+  <g fill="#c3c8d2" stroke="#c3c8d2" stroke-linecap="round" stroke-linejoin="round">
     <!-- Crescent, horns up: outer circle c(100,90) r66, inner circle c(100,79.9) r60.1, meeting at the horns -->
     <path d="M49.1 48 A66 66 0 1 0 150.9 48 A60.1 60.1 0 1 1 49.1 48 Z" stroke="none"/>
     <!-- Scales -->
