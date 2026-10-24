@@ -19,7 +19,7 @@
       --blue: #26305e;
       --insert: #3a4f9f;
       --on-blue: #ffffff;
-      --on-blue-2: #c9ced9;
+      --on-blue-2: #c4cce2;
       --silver: #c3c8d2;
       --silver-2: #e8eaef;
       --silver-3: #f1f2f5;
@@ -46,7 +46,7 @@
     .skip { position: absolute; left: 1rem; top: -4rem; background: var(--ink); color: var(--paper); padding: 0.75rem 1rem; font-family: var(--sans); font-weight: 600; z-index: 200; }
     .skip:focus { top: 1rem; }
 
-    /* Amendments: struck text in red, inserted text in blue italic */
+    /* Amendments: struck text in silver-gray, inserted text in blue italic */
     del, ins { text-decoration: none; position: relative; }
     /* The strike is a background so it crosses every line a wrapped phrase occupies */
     del { color: var(--strike); background: linear-gradient(currentColor, currentColor) no-repeat 0 58% / 100% 0.08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
@@ -157,7 +157,7 @@
     /* SEC. 2 speakers: enumerated paragraphs */
     .speakers { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 3rem) clamp(2rem, 5vw, 5rem); max-width: 70rem; }
     .speakers li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); }
-    .speakers .n { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: var(--blue); line-height: 1.5; }
+    .speakers .n { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: var(--insert); line-height: 1.5; }
     .speakers .who { font-family: var(--sans); font-weight: 800; font-size: clamp(1.45rem, 2.6vw, 2.1rem); line-height: 1.12; letter-spacing: -0.02em; }
     .speakers .who.titled { font-weight: 600; font-style: normal; }
     .speakers .role { color: var(--ink-2); margin-top: 0.35rem; }
@@ -180,7 +180,7 @@
     .map-note { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-2); margin-top: 0.6rem; }
     .roll { list-style: none; counter-reset: ch; }
     .roll li { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) auto; gap: 0 1rem; align-items: baseline; padding: 0.95rem 0.75rem; margin: 0 -0.75rem; transition: background-color 0.25s; }
-    .roll li::before { counter-increment: ch; content: '(' counter(ch) ')'; font-family: var(--serif); font-weight: 700; color: var(--blue); }
+    .roll li::before { counter-increment: ch; content: '(' counter(ch) ')'; font-family: var(--serif); font-weight: 700; color: var(--insert); }
     .roll li.on { background: var(--silver-2); }
     .roll .school { font-family: var(--sans); font-weight: 800; font-size: 1.3rem; letter-spacing: -0.01em; }
     .roll .city { color: var(--ink-2); font-size: 1rem; }
@@ -208,7 +208,7 @@
     .field label { font: 700 0.95rem var(--sans); }
     .field .hint { font-size: 0.95rem; color: var(--ink-2); }
     .field input, .field select, .field textarea { font: 400 1.05rem/1.4 var(--serif); color: var(--ink); background: #ffffff; padding: 0.85rem 0.9rem; border: 2px solid var(--silver); border-radius: 0; width: 100%; transition: border-color 0.2s; }
-    .field select { font-family: var(--sans); appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2 5l5 5 5-5' fill='none' stroke='%23121214' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.9rem center / 14px; padding-right: 2.5rem; }
+    .field select { font-family: var(--sans); appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2 5l5 5 5-5' fill='none' stroke='%23151a2d' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.9rem center / 14px; padding-right: 2.5rem; }
     .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--blue); outline: none; }
     .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
     .field input:user-invalid, .field textarea:user-invalid { border-color: var(--red); }
@@ -347,7 +347,7 @@
                   <option value="davis">UC Davis</option>
                   <option value="none">My campus isn't listed</option>
                 </select>
-                <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" fill="none" stroke="#121214" stroke-width="2"/></svg>
+                <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" fill="none" stroke="#151a2d" stroke-width="2"/></svg>
               </div>
             </div>
             <div class="result" id="campus-result" aria-live="polite">

@@ -9,7 +9,7 @@ colors:
   ampl-navy: "#26305e"
   insertion-blue: "#3a4f9f"
   on-navy: "#ffffff"
-  on-navy-secondary: "#c9ced9"
+  on-navy-secondary: "#c4cce2"
   silver: "#c3c8d2"
   silver-wash: "#e8eaef"
   silver-pale: "#f1f2f5"
@@ -74,15 +74,17 @@ components:
     rounded: "{rounded.none}"
     padding: "0.85rem 1.1rem"
   button-primary-hover:
-    backgroundColor: "{colors.insertion-blue}"
+    backgroundColor: "{colors.ampl-navy}"
     textColor: "{colors.bond-paper}"
   button-light:
-    backgroundColor: "{colors.on-blue}"
-    textColor: "{colors.insertion-blue}"
+    backgroundColor: "{colors.silver}"
+    textColor: "{colors.ampl-navy}"
+    typography: "{typography.label}"
     rounded: "{rounded.none}"
     padding: "0.85rem 1.1rem"
   button-light-hover:
-    backgroundColor: "{colors.on-blue-secondary}"
+    backgroundColor: "{colors.on-navy}"
+    textColor: "{colors.ampl-navy}"
   button-ghost:
     backgroundColor: "transparent"
     textColor: "{colors.ink}"
@@ -92,18 +94,18 @@ components:
     backgroundColor: "{colors.ink}"
     textColor: "{colors.bond-paper}"
   input-field:
-    backgroundColor: "{colors.on-blue}"
+    backgroundColor: "{colors.on-navy}"
     textColor: "{colors.ink}"
     rounded: "{rounded.none}"
     padding: "0.85rem 0.9rem"
   select-campus:
-    backgroundColor: "{colors.on-blue}"
+    backgroundColor: "{colors.on-navy}"
     textColor: "{colors.ink}"
     rounded: "{rounded.none}"
     padding: "0.95rem 2.75rem 0.95rem 1rem"
   status-tag:
-    backgroundColor: "{colors.on-blue}"
-    textColor: "{colors.insertion-blue}"
+    backgroundColor: "{colors.silver}"
+    textColor: "{colors.ampl-navy}"
     rounded: "{rounded.none}"
     padding: "0.25rem 0.55rem"
 ---
@@ -114,9 +116,9 @@ components:
 
 **Creative North Star: "The Amended Bill"**
 
-The public site is printed like a California legislative bill: white bond paper, black ink, a line-numbered left margin, numbered sections (SEC. 1., SEC. 2.), lettered subsections ((a), (b)) and enumerated paragraphs ((1), (2)). Amendment is the voice. Struck red text names the status quo AMPL changes; bold blue italic insertions name what it builds. The bill's structure is the composition, never decoration laid over a generic page.
+The public site is printed like a California legislative bill: white bond paper, black ink, a line-numbered left margin, numbered sections (SEC. 1., SEC. 2.), lettered subsections ((a), (b)) and enumerated paragraphs ((1), (2)). Amendment is the voice. Struck silver-gray text names the status quo AMPL changes; bold blue italic insertions name what it builds. The bill's structure is the composition, never decoration laid over a generic page.
 
-Insertion blue is a field, not a trim color. It owns whole full-bleed bands (the digest under the headline, the Get Involved motions section, the footer's enacting clause) and inverts everything inside them. Outside those bands the page is ink on paper with blue reserved for enumerators, section numbers, links and active states. Density is generous and readable: statute body text at 1.125rem Tinos, set against heavy Public Sans headings in the voice of civic signage.
+AMPL navy is a field, not a trim color. It owns whole full-bleed bands (the digest under the headline, the Get Involved motions section, the footer's enacting clause) and inverts everything inside them. Outside those bands the page is ink on paper with navy reserved for links, pins and active states, and the calmer insertion blue for inserted text, section numbers and enumerators. Density is generous and readable: statute body text at 1.125rem Tinos, set against heavy Public Sans headings in the voice of civic signage.
 
 This system replaces the earlier navy, gold and cream serif editorial look entirely. The rejected references are the "law nonprofit" navy-gold template and the broadsheet-editorial look.
 
@@ -133,7 +135,7 @@ Blue and silver, from the AMPL emblem: AMPL navy for fields and marks, silver fo
 
 ### Primary
 - **AMPL Navy** (`ampl-navy`): full-bleed band backgrounds (digest, motions section, footer), the 6px masthead rule, primary links, map pins, nav underline, focus outlines, selection, the mark in the masthead.
-- **Insertion Blue** (`insertion-blue`): inserted (`<ins>`) text on paper, section numbers, enumerators. Calmer than navy so insertions stay distinct from body ink.
+- **Insertion Blue** (`insertion-blue`): inserted (`<ins>`) text on paper, section numbers, program letters ((a), (b)) and the italic exhibit insertions. Calmer than navy so insertions stay distinct from body ink.
 
 ### Secondary
 - **Silver** (`silver`): light buttons and the Pending tag on navy, form field borders, the footer seal.
@@ -164,17 +166,17 @@ Blue and silver, from the AMPL emblem: AMPL navy for fields and marks, silver fo
 - **Amendment** (Tinos 400, clamp(1.35rem, 2.4vw, 1.8rem), 1.35): the one amended lede beneath each section title. Plain ledes use 1.3rem in ink-secondary, max 46ch.
 - **Body** (Tinos 400, 1.125rem, 1.6): statute text; program paragraphs step to 1.2rem. Measure 40 to 60ch.
 - **Label** (Public Sans 600 to 700, 0.95 to 1.05rem): nav, buttons, field labels, links in result blocks, meta strip.
-- **Enumerator** (Tinos 700, 1.3 to 1.6rem, insertion blue): (a), (1), and the chapter roll's counter, in a fixed 2.5 to 3.5rem left column.
-- **Line number** (Tinos 400, 0.8rem, tabular, ink at 50%): the margin numerals, every fifth line labelled, on the 2rem line grid.
+- **Enumerator** (Tinos 700, 1.3 to 1.6rem): (a), (1), and the chapter roll's counter, in a fixed 2.5 to 3.5rem left column. All enumerators are insertion blue on paper; inside navy fields they turn on-navy-secondary.
+- **Line number** (Tinos 400, 0.8rem, tabular, #8d93a1 on paper, on-navy-secondary in navy fields): the margin numerals, every fifth line labelled, on the 2rem line grid.
 
 ### Named Rules
-**The Statute Voice Rule.** Running text, insertions, enumerators and line numbers are Tinos; anything a person reads as a heading, label or control is Public Sans. Insertions are always Tinos italic bold in blue.
+**The Statute Voice Rule.** Running text, insertions, enumerators and line numbers are Tinos; anything a person reads as a heading, label or control is Public Sans. Insertions are always Tinos italic bold, insertion blue on paper and white inside navy fields.
 
 **The One Amendment Rule.** Each section carries exactly one amended line (a `del` and/or `ins` pair). Amendment is the voice of a key line, not a styling for emphasis elsewhere.
 
 ## Layout
 
-A single column of sections on the line-numbered bill. Every content block sits inside a left padding of gutter plus margin (`spacing.gutter` + `spacing.margin`); the margin column holds the line numbers, generated in JS on the 2rem `spacing.line` grid and labelled every fifth line. Blue bands run full-bleed while their content keeps the same left edge, and the margin numerals inside them turn on-blue-secondary.
+A single column of sections on the line-numbered bill. Every content block sits inside a left padding of gutter plus margin (`spacing.gutter` + `spacing.margin`); the margin column holds the line numbers, generated in JS on the 2rem `spacing.line` grid and labelled every fifth line. Navy bands run full-bleed while their content keeps the same left edge, and the margin numerals inside them turn on-navy-secondary.
 
 Sections use `section-top` / `section-bottom` padding with a 62rem max-width header block. Content inside sections is grid-based: two-column digest and picker (1.1fr / 1fr), program rows of enumerator / text / photo (3.5rem / 1fr / clamp(16rem, 32vw, 28rem)), two-column enumerated lists for speakers and motions, map plus roll for chapters, and form plus aside for contact. Column gaps scale with clamp(1.5rem to 6rem).
 
@@ -182,16 +184,16 @@ Breakpoints: at 960px the margin narrows to 2.4rem, every two-column grid stacks
 
 ## Elevation & Depth
 
-Flat. Depth comes from the blue fields, not from shadows: a surface is either paper or blue, and the line between them is a full-bleed color change. There are no drop shadows, gradients or layered cards. The ghost button's outline is drawn as an inset 2px stroke, which is a border technique and not elevation. The photo viewer dims the page with a near-opaque navy-black backdrop (rgba(10, 14, 32, 0.92)).
+Flat. Depth comes from the navy fields, not from shadows: a surface is either paper or navy, and the line between them is a full-bleed color change. There are no drop shadows, gradients or layered cards. The ghost button's outline is drawn as an inset 2px stroke, which is a border technique and not elevation. The photo viewer dims the page with a near-opaque navy-black backdrop (rgba(18, 22, 44, 0.94)).
 
 ### Named Rules
-**The Paper Or Blue Rule.** Surfaces are flat at rest and in every state. Separate regions with a blue field, a section number or space, never with a shadow or a tinted card.
+**The Paper Or Blue Rule.** Surfaces are flat at rest and in every state. Separate regions with a navy field, a section number or space, never with a shadow or a tinted card.
 
 ## Shapes
 
 Hard rectangles throughout (`rounded.none`): buttons, selects, inputs, tags, photos and bands are square-cornered. The only round forms belong to the AMPL mark (the crescent and the scales' finial). Photos are cropped to 4:3 (programs, record grid), 1:1 (first-viewport photo) or 3:2 (mobile first-viewport photo). Brackets are the button's silhouette: a Tinos "[" and "]" frame each action label.
 
-The system has no decorative divider rules. Structure is carried by section numbers, margin numerals and blue fields. The lines it does draw are functional: the strike through deleted text, the 6px blue masthead rule, the 3px active-nav underline, and 2px field strokes.
+The system has no decorative divider rules. Structure is carried by section numbers, margin numerals and navy fields. The lines it does draw are functional: the strike through deleted text, the 6px navy masthead rule, the 3px active-nav underline, and 2px field strokes.
 
 ## Components
 
@@ -199,32 +201,32 @@ The system has no decorative divider rules. Structure is carried by section numb
 Bracketed statute actions: hard-edged, heavy and plain.
 - **Shape:** square corners (0px), Public Sans 700 at 1rem, 0.85rem by 1.1rem padding, label framed by Tinos brackets at 70% opacity.
 - **Primary:** ink fill, paper text; hover turns the fill AMPL navy (0.2s) while the brackets step out 3px each way (cubic-bezier(0.16, 1, 0.3, 1)).
-- **Light (on blue):** white fill, blue text; hover goes on-blue-secondary.
-- **Ghost:** transparent with a 2px inset ink stroke; hover fills ink. On blue fields the stroke and text are white, and the hover fill is white with blue text.
+- **Light (on navy):** silver fill, navy text; hover goes white.
+- **Ghost:** transparent with a 2px inset ink stroke; hover fills ink. On navy fields the stroke and text are white, and the hover fill is white with navy text.
 - **Disabled / sending:** 60% opacity with a progress cursor.
-- **Focus:** 3px solid blue outline at a 3px offset; white inside blue fields.
+- **Focus:** 3px solid AMPL navy outline at a 3px offset; white inside navy fields.
 
 ### Status Tag
-- **Style:** Public Sans 800 at 0.8rem, uppercase, 0.08em tracking, blue on white, square. Used only to state a real program status (Mentorship "Pending") inline after a title on blue.
+- **Style:** Public Sans 800 at 0.8rem, uppercase, 0.08em tracking, navy on silver, square. Used only to state a real program status (Mentorship "Pending") inline after a title on navy.
 
 ### Inputs / Fields
-- **Style:** white fill, 2px field-stroke border, square, Tinos 1.05rem input text; selects use Public Sans with a drawn chevron. Labels are Public Sans 700 above the field, with hints in ink-secondary.
+- **Style:** white fill, 2px silver border, square, Tinos 1.05rem input text; selects use Public Sans with a drawn chevron. Labels are Public Sans 700 above the field, with hints in ink-secondary.
 - **Focus:** border turns AMPL navy, plus a 3px navy outline on keyboard focus.
-- **Error:** border turns deletion red (`:user-invalid`); the status line reports errors in red and success in blue.
+- **Error:** border turns error red (`:user-invalid`); the status line reports errors in error red and success in navy.
 
 ### Campus Picker
-The primary action, set inside the blue digest band: a borderless white full-width select (Public Sans 600, 1.05rem) under a 1.35rem Public Sans 800 label, with an `aria-live` result block below it showing the chapter name, city and links in white.
+The primary action, set inside the navy digest band: a borderless white full-width select (Public Sans 600, 1.05rem) under a 1.35rem Public Sans 800 label, with an `aria-live` result block below it showing the chapter name, city and links in white.
 
 ### Navigation
-- **Style:** sticky paper masthead with a 6px insertion-blue top rule. Wordmark is Public Sans 900 with the full name in Tinos beside it. Links are Public Sans 600 at 0.95rem; "Chapter login" sits last at weight 400 in ink-secondary.
-- **States:** hover turns links blue; the current section is blue with a 3px underline at a 0.45em offset (`aria-current`).
+- **Style:** sticky paper masthead with a 6px AMPL navy top rule. The 40px navy mark leads a Public Sans 900 wordmark with the full name in Tinos beside it. Links are Public Sans 600 at 0.95rem; "Chapter login" sits last at weight 400 in ink-secondary.
+- **States:** hover turns links navy; the current section is navy with a 3px underline at a 0.45em offset (`aria-current`).
 - **Mobile (860px and below):** a "Menu" button with a three-line icon opens a full-width paper dropdown of 1.1rem links.
 
 ### Enumerated Lists
-Speakers, motions and the chapter roll share one grammar: a fixed narrow column holding a Tinos bold enumerator in blue ((1), (a)), then a Public Sans 800 title and Tinos secondary text. The selected chapter row takes the roll-highlight fill, linked to its pin on the map.
+Speakers, motions and the chapter roll share one grammar: a fixed narrow column holding a Tinos bold enumerator ((1), (a)), then a Public Sans 800 title and Tinos secondary text. The selected chapter row takes the silver-wash fill, linked to its pin on the map.
 
 ### Chapter Map
-The California map image on the map-wash ground, with campus pins drawn as paper circles with a 3px blue stroke that fill blue on hover, focus or selection, joined by a dotted blue route at 55% opacity. Pin labels are Public Sans 800 at 13px with a map-wash halo.
+The California map image on the silver-pale ground, with campus pins drawn as paper circles with a 3px navy stroke that fill navy on hover, focus or selection, joined by a dotted navy route at 55% opacity. Pin labels are Public Sans 800 at 13px with a silver-pale halo.
 
 ### Amendment Motion
 Each section's key line performs its amendment once when it enters view: the strike draws left to right (0.7s), then the insertion resolves from a 6px blur to sharp (0.8s, 0.6s delay), both on cubic-bezier(0.16, 1, 0.3, 1). With reduced motion or without JS the final amended text shows static. Apart from button hover and the photo hover lift, nothing else animates.
@@ -242,16 +244,16 @@ The mark is the incumbent AMPL emblem redrawn as one-colour vector: a crescent, 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** set every surface as paper or a full-bleed insertion-blue field, and invert all content inside the field (white text, on-blue-secondary secondary text, white focus rings).
-- **Do** number structure the way a bill does: "SEC. n." on section titles, (a) for subsections, (1) for enumerated items, all in Tinos bold blue except the 900-weight Public Sans section number.
+- **Do** set every surface as paper or a full-bleed AMPL navy field, and invert all content inside the field (white text, on-navy-secondary secondary text, white focus rings).
+- **Do** number structure the way a bill does: "SEC. n." on section titles, (a) for subsections, (1) for enumerated items, in Tinos bold, with the section number in 900-weight Public Sans insertion blue.
 - **Do** keep the line-numbered left margin and align all content to the gutter-plus-margin edge.
-- **Do** give each section one amended line, with insertions in Tinos bold italic blue and deletions struck in red (on-blue-secondary inside blue fields).
+- **Do** give each section one amended line, with insertions in Tinos bold italic insertion blue and deletions struck in strike gray (on-navy-secondary inside navy fields).
 - **Do** keep every control square-cornered, and frame button labels with Tinos brackets.
 
 ### Don't:
-- **Don't** use rounded corners, drop shadows, gradients or tinted cards; depth is paper versus blue.
-- **Don't** use deletion red for anything except struck text and validation errors.
-- **Don't** separate sections with divider rules; use section numbers, margin numerals and blue fields.
+- **Don't** use rounded corners, drop shadows, gradients or tinted cards; depth is paper versus navy.
+- **Don't** use error red for anything except validation errors; strikes are never red.
+- **Don't** separate sections with divider rules; use section numbers, margin numerals and navy fields.
 - **Don't** return to the navy, gold and cream serif palette or the broadsheet-editorial layout this system replaced.
 - **Don't** animate anything beyond the one amendment per section and the small hover responses.
 
