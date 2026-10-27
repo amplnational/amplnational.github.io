@@ -370,6 +370,12 @@
     if (state.profile.role !== 'chapter' && state.profile.role !== 'admin') { showView('pending'); return; }
 
     await loadChapters();
+    // First admin visit: create the chapters listed on the main site so accounts can be assigned right away.
+    if (isAdmin() && !Object.keys(state.chapters).length) {
+      const batch = writeBatch(db);
+      Object.entries(DEFAULT_CHAPTERS).forEach(([id, c]) => batch.set(doc(db, 'chapters', id), { ...c, budgetAllocated: 0 }));
+      try { await batch.commit(); await loadChapters(); } catch (err) { console.error(err); }
+    }
     state.chapterId = isAdmin() ? (state.chapterId || Object.keys(state.chapters)[0] || null) : state.profile.chapterId;
     document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', !isAdmin()));
     $('#side-role').textContent = isAdmin() ? 'AMPL National' : 'Your Chapter';

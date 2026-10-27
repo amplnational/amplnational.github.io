@@ -29,7 +29,7 @@ These values are meant to be public. The security rules are what protect your da
 2. In the Firebase console: **Firestore Database → Data → users →** click your account's document.
 3. Change the `role` field from `pending` to `admin`.
 4. Refresh the portal. You'll see the admin tabs.
-5. Go to **Chapters & Budgets** and click the button to add the existing chapters.
+5. The six chapters from the main site are created automatically the first time an admin signs in. Add more under **Chapters & Budgets**.
 
 ## Day-to-day use
 - **New chapter officers** go to the portal and click **Request Access**. They then show up under **Approvals** and **Accounts**. Assign them a chapter, set the role to **Chapter officer**, and click **Save**.
