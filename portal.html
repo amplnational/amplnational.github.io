@@ -965,8 +965,45 @@
     if (field || row.length) { row.push(field); rows.push(row); }
     return rows.filter(r => r.some(f => f.trim()));
   }
+  const toAmount = (v) => Math.abs(Number(String(v || '').replace(/[$,\s]/g, '')));
+  const toIsoDate = (v) => {
+    const m = String(v || '').trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    return m ? `${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}` : String(v || '').trim();
+  };
+
+  // Reads a CSV downloaded from the "Budget & Finance Tracker" sheet (File → Download → CSV):
+  // section headings in column A, a "Date, Amount, …" header row under each, then entries.
+  function ledgerFromSheetExport(rows) {
+    const headings = { 'INCOME': 'income', 'BANQUET EXPENSES': 'banquet', 'NATIONAL EXPENSES': 'national' };
+    const out = [];
+    let section = null, cols = null;
+    rows.forEach(r => {
+      const first = (r[0] || '').trim();
+      const upper = first.toUpperCase();
+      if (/^total raised from fundraising$/i.test(first) && toAmount(r[1]) > 0) {
+        out.push({ section: 'fundraising', date: '', amount: toAmount(r[1]), category: 'Fundraising', description: 'Total raised from fundraising (from the Budget & Finance Tracker sheet)', person: '', flag: true, notes: '' });
+        return;
+      }
+      if (headings[upper]) { section = headings[upper]; cols = null; return; }
+      if (upper === 'SUMMARY' || upper.endsWith(' TOTAL')) { if (upper.endsWith(' TOTAL')) section = null; return; }
+      if (upper === 'DATE') { cols = r.map(c => c.trim().toLowerCase()); return; }
+      if (!section || !cols) return;
+      const get = (name) => (r[cols.indexOf(name)] ?? '').trim();
+      const amount = toAmount(get('amount'));
+      if (!(amount > 0)) return;
+      out.push({
+        section, date: toIsoDate(get('date')), amount, category: get('category'), description: get('description'),
+        person: get('purchased by') || get('approved by'), flag: /^yes$/i.test(get('receipt?') || get('reimbursed?')), notes: get('notes')
+      });
+    });
+    if (!out.length) throw new Error("Couldn't find any entries in that file. Download the sheet with File → Download → Comma-separated values (.csv) and try again.");
+    return out;
+  }
+
   function ledgerFromCsv(text) {
-    const [head, ...rows] = parseCsv(text);
+    const all = parseCsv(text);
+    if (all.some(r => /^(banquet|national) expenses$/i.test((r[0] || '').trim()))) return ledgerFromSheetExport(all);
+    const [head, ...rows] = all;
     const cols = head.map(h => h.trim().toLowerCase());
     const missing = CSV_COLUMNS.filter(c => c !== 'notes' && !cols.includes(c));
     if (missing.length) throw new Error(`The CSV is missing these columns: ${missing.join(', ')}. Download a CSV from this page to see the expected layout.`);
