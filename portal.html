@@ -126,7 +126,8 @@
     table { width:100%; border-collapse:collapse; font-size:0.9rem; }
     th { text-align:left; font-size:0.8rem; font-weight:600; color:var(--muted); padding:0.6rem 0.5rem; border-bottom:1px solid var(--border); }
     td { padding:0.75rem 0.5rem; border-bottom:1px solid var(--line-2); vertical-align:top; }
-    td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+    td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .ledger-section td:first-child { white-space:nowrap; }
     .table-wrap { overflow-x:auto; }
     .badge { display:inline-block; text-transform:capitalize; font-size:0.74rem; font-weight:600; line-height:1; padding:0.3rem 0.5rem; border-radius:2px; border:1px solid currentColor; }
     .badge.pending { color:var(--warn); background:#fbf5ea; }
@@ -134,6 +135,19 @@
     .badge.denied, .badge.expense { color:var(--bad); background:#fbf1f0; }
     .badge.admin { color:var(--navy); background:#eceef5; }
     .badge.chapter { color:var(--ink-2); background:var(--surface); }
+
+    .badge.paid { color:var(--navy); background:#eceef5; }
+    .badge.as-is { text-transform:none; }
+
+    /* Reimbursements and ledger */
+    .hint { font-size:0.84rem; color:var(--muted); }
+    .msg.warn { border-color:#e6cf9f; background:#fbf5ea; color:var(--warn); }
+    .receipts { display:flex; flex-wrap:wrap; gap:0.75rem; margin-top:0.5rem; }
+    .receipts a { display:flex; flex-direction:column; gap:0.3rem; font-size:0.84rem; max-width:140px; overflow-wrap:anywhere; }
+    .receipts img { width:140px; height:105px; object-fit:cover; border:1px solid var(--border); border-radius:var(--radius); background:#fff; }
+    .ledger-section + .ledger-section { margin-top:1.75rem; }
+    .ledger-section h3 { font-size:0.95rem; font-weight:600; margin-bottom:0.4rem; display:flex; justify-content:space-between; gap:1rem; }
+    .toolbar { display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; }
 
     .setup-notice { max-width:640px; margin:4rem auto; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:2.5rem; }
     .setup-notice code { font-family:ui-monospace, 'SFMono-Regular', Menlo, monospace; background:var(--surface); border:1px solid var(--line-2); border-radius:2px; padding:1px 5px; font-size:0.85rem; }
@@ -212,7 +226,9 @@
       <button class="tab-btn" data-tab="profile">Chapter Profile</button>
       <button class="tab-btn" data-tab="reports">Event Reports</button>
       <button class="tab-btn" data-tab="finances">Finances</button>
+      <button class="tab-btn" data-tab="reimbursements">Reimbursements</button>
       <button class="tab-btn hidden admin-only" data-tab="approvals">Approvals <span id="pending-count" class="count hidden"></span></button>
+      <button class="tab-btn hidden admin-only" data-tab="ledger">National Ledger</button>
       <button class="tab-btn hidden admin-only" data-tab="accounts">Accounts</button>
       <button class="tab-btn hidden admin-only" data-tab="chapters">Chapters &amp; Budgets</button>
     </aside>
@@ -224,7 +240,7 @@
   import { firebaseConfig } from './firebase-config.js';
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, collection, query, where, getDocs, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, collection, query, where, getDocs, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
   // Matches chapterData on the main site; used to seed Firestore and for the sign-up dropdown.
   const DEFAULT_CHAPTERS = {
@@ -354,6 +370,12 @@
     if (state.profile.role !== 'chapter' && state.profile.role !== 'admin') { showView('pending'); return; }
 
     await loadChapters();
+    // First admin visit: create the chapters listed on the main site so accounts can be assigned right away.
+    if (isAdmin() && !Object.keys(state.chapters).length) {
+      const batch = writeBatch(db);
+      Object.entries(DEFAULT_CHAPTERS).forEach(([id, c]) => batch.set(doc(db, 'chapters', id), { ...c, budgetAllocated: 0 }));
+      try { await batch.commit(); await loadChapters(); } catch (err) { console.error(err); }
+    }
     state.chapterId = isAdmin() ? (state.chapterId || Object.keys(state.chapters)[0] || null) : state.profile.chapterId;
     document.querySelectorAll('.admin-only').forEach(el => el.classList.toggle('hidden', !isAdmin()));
     $('#side-role').textContent = isAdmin() ? 'AMPL National' : 'Your Chapter';
@@ -370,7 +392,7 @@
   }
 
   // ---------- Tabs ----------
-  const TABS = { overview: renderOverview, resources: renderResources, profile: renderProfile, reports: renderReports, finances: renderFinances, approvals: renderApprovals, accounts: renderAccounts, chapters: renderChapters };
+  const TABS = { overview: renderOverview, resources: renderResources, profile: renderProfile, reports: renderReports, finances: renderFinances, reimbursements: renderReimbursements, approvals: renderApprovals, ledger: renderLedger, accounts: renderAccounts, chapters: renderChapters };
 
   document.querySelectorAll('.tab-btn').forEach(btn => btn.onclick = () => openTab(btn.dataset.tab));
 
@@ -648,15 +670,428 @@
     content.querySelectorAll('[data-deltxn]').forEach(b => b.onclick = () => confirm('Delete this ledger entry?') && run(() => deleteDoc(doc(db, 'transactions', b.dataset.deltxn))));
   }
 
+  // ---------- Reimbursements ----------
+  // Firebase Storage needs the paid plan, so receipts live in Firestore: images are
+  // shrunk in the browser and each file is kept under Firestore's 1 MB document limit.
+  const RECEIPT_MAX_BYTES = 700 * 1024;
+  const RECEIPT_MAX_FILES = 5;
+  const today = () => new Date().toLocaleDateString('en-CA');
+  const sumAmounts = (list, key = 'amount') => list.reduce((t, x) => t + (Number(x[key]) || 0), 0);
+
+  const readAsDataUrl = (blob) => new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+    r.readAsDataURL(blob);
+  });
+
+  async function shrinkImage(file) {
+    const bitmap = await createImageBitmap(file);
+    for (let maxSide = 2000; maxSide >= 800; maxSide -= 400) {
+      const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(bitmap.width * scale);
+      canvas.height = Math.round(bitmap.height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      for (const quality of [0.82, 0.7, 0.55]) {
+        const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', quality));
+        if (blob && blob.size <= RECEIPT_MAX_BYTES) return blob;
+      }
+    }
+    throw new Error(`"${file.name}" is too large even after shrinking. Try a smaller photo.`);
+  }
+
+  async function prepareReceipt(file) {
+    if (file.type === 'application/pdf') {
+      if (file.size > RECEIPT_MAX_BYTES) throw new Error(`"${file.name}" is over 700 KB. Upload a photo of the receipt instead, or a smaller PDF.`);
+      return { name: file.name, type: file.type, data: await readAsDataUrl(file) };
+    }
+    if (!file.type.startsWith('image/')) throw new Error(`"${file.name}" isn't a photo or PDF.`);
+    let blob;
+    try { blob = await shrinkImage(file); }
+    catch (err) { throw new Error(err.message.startsWith('"') ? err.message : `Couldn't read "${file.name}". Save it as JPG or PNG and try again.`); }
+    return { name: file.name.replace(/\.[^.]+$/, '') + '.jpg', type: 'image/jpeg', data: await readAsDataUrl(blob) };
+  }
+
+  async function loadReceipts(r) {
+    const snap = await getDocs(query(collection(db, 'receipts'), where('reimbursementId', '==', r.id), where('chapterId', '==', r.chapterId)));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+
+  function reimbursementForm(grants) {
+    const grantOpts = grants.map(g => `<option value="${esc(g.id)}">${esc(g.title)} (${money(g.amount)})</option>`).join('');
+    return `
+      <div class="card"><div class="card-title">Request a reimbursement</div>
+        <p class="muted" style="margin:-0.5rem 0 1.25rem">For events National already approved a grant for. Submitting as ${esc(state.profile.name || state.user.email)} (${esc(state.user.email)}).</p>
+        <form id="reimb-form" class="stack" novalidate>
+          <div class="form-group"><label class="form-label" for="rb-grant">Which grant is this for?</label>
+            <select id="rb-grant" name="grantRequestId" class="form-select" required data-err="Choose which grant this is for.">
+              <option value="">Choose a grant</option>${grantOpts}
+              <option value="outside">A grant approved outside the portal</option>
+            </select>
+          </div>
+          <div class="form-group hidden" id="rb-outside"><label class="form-label" for="rb-gamount">Approved grant amount (USD)</label><input id="rb-gamount" name="grantAmount" type="number" min="0.01" step="0.01" class="form-input" data-err="Enter the approved grant amount." /></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="rb-event">Event name</label><input id="rb-event" name="eventName" class="form-input" required data-err="Enter the event name." /></div>
+            <div class="form-group"><label class="form-label" for="rb-edate">Event date</label><input id="rb-edate" name="eventDate" type="date" class="form-input" required max="${today()}" data-err="Enter the event date (it can't be in the future)." /></div>
+          </div>
+          <div class="form-group"><label class="form-label" for="rb-amount">Total spent (USD)</label><input id="rb-amount" name="amount" type="number" min="0.01" step="0.01" class="form-input" required style="max-width:14rem" data-err="Enter the total you spent." /></div>
+          <div class="msg warn hidden" id="rb-over"></div>
+          <div class="form-group"><label class="form-label" for="rb-changes" id="rb-changes-label">Anything different from the original request? (optional)</label><textarea id="rb-changes" name="changes" class="form-textarea" style="min-height:70px" placeholder="Venue, turnout, speakers or budget changes" data-err="Explain why it cost more than the grant."></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="rb-paidby">Who should we pay back?</label><input id="rb-paidby" name="paidBy" class="form-input" required data-err="Enter who should be paid back." value="${esc(state.profile.name || '')}" /></div>
+            <div class="form-group"><label class="form-label" for="rb-handle">Their Zelle or Venmo</label><input id="rb-handle" name="payHandle" class="form-input" required placeholder="Phone, email, or @venmo-name" data-err="Enter their Zelle or Venmo." /></div>
+          </div>
+          <div class="form-group"><label class="form-label" for="rb-files">Receipts</label>
+            <input id="rb-files" type="file" class="form-input" accept="image/*,application/pdf" multiple required data-err="Attach your receipts." />
+            <span class="hint">Photos or PDFs, up to ${RECEIPT_MAX_FILES} files. If several people paid, send one request per person.</span></div>
+          <div class="toolbar"><button class="btn" type="submit">Submit request</button><span class="msg hidden" id="rb-msg"></span></div>
+        </form>
+      </div>`;
+  }
+
+  function bindReimbursementForm(grants) {
+    const form = $('#reimb-form');
+    const grantById = Object.fromEntries(grants.map(g => [g.id, g]));
+    const grantAmount = () => {
+      const g = grantById[form.grantRequestId.value];
+      return g ? Number(g.amount) : Number(form.grantAmount.value) || 0;
+    };
+    // Spending more than the grant is allowed, but then the officer has to say why.
+    const checkOver = () => {
+      const cap = grantAmount(), spent = Number(form.amount.value) || 0;
+      const over = cap > 0 && spent > cap + 0.004;
+      $('#rb-over').classList.toggle('hidden', !over);
+      if (over) $('#rb-over').textContent = `That's ${money(spent - cap)} more than the ${money(cap)} grant. Please explain the difference below.`;
+      form.changes.required = over;
+      $('#rb-changes-label').textContent = over ? 'Why did it cost more than the grant?' : 'Anything different from the original request? (optional)';
+    };
+    form.grantRequestId.onchange = () => {
+      const outside = form.grantRequestId.value === 'outside';
+      $('#rb-outside').classList.toggle('hidden', !outside);
+      form.grantAmount.required = outside;
+      const g = grantById[form.grantRequestId.value];
+      if (g && !form.eventName.value) form.eventName.value = g.title;
+      checkOver();
+    };
+    form.grantAmount.oninput = form.amount.oninput = checkOver;
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const msg = $('#rb-msg');
+      const fail = (text, el) => { flash(msg, text, true); if (el) el.focus(); };
+      const bad = [...form.elements].find(el => el.willValidate && !el.checkValidity());
+      if (bad) return fail(bad.dataset.err || 'Please fill in the highlighted field.', bad);
+      const files = [...form.querySelector('#rb-files').files];
+      if (files.length > RECEIPT_MAX_FILES) return fail(`Upload at most ${RECEIPT_MAX_FILES} receipt files.`);
+
+      const btn = form.querySelector('[type="submit"]');
+      btn.disabled = true; btn.textContent = 'Uploading receipts…';
+      try {
+        const receipts = [];
+        for (const f of files) receipts.push(await prepareReceipt(f));
+        const v = formValues(form);
+        const g = grantById[v.grantRequestId];
+        const ref = doc(collection(db, 'reimbursements'));
+        const batch = writeBatch(db);
+        receipts.forEach(r => batch.set(doc(collection(db, 'receipts')), {
+          ...r, chapterId: state.chapterId, reimbursementId: ref.id, uploadedBy: state.user.uid, createdAt: serverTimestamp()
+        }));
+        batch.set(ref, {
+          chapterId: state.chapterId,
+          requesterName: state.profile.name || state.user.email, email: state.user.email,
+          grantRequestId: g ? g.id : '', grantTitle: g ? g.title : '', grantAmount: g ? Number(g.amount) : Number(v.grantAmount),
+          eventName: v.eventName.trim(), eventDate: v.eventDate, changes: v.changes.trim(),
+          amount: Math.round(Number(v.amount) * 100) / 100,
+          paidBy: v.paidBy.trim(), payHandle: v.payHandle.trim(), receiptCount: receipts.length,
+          status: 'pending', adminNote: '', approvedAmount: null,
+          submittedBy: state.user.uid, submittedByName: state.profile.name || state.user.email, createdAt: serverTimestamp()
+        });
+        await batch.commit();
+        rerender();
+      } catch (err) {
+        console.error(err);
+        fail(friendlyError(err));
+        btn.disabled = false; btn.textContent = 'Submit request';
+      }
+    };
+  }
+
+  function reimbursementList(list, opts = {}) {
+    if (!list.length) return `<p class="empty">${opts.empty || 'No reimbursement requests yet.'}</p>`;
+    return list.map(r => {
+      const chapter = state.chapters[r.chapterId]?.name || r.chapterId;
+      const paid = r.approvedAmount ?? r.amount;
+      const status = r.status === 'paid' ? `Paid ${money(paid)}${r.paidOn ? ' on ' + fmtDate(r.paidOn) : ''}` : r.status === 'denied' ? 'Denied' : 'Waiting for National';
+      const canPay = isAdmin() && r.status === 'pending';
+      return `<div class="list-item" data-rid="${r.id}">
+        <div class="item-row">
+          <div>
+            <div class="item-title">${esc(r.eventName)} · ${money(r.amount)}</div>
+            <div class="item-meta">${opts.showChapter ? esc(chapter) + ' · ' : ''}${esc(fmtDate(r.eventDate))} · grant ${money(r.grantAmount)}${r.grantTitle ? '' : ' (outside the portal)'} · submitted by ${esc(r.requesterName)}${r.email ? ` (<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>)` : ''}</div>
+            <div class="item-meta">Pay ${esc(r.paidBy)} · ${esc(r.payHandle)}</div>
+            ${r.changes ? `<div class="item-body">${esc(r.changes)}</div>` : ''}
+            ${r.adminNote ? `<div class="item-meta"><strong>National:</strong> ${esc(r.adminNote)}</div>` : ''}
+            <div class="item-meta" style="margin-top:0.35rem"><button type="button" class="link-btn" data-receipts="${r.id}">View ${r.receiptCount || ''} receipt${r.receiptCount === 1 ? '' : 's'}</button></div>
+            <div class="receipts"></div>
+          </div>
+          <div class="item-actions" style="align-items:center">
+            <span class="badge as-is ${esc(r.status)}">${esc(status)}</span>
+            ${!isAdmin() && r.status === 'pending' ? `<button class="btn btn-sm btn-ghost" data-reimb="withdraw" data-id="${r.id}">Withdraw</button>` : ''}
+            ${isAdmin() && r.status !== 'pending' ? `<button class="btn btn-sm btn-ghost" data-reimb="undo" data-id="${r.id}">Undo</button>` : ''}
+          </div>
+        </div>
+        ${canPay ? `<div class="toolbar" style="margin-top:0.75rem">
+          <label class="form-label" for="pay-${r.id}">Amount to pay</label>
+          <input id="pay-${r.id}" class="form-input" type="number" min="0.01" step="0.01" value="${Math.min(r.amount, r.grantAmount || r.amount).toFixed(2)}" style="width:8rem;text-align:right" />
+          <button class="btn btn-sm btn-ok" data-reimb="pay" data-id="${r.id}">Mark as paid</button>
+          <button class="btn btn-sm btn-ghost" data-reimb="deny" data-id="${r.id}">Deny</button>
+        </div>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  function bindReimbursementActions(root, list) {
+    const byId = Object.fromEntries(list.map(r => [r.id, r]));
+    root.querySelectorAll('[data-receipts]').forEach(b => b.onclick = async () => {
+      const box = b.closest('.list-item').querySelector('.receipts');
+      b.disabled = true; b.textContent = 'Loading…';
+      try {
+        const receipts = await loadReceipts(byId[b.dataset.receipts]);
+        const links = await Promise.all(receipts.map(async rc => {
+          const url = URL.createObjectURL(await (await fetch(rc.data)).blob());
+          return `<a href="${url}" target="_blank" rel="noopener" download="${esc(rc.name)}">${rc.type.startsWith('image/') ? `<img src="${url}" alt="Receipt: ${esc(rc.name)}" />` : ''}${esc(rc.name)}</a>`;
+        }));
+        box.innerHTML = links.join('') || '<span class="empty">No receipts found.</span>';
+        b.remove();
+      } catch (err) { console.error(err); b.disabled = false; b.textContent = 'Try again'; alert(friendlyError(err)); }
+    });
+    root.querySelectorAll('[data-reimb]').forEach(b => b.onclick = () => {
+      const r = byId[b.dataset.id];
+      const ref = doc(db, 'reimbursements', r.id);
+      const act = b.dataset.reimb;
+      if (act === 'pay') {
+        const amount = Math.round(Number($(`#pay-${r.id}`).value) * 100) / 100;
+        if (!(amount > 0)) return alert('Enter the amount you paid.');
+        if (!confirm(`Mark ${money(amount)} as sent to ${r.paidBy} (${r.payHandle})?\n\nThis also adds it to the National Ledger.`)) return;
+        run(async () => {
+          const entry = doc(collection(db, 'ledger'));
+          const batch = writeBatch(db);
+          batch.set(entry, {
+            section: 'national', date: today(), amount, category: 'Reimbursement',
+            description: `${state.chapters[r.chapterId]?.name || r.chapterId}: ${r.eventName}`,
+            person: state.profile.name || state.user.email, flag: true, notes: `Paid to ${r.paidBy}`,
+            reimbursementId: r.id, createdBy: state.user.uid, createdAt: serverTimestamp()
+          });
+          batch.update(ref, { status: 'paid', approvedAmount: amount, paidOn: today(), ledgerEntryId: entry.id, decidedBy: state.profile.name || state.user.email, decidedAt: serverTimestamp() });
+          await batch.commit();
+          refreshPendingCount();
+        });
+      } else if (act === 'deny') {
+        const note = prompt('Why is this denied? The chapter will see your reason.', '');
+        if (note === null) return;
+        run(async () => { await updateDoc(ref, { status: 'denied', adminNote: note.trim(), decidedBy: state.profile.name || state.user.email, decidedAt: serverTimestamp() }); refreshPendingCount(); });
+      } else if (act === 'undo') {
+        if (!confirm(r.status === 'paid' ? 'Move this back to waiting? Its National Ledger entry is removed.' : 'Move this back to waiting?')) return;
+        run(async () => {
+          const batch = writeBatch(db);
+          if (r.ledgerEntryId) batch.delete(doc(db, 'ledger', r.ledgerEntryId));
+          batch.update(ref, { status: 'pending', approvedAmount: null, adminNote: '', paidOn: null, ledgerEntryId: null });
+          await batch.commit();
+          refreshPendingCount();
+        });
+      } else if (act === 'withdraw') {
+        if (!confirm('Withdraw this request?')) return;
+        run(async () => {
+          const batch = writeBatch(db);
+          (await loadReceipts(r)).forEach(rc => batch.delete(doc(db, 'receipts', rc.id)));
+          batch.delete(ref);
+          await batch.commit();
+        });
+      }
+    });
+  }
+
+  async function renderReimbursements(content) {
+    if (isAdmin()) {
+      const list = await allDocs('reimbursements');
+      const waiting = list.filter(r => r.status === 'pending');
+      content.innerHTML = `
+        <div class="content-head"><div><h1 class="section-title">Reimbursements</h1></div></div>
+        <div class="card"><div class="card-title">To pay</div>${reimbursementList(waiting, { showChapter: true, empty: 'Nothing waiting. New requests from chapters show up here.' })}</div>
+        <div class="card"><div class="card-title">Done</div>${reimbursementList(list.filter(r => r.status !== 'pending'), { showChapter: true, empty: 'No paid or denied requests yet.' })}</div>`;
+      bindReimbursementActions(content, list);
+      return;
+    }
+    if (!state.chapterId) return noChapter(content, 'Reimbursements');
+    const [list, requests] = await Promise.all([chapterDocs('reimbursements'), chapterDocs('budgetRequests')]);
+    const grants = requests.filter(r => r.status === 'approved');
+    content.innerHTML = chapterHeader('Reimbursements', '') + reimbursementForm(grants) +
+      `<div class="card"><div class="card-title">Your chapter's requests</div>${reimbursementList(list)}</div>`;
+    bindReimbursementForm(grants);
+    bindReimbursementActions(content, list);
+  }
+
+  // ---------- Admin: national ledger ----------
+  // Mirrors the "AMPL National — Budget & Finance Tracker" sheet: remaining balance is
+  // fundraising + income − banquet expenses − national expenses.
+  const LEDGER_SECTIONS = {
+    fundraising: { label: 'Fundraising', sign: 1, person: 'Raised by', flag: 'Deposited?' },
+    income:      { label: 'Income', sign: 1, person: 'From', flag: 'Received?' },
+    banquet:     { label: 'Banquet expenses', sign: -1, person: 'Purchased by', flag: 'Receipt?' },
+    national:    { label: 'National expenses', sign: -1, person: 'Approved by', flag: 'Reimbursed?' }
+  };
+  const CSV_COLUMNS = ['section', 'date', 'amount', 'category', 'description', 'person', 'flag', 'notes'];
+
+  function csvEscape(v) { const s = String(v ?? ''); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+  function parseCsv(text) {
+    const rows = []; let row = [], field = '', quoted = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (quoted) {
+        if (c === '"' && text[i + 1] === '"') { field += '"'; i++; }
+        else if (c === '"') quoted = false;
+        else field += c;
+      } else if (c === '"') quoted = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); rows.push(row); row = []; field = '';
+      } else field += c;
+    }
+    if (field || row.length) { row.push(field); rows.push(row); }
+    return rows.filter(r => r.some(f => f.trim()));
+  }
+  function ledgerFromCsv(text) {
+    const [head, ...rows] = parseCsv(text);
+    const cols = head.map(h => h.trim().toLowerCase());
+    const missing = CSV_COLUMNS.filter(c => c !== 'notes' && !cols.includes(c));
+    if (missing.length) throw new Error(`The CSV is missing these columns: ${missing.join(', ')}. Download a CSV from this page to see the expected layout.`);
+    return rows.map((r, n) => {
+      const get = (c) => (r[cols.indexOf(c)] ?? '').trim();
+      const section = get('section').toLowerCase();
+      if (!LEDGER_SECTIONS[section]) throw new Error(`Row ${n + 2}: section must be one of ${Object.keys(LEDGER_SECTIONS).join(', ')}.`);
+      const amount = Math.abs(Number(get('amount').replace(/[$,\s]/g, '')));
+      if (!(amount > 0)) throw new Error(`Row ${n + 2}: amount "${get('amount')}" isn't a number.`);
+      const date = get('date');
+      if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new Error(`Row ${n + 2}: date must look like 2026-05-31.`);
+      return { section, date, amount, category: get('category'), description: get('description'), person: get('person'), flag: /^(yes|y|true|1)$/i.test(get('flag')), notes: get('notes') };
+    });
+  }
+
+  async function renderLedger(content) {
+    const [entries, reimbs] = await Promise.all([allDocs('ledger'), allDocs('reimbursements')]);
+    entries.sort((a, b) => (b.date || '').localeCompare(a.date || '') || ts(b.createdAt) - ts(a.createdAt));
+    const total = (s) => sumAmounts(entries.filter(e => e.section === s));
+    const balance = total('fundraising') + total('income') - total('banquet') - total('national');
+    const waiting = reimbs.filter(r => r.status === 'pending');
+
+    content.innerHTML = `
+      <div class="content-head"><div><h1 class="section-title">National Ledger</h1></div>
+        <div class="toolbar">
+          ${entries.length ? '<button class="btn btn-light btn-sm" id="ledger-export">Download for Google Sheets</button>' : `
+            <label class="btn btn-light btn-sm" for="ledger-import" style="cursor:pointer">Import from CSV</label>
+            <input type="file" id="ledger-import" accept=".csv,text/csv" style="position:absolute;width:1px;height:1px;opacity:0" />`}
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-num">${money(total('fundraising'))}</div><div class="stat-label">Raised from fundraising</div></div>
+        <div class="stat"><div class="stat-num">${money(total('income'))}</div><div class="stat-label">Other income</div></div>
+        <div class="stat"><div class="stat-num">${money(total('banquet') + total('national'))}</div><div class="stat-label">Spent</div></div>
+        <div class="stat"><div class="stat-num" style="color:${balance < 0 ? 'var(--bad)' : 'var(--ink)'}">${money(balance)}</div><div class="stat-label">Remaining balance</div></div>
+      </div>
+      ${waiting.length ? `<div class="msg" style="margin-bottom:1.25rem">${waiting.length} reimbursement${waiting.length > 1 ? 's' : ''} waiting to be paid (${money(sumAmounts(waiting))}). <button class="link-btn" id="go-reimb">Review</button></div>` : ''}
+
+      <div class="card"><div class="card-title">Add an entry</div>
+        <form id="ledger-form" class="stack">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="lg-section">Type</label><select id="lg-section" name="section" class="form-select">${Object.entries(LEDGER_SECTIONS).map(([k, s]) => `<option value="${k}" ${k === 'national' ? 'selected' : ''}>${s.label}</option>`).join('')}</select></div>
+            <div class="form-group"><label class="form-label" for="lg-amount">Amount (USD)</label><input id="lg-amount" name="amount" type="number" min="0.01" step="0.01" class="form-input" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="lg-desc">Description</label><input id="lg-desc" name="description" class="form-input" required placeholder="e.g. Venue deposit for the spring banquet" /></div>
+            <div class="form-group"><label class="form-label" for="lg-date">Date</label><input id="lg-date" name="date" type="date" class="form-input" value="${today()}" /></div>
+          </div>
+          <button class="btn">Add entry</button>
+        </form>
+        <p class="hint" style="margin-top:0.75rem">Paid reimbursements are added here automatically.</p>
+      </div>
+
+      <div class="card">
+        ${Object.entries(LEDGER_SECTIONS).map(([key, s]) => {
+          const rows = entries.filter(e => e.section === key);
+          return `<div class="ledger-section"><h3><span>${s.label}</span><span>${money(total(key))}</span></h3>
+            ${rows.length ? `<div class="table-wrap"><table>
+              <tr><th>Date</th><th>Description</th><th class="num">Amount</th><th></th></tr>
+              ${rows.map(e => {
+                const meta = [e.category, e.person && `${s.person} ${e.person}`, e.notes].filter(Boolean).join(' · ');
+                return `<tr>
+                  <td>${esc(fmtDate(e.date)) || '<span class="item-meta">No date</span>'}</td>
+                  <td>${esc(e.description || e.category)}${meta && e.description ? `<div class="item-meta">${esc(meta)}</div>` : ''}</td>
+                  <td class="num">${s.sign < 0 ? '−' : ''}${money(e.amount)}</td>
+                  <td><button class="btn btn-sm btn-ghost" data-delentry="${e.id}">Delete</button></td>
+                </tr>`;
+              }).join('')}
+            </table></div>` : '<p class="empty">Nothing yet.</p>'}</div>`;
+        }).join('')}
+      </div>`;
+
+    const go = $('#go-reimb');
+    if (go) go.onclick = () => openTab('reimbursements');
+    const form = $('#ledger-form');
+    form.onsubmit = (e) => { e.preventDefault(); const v = formValues(form);
+      run(() => addDoc(collection(db, 'ledger'), {
+        section: v.section, date: v.date, amount: Math.round(Number(v.amount) * 100) / 100, category: '', description: v.description.trim(),
+        person: state.profile.name || state.user.email, flag: false, notes: '', createdBy: state.user.uid, createdAt: serverTimestamp()
+      })); };
+    content.querySelectorAll('[data-delentry]').forEach(b => b.onclick = () => {
+      const e = entries.find(x => x.id === b.dataset.delentry);
+      const linked = e?.reimbursementId ? '\n\nThis entry came from a paid reimbursement. To undo the payment instead, use Undo on the Reimbursements tab.' : '';
+      if (confirm(`Delete "${e?.description || 'this entry'}" (${money(e?.amount)})?${linked}`)) run(() => deleteDoc(doc(db, 'ledger', b.dataset.delentry)));
+    });
+
+    const exportBtn = $('#ledger-export');
+    if (exportBtn) exportBtn.onclick = () => {
+      const lines = [CSV_COLUMNS.join(',')].concat([...entries].reverse().map(e => CSV_COLUMNS.map(c => csvEscape(c === 'flag' ? (e.flag ? 'yes' : 'no') : e[c])).join(',')));
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/csv' }));
+      a.download = `ampl-national-ledger-${today()}.csv`;
+      a.click();
+    };
+    const importInput = $('#ledger-import');
+    if (importInput) importInput.onchange = async (e) => {
+      const file = e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      let rows;
+      try { rows = ledgerFromCsv(await file.text()); }
+      catch (err) { return alert(err.message); }
+      if (!rows.length) return alert('That CSV has no entries.');
+      const sums = Object.keys(LEDGER_SECTIONS).map(k => [k, sumAmounts(rows.filter(r => r.section === k))]).filter(([, v]) => v);
+      if (!confirm(`Import ${rows.length} entries?\n\n${sums.map(([k, v]) => `${LEDGER_SECTIONS[k].label}: ${money(v)}`).join('\n')}`)) return;
+      run(async () => {
+        for (let i = 0; i < rows.length; i += 400) {
+          const batch = writeBatch(db);
+          rows.slice(i, i + 400).forEach(r => batch.set(doc(collection(db, 'ledger')), { ...r, createdBy: state.user.uid, createdAt: serverTimestamp() }));
+          await batch.commit();
+        }
+      });
+    };
+  }
+
   // ---------- Admin: approvals ----------
   async function refreshPendingCount() {
     let n;
     try {
-      const [reqs, users] = await Promise.all([
+      const [reqs, users, reimbs] = await Promise.all([
         getDocs(query(collection(db, 'budgetRequests'), where('status', '==', 'pending'))),
-        getDocs(query(collection(db, 'users'), where('role', '==', 'pending')))
+        getDocs(query(collection(db, 'users'), where('role', '==', 'pending'))),
+        getDocs(query(collection(db, 'reimbursements'), where('status', '==', 'pending')))
       ]);
-      n = reqs.size + users.size;
+      n = reqs.size + users.size + reimbs.size;
     } catch (err) { console.error(err); return; }
     const badge = $('#pending-count');
     badge.textContent = n;
@@ -664,20 +1099,27 @@
   }
 
   async function renderApprovals(content) {
-    const [reqSnap, userSnap] = await Promise.all([
+    const [reqSnap, userSnap, reimbSnap] = await Promise.all([
       getDocs(query(collection(db, 'budgetRequests'), where('status', '==', 'pending'))),
-      getDocs(query(collection(db, 'users'), where('role', '==', 'pending')))
+      getDocs(query(collection(db, 'users'), where('role', '==', 'pending'))),
+      getDocs(query(collection(db, 'reimbursements'), where('status', '==', 'pending')))
     ]);
     const requests = reqSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
+    const reimbs = reimbSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
     content.innerHTML = `
       <div class="content-head"><div><h1 class="section-title">Approvals</h1></div></div>
       <div class="card"><div class="card-title">Pending budget requests</div>${requestRows(requests, { showChapter: true })}</div>
+      <div class="card"><div class="card-title">Reimbursements to pay</div>
+        ${reimbs.length ? `<p class="muted">${reimbs.length} request${reimbs.length > 1 ? 's are' : ' is'} waiting (${money(sumAmounts(reimbs))}). <button class="link-btn" id="go-reimb">Review in Reimbursements</button></p>` : '<p class="empty">Nothing waiting.</p>'}
+      </div>
       <div class="card"><div class="card-title">Pending account requests</div>
         ${userSnap.size ? `<p class="muted">${userSnap.size} account${userSnap.size > 1 ? 's are' : ' is'} waiting. <button class="link-btn" id="go-accounts">Review in Accounts</button></p>` : '<p class="empty">No pending accounts.</p>'}
       </div>`;
     bindRequestActions(content);
     const go = $('#go-accounts');
     if (go) go.onclick = () => openTab('accounts');
+    const goReimb = $('#go-reimb');
+    if (goReimb) goReimb.onclick = () => openTab('reimbursements');
   }
 
   // ---------- Admin: accounts ----------
