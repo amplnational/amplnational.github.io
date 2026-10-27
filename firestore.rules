@@ -1,0 +1,88 @@
+rules_version = '2';
+
+// AMPL Chapter Portal security rules.
+// Paste into Firebase console → Firestore Database → Rules, then click Publish.
+//
+// Roles (stored in users/{uid}.role):
+//   pending  - signed up, waiting for a national admin to approve
+//   chapter  - chapter officer; can see and edit only their own chapter's data
+//   admin    - AMPL National; can see and edit everything
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function userPath() { return /databases/$(database)/documents/users/$(request.auth.uid); }
+    function hasProfile() { return signedIn() && exists(userPath()); }
+    function me() { return get(userPath()).data; }
+    function isAdmin() { return hasProfile() && me().role == 'admin'; }
+    function isMember() { return hasProfile() && me().role in ['chapter', 'admin']; }
+    function ownsChapter(chapterId) { return hasProfile() && me().role == 'chapter' && me().chapterId == chapterId; }
+    function canSeeChapter(chapterId) { return isAdmin() || ownsChapter(chapterId); }
+    function positiveAmount() { return request.resource.data.amount is number && request.resource.data.amount > 0; }
+
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      // New sign-ups always start as pending with no chapter.
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.role == 'pending'
+        && request.resource.data.chapterId == null
+        && request.resource.data.keys().hasOnly(['email', 'name', 'role', 'chapterId', 'requestedChapter', 'createdAt']);
+      allow update: if isAdmin()
+        || (signedIn() && request.auth.uid == uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name']));
+      allow delete: if isAdmin();
+    }
+
+    match /chapters/{chapterId} {
+      allow read: if isMember();
+      allow create, delete: if isAdmin();
+      // Chapters may edit their public profile, but not their name or budget.
+      allow update: if isAdmin()
+        || (ownsChapter(chapterId)
+            && request.resource.data.diff(resource.data).affectedKeys()
+                 .hasOnly(['city', 'instagram', 'email', 'president', 'officers', 'description']));
+    }
+
+    match /announcements/{id} {
+      allow read: if isMember();
+      allow write: if isAdmin();
+    }
+
+    match /resources/{id} {
+      allow read: if isMember();
+      allow write: if isAdmin();
+    }
+
+    match /reports/{id} {
+      allow read: if canSeeChapter(resource.data.chapterId);
+      allow create: if ownsChapter(request.resource.data.chapterId)
+        && request.resource.data.submittedBy == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    match /budgetRequests/{id} {
+      allow read: if canSeeChapter(resource.data.chapterId);
+      allow create: if ownsChapter(request.resource.data.chapterId)
+        && request.resource.data.submittedBy == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && positiveAmount();
+      // Only national can approve or deny.
+      allow update: if isAdmin();
+      // Chapters can withdraw a request that hasn't been decided yet.
+      allow delete: if isAdmin()
+        || (ownsChapter(resource.data.chapterId) && resource.data.status == 'pending');
+    }
+
+    match /transactions/{id} {
+      allow read: if canSeeChapter(resource.data.chapterId);
+      allow create: if canSeeChapter(request.resource.data.chapterId)
+        && request.resource.data.type in ['expense', 'income']
+        && positiveAmount();
+      allow update: if canSeeChapter(resource.data.chapterId)
+        && canSeeChapter(request.resource.data.chapterId)
+        && request.resource.data.type in ['expense', 'income']
+        && positiveAmount();
+      allow delete: if canSeeChapter(resource.data.chapterId);
+    }
+  }
+}
