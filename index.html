@@ -9,290 +9,281 @@
   <link rel="alternate icon" href="images/logo.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,600;0,800;0,900;1,400&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --paper: #fbfbfc;
-      --ink: #151a2d;
-      --ink-2: #464c5e;
-      --ink-3: #676d7d;
-      --blue: #26305e;
-      --insert: #3a4f9f;
-      --on-blue: #ffffff;
-      --on-blue-2: #c4cce2;
+      --bg: #edeff3;
+      --surface: #f6f7f9;
+      --panel: #fbfbfc;
+      --ink: #1a2133;
+      --ink-2: #485064;
+      --ink-3: #5f6678;
+      --line: #d3d7df;
+      --line-2: #e2e5ea;
+      --navy: #1c2541;
+      --navy-2: #27315a;
+      --navy-3: #141b31;
+      --link: #2d3c74;
+      --on-navy: #ffffff;
+      --on-navy-2: #b8c0d4;
+      --on-navy-line: rgba(255, 255, 255, 0.14);
       --silver: #c3c8d2;
-      --silver-2: #e8eaef;
-      --silver-3: #f1f2f5;
-      --strike: #646b7b;
-      --red: #b3261e;
-      --margin: 4.5rem;
-      --line: 2rem;
-      --gutter: clamp(1.25rem, 4vw, 4rem);
-      --sans: 'Public Sans', system-ui, sans-serif;
-      --serif: 'Tinos', 'Times New Roman', serif;
+      --red: #a8322b;
+      --wrap: 72rem;
+      --gutter: clamp(1.25rem, 4vw, 2.5rem);
+      --radius: 3px;
+      --sans: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+    html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; scrollbar-color: #9aa1b0 var(--bg); }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-    body { background: var(--paper); color: var(--ink); font-family: var(--serif); font-size: 1.125rem; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-    ::selection { background: var(--blue); color: var(--on-blue); }
-    :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
-    .on-blue :focus-visible { outline-color: var(--on-blue); }
-    html { scrollbar-color: var(--ink-3) var(--paper); }
-    input, select, textarea { caret-color: var(--blue); }
-    a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: 0.06em; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 1.0625rem; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    ::selection { background: var(--navy); color: var(--on-navy); }
+    :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+    .dark :focus-visible { outline-color: var(--on-navy); }
+    .dark ::selection { background: var(--on-navy); color: var(--navy); }
+    input, select, textarea { caret-color: var(--navy); }
+    a { color: var(--link); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
     img { display: block; max-width: 100%; height: auto; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-    .skip { position: absolute; left: 1rem; top: -4rem; background: var(--ink); color: var(--paper); padding: 0.75rem 1rem; font-family: var(--sans); font-weight: 600; z-index: 200; }
+    .skip { position: absolute; left: 1rem; top: -4rem; background: var(--panel); color: var(--ink); padding: 0.7rem 1rem; font-weight: 600; z-index: 200; border-radius: var(--radius); }
     .skip:focus { top: 1rem; }
+    .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
 
-    /* Amendments: struck text in silver-gray, inserted text in blue italic */
-    del, ins { text-decoration: none; position: relative; }
-    /* The strike is a background so it crosses every line a wrapped phrase occupies */
-    del { color: var(--strike); background: linear-gradient(currentColor, currentColor) no-repeat 0 58% / 100% 0.08em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
-    ins { color: var(--insert); font-family: var(--serif); font-style: italic; font-weight: 700; }
-    .on-blue del { color: var(--on-blue-2); }
-    .on-blue ins { color: var(--on-blue); }
-    .js.motion [data-amend] del { background-size: 0% 0.08em; transition: background-size 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
-    .js.motion [data-amend] ins { opacity: 0; filter: blur(6px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s, filter 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s; }
-    .js.motion [data-amend].amended del { background-size: 100% 0.08em; }
-    .js.motion [data-amend].amended ins { opacity: 1; filter: none; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 600; color: var(--ink); text-wrap: balance; }
+    h1 { font-size: clamp(2.15rem, 4vw, 3.25rem); line-height: 1.1; letter-spacing: -0.015em; }
+    h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); line-height: 1.15; letter-spacing: -0.01em; }
+    h3 { font-size: 1.3rem; line-height: 1.3; }
+    .dark h1, .dark h2, .dark h3 { color: var(--on-navy); }
+    .lede { font-size: 1.2rem; line-height: 1.6; color: var(--ink-2); max-width: 40rem; margin-top: 0.9rem; }
 
     /* Header */
-    .masthead { position: sticky; top: 0; z-index: 100; background: var(--paper); border-top: 6px solid var(--blue); }
-    .masthead-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; padding: 0.9rem var(--gutter) 0.9rem calc(var(--gutter) + var(--margin)); }
-    .brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; font-family: var(--sans); font-weight: 900; font-size: 1.35rem; letter-spacing: -0.02em; }
-    .brand .mark { width: 40px; height: 40px; color: var(--blue); flex: none; }
-    .brand small { font-family: var(--serif); font-weight: 400; font-size: 0.95rem; letter-spacing: 0; color: var(--ink-2); }
-    .nav { display: flex; align-items: center; gap: 1.75rem; list-style: none; font-family: var(--sans); font-size: 0.95rem; font-weight: 600; }
-    .nav a { text-decoration: none; padding: 0.35rem 0; }
-    .nav a:hover { color: var(--blue); }
-    .nav a[aria-current="true"] { color: var(--blue); text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 0.45em; }
-    .nav .login { font-weight: 400; color: var(--ink-2); }
-    .menu-btn { display: none; align-items: center; gap: 0.5rem; background: none; border: 0; font: 600 0.95rem/1.3 var(--sans); color: var(--ink); cursor: pointer; padding: 0.5rem 0; }
-    .menu-btn svg { width: 22px; height: 22px; }
+    .masthead { position: sticky; top: 0; z-index: 100; background: var(--navy); color: var(--on-navy); border-bottom: 1px solid var(--on-navy-line); }
+    .masthead .wrap { display: flex; align-items: center; justify-content: space-between; gap: 2rem; min-height: 4.5rem; }
+    .brand { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; color: var(--on-navy); }
+    .brand .mark { width: 38px; height: 38px; color: var(--silver); flex: none; }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+    .brand-text b { font-family: var(--serif); font-weight: 600; font-size: 1.3rem; letter-spacing: 0.04em; }
+    .brand-text small { font-size: 0.78rem; color: var(--on-navy-2); letter-spacing: 0.01em; }
+    .nav { display: flex; align-items: center; gap: 1.6rem; list-style: none; font-size: 0.94rem; font-weight: 500; }
+    .nav a { color: var(--on-navy-2); text-decoration: none; padding: 0.4rem 0; transition: color 0.15s; }
+    .nav a:hover, .nav a[aria-current="true"] { color: var(--on-navy); }
+    .nav a[aria-current="true"] { box-shadow: inset 0 -2px 0 var(--silver); }
+    .nav .login { color: var(--on-navy); border: 1px solid rgba(255, 255, 255, 0.35); border-radius: var(--radius); padding: 0.45rem 0.9rem; }
+    .nav .login:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.6); }
+    .menu-btn { display: none; align-items: center; gap: 0.5rem; background: none; border: 1px solid rgba(255, 255, 255, 0.35); border-radius: var(--radius); font: 600 0.92rem/1 var(--sans); color: var(--on-navy); cursor: pointer; padding: 0.6rem 0.8rem; }
+    .menu-btn svg { width: 18px; height: 18px; }
 
-    /* Margin line numbers, the bill's ruled margin */
-    .bill { position: relative; }
-    .linenos { position: absolute; top: 0; bottom: 0; left: var(--gutter); width: calc(var(--margin) - 1.25rem); overflow: hidden; pointer-events: none; user-select: none; font-family: var(--serif); font-size: 0.8rem; line-height: var(--line); color: #8d93a1; text-align: right; font-variant-numeric: tabular-nums; z-index: 1; }
-    .linenos span { display: block; height: var(--line); }
-    .linenos span.b { color: var(--on-blue-2); }
-    .col { padding-left: calc(var(--gutter) + var(--margin)); padding-right: var(--gutter); }
+    /* Hero */
+    .hero { background: var(--navy); color: var(--on-navy); padding: clamp(2.75rem, 5.5vw, 4.25rem) 0 clamp(3rem, 6vw, 4.5rem); }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+    .hero-photo { padding-top: 0.6rem; }
+    .hero .lede { color: var(--on-navy-2); font-size: 1.15rem; }
+    .hero .lede strong { color: var(--on-navy); font-weight: 600; }
+    .picker { margin-top: 1.75rem; background: var(--panel); color: var(--ink); border-radius: var(--radius); padding: 1.4rem 1.5rem 1.25rem; max-width: 34rem; }
+    .picker label { display: block; font-weight: 700; font-size: 1rem; margin-bottom: 0.6rem; }
+    .select-wrap { position: relative; }
+    .select-wrap svg { position: absolute; right: 0.95rem; top: 50%; width: 12px; height: 12px; transform: translateY(-50%); pointer-events: none; color: var(--ink-2); }
+    select.campus { appearance: none; width: 100%; font: 500 1rem/1.3 var(--sans); padding: 0.8rem 2.5rem 0.8rem 0.9rem; background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer; transition: border-color 0.15s; }
+    select.campus:hover { border-color: #aab0bd; }
+    select.campus:focus { border-color: var(--navy); outline: none; }
+    select.campus:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+    .result { margin-top: 0.8rem; min-height: 2.4rem; font-size: 0.97rem; }
+    .result > * { animation: rise 0.35s var(--ease) both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(4px); } }
+    @media (prefers-reduced-motion: reduce) { .result > * { animation: none; } }
+    .result-empty { color: var(--ink-3); }
+    .result-name { font-weight: 700; }
+    .result-city { color: var(--ink-2); }
+    .result-links { display: flex; flex-wrap: wrap; gap: 0.3rem 1.25rem; margin-top: 0.45rem; font-weight: 600; }
+    .hero-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 60%; border-radius: var(--radius); }
+    .hero-photo figcaption { color: var(--on-navy-2); font-size: 0.88rem; margin-top: 0.7rem; }
 
-    /* Bill face (first viewport) */
-    .face { padding-top: clamp(1rem, 2.5vh, 2rem); }
-    .face-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem; font-family: var(--sans); font-size: 0.95rem; color: var(--ink-2); }
-    .face-meta strong { color: var(--ink); font-weight: 800; letter-spacing: 0.02em; }
-    .face-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 27%); gap: clamp(1.5rem, 4vw, 4rem); align-items: end; margin-top: clamp(0.75rem, 2vh, 1.5rem); }
-        h1 { font-family: var(--sans); font-weight: 900; font-size: clamp(2rem, min(5.6vw, 8.6vh), 5.25rem); line-height: 1; letter-spacing: -0.035em; text-wrap: balance; }
-    h1 ins { font-weight: 700; letter-spacing: -0.02em; }
-    .face-photo figure { position: relative; }
-    .face-photo img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: 50% 62%; max-height: 42vh; }
-    .face-photo-m { display: none; }
-    figcaption { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-2); margin-top: 0.5rem; }
-    figcaption b { font-family: var(--sans); font-weight: 800; color: var(--ink); }
-
-    /* Digest band with the campus picker */
-    .band { background: var(--blue); color: var(--on-blue); position: relative; }
-    .band .col { padding-top: 1.75rem; padding-bottom: 2rem; }
-    .digest { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: start; }
-    .digest h2 { font-family: var(--sans); font-weight: 800; font-size: 1.6rem; letter-spacing: -0.01em; margin-bottom: 0.6rem; }
-    .digest p { color: var(--on-blue-2); max-width: 60ch; }
-    .digest p strong { color: var(--on-blue); }
-    .picker label { display: block; font-family: var(--sans); font-weight: 800; font-size: 1.35rem; letter-spacing: -0.01em; margin-bottom: 0.7rem; }
-    .picker-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .select-wrap { position: relative; flex: 1 1 14rem; }
-    .select-wrap svg { position: absolute; right: 1rem; top: 50%; width: 14px; height: 14px; transform: translateY(-50%); pointer-events: none; }
-    select.campus { appearance: none; width: 100%; font: 600 1.05rem/1.3 var(--sans); padding: 0.95rem 2.75rem 0.95rem 1rem; background: var(--on-blue); color: var(--ink); border: 0; border-radius: 0; cursor: pointer; }
-    .result { margin-top: 1rem; min-height: 4.5rem; }
-    .result-empty { color: var(--on-blue-2); font-style: italic; }
-    .result-name { font-family: var(--sans); font-weight: 800; font-size: 1.2rem; }
-    .result-city { color: var(--on-blue-2); }
-    .result-links { display: flex; flex-wrap: wrap; gap: 0.6rem 1.25rem; margin-top: 0.6rem; font-family: var(--sans); font-weight: 600; }
-    .result-links a { color: var(--on-blue); }
-
-    /* Buttons: square statute actions */
-    .btn { display: inline-flex; align-items: center; gap: 0.6rem; font: 700 1rem/1.3 var(--sans); padding: 0.85rem 1.1rem; background: var(--ink); color: var(--paper); text-decoration: none; border: 0; border-radius: 0; cursor: pointer; transition: background-color 0.2s; }
-    .btn:hover { background: var(--blue); }
-    .btn svg { width: 16px; height: 16px; }
-    .btn::before, .btn::after { font-family: var(--serif); font-weight: 400; font-size: 1.35em; line-height: 0; opacity: 0.7; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
-    .btn::before { content: '['; margin-right: -0.15rem; }
-    .btn::after { content: ']'; margin-left: -0.15rem; }
-    .btn:hover::before { transform: translateX(-3px); }
-    .btn:hover::after { transform: translateX(3px); }
-    .btn.light { background: var(--silver); color: var(--blue); }
-    .btn.light:hover { background: var(--on-blue); }
-    .btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
-    .btn.ghost:hover { background: var(--ink); color: var(--paper); }
-    .on-blue .btn.ghost { color: var(--on-blue); box-shadow: inset 0 0 0 2px var(--on-blue); }
-    .on-blue .btn.ghost:hover { background: var(--on-blue); color: var(--blue); }
+    /* Chapter strip under the hero */
+    .strip { background: var(--surface); border-bottom: 1px solid var(--line); }
+    .strip .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 2rem; padding-top: 1.1rem; padding-bottom: 1.1rem; font-size: 0.92rem; color: var(--ink-2); }
+    .strip strong { color: var(--ink); font-weight: 600; }
+    .strip ul { display: flex; flex-wrap: wrap; gap: 0.3rem 1.6rem; list-style: none; }
+    .strip a { color: var(--ink-2); text-decoration: none; }
+    .strip a:hover { color: var(--link); text-decoration: underline; }
 
     /* Sections */
-    .sec { padding-top: clamp(4rem, 9vw, 7.5rem); padding-bottom: clamp(3rem, 6vw, 5rem); }
-    .sec-head { max-width: 62rem; margin-bottom: clamp(2rem, 4vw, 3.5rem); }
-    .sec-no { font-family: var(--sans); font-weight: 900; }
-    h2.sec-title { font-family: var(--sans); font-weight: 800; font-size: clamp(1.9rem, 3.6vw, 3.1rem); line-height: 1.05; letter-spacing: -0.03em; text-wrap: balance; }
-    h2.sec-title .sec-no { color: var(--insert); margin-right: 0.35em; }
-    .on-blue h2.sec-title .sec-no { color: var(--on-blue-2); }
-    .sec-lede { font-size: 1.3rem; line-height: 1.5; margin-top: 1rem; max-width: 46ch; color: var(--ink-2); }
-    .sec-lede.amend { color: var(--ink); font-size: clamp(1.35rem, 2.4vw, 1.8rem); line-height: 1.35; }
+    .sec { padding: clamp(4rem, 8vw, 6rem) 0; }
+    .sec.alt { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .sec-head { margin-bottom: clamp(2.25rem, 4vw, 3rem); }
+    .tag { display: inline-block; font: 600 0.72rem/1 var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); border: 1px solid var(--line); background: var(--panel); border-radius: 2px; padding: 0.3rem 0.45rem; margin-left: 0.5rem; vertical-align: 0.2em; }
 
-    /* SEC. 1 programs: lettered subsections */
-    .programs { display: grid; gap: clamp(2.5rem, 4.5vw, 3.5rem); }
-    .program { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr) clamp(16rem, 32vw, 28rem); gap: 0 clamp(1.25rem, 3vw, 3rem); align-items: start; }
-    .exhibit-amend { font-family: var(--serif); font-style: italic; font-weight: 700; color: var(--insert); font-size: clamp(1.3rem, 2vw, 1.6rem); line-height: 1.35; align-self: center; }
-    .program-letter { font-family: var(--serif); font-size: 1.6rem; font-weight: 700; color: var(--insert); line-height: 1.4; }
-    .program h3 { font-family: var(--sans); font-weight: 800; font-size: clamp(1.5rem, 2.6vw, 2.2rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
-    .program p { font-size: 1.2rem; line-height: 1.6; max-width: 58ch; }
-    .photo-btn { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; text-align: left; color: inherit; }
-    .photo-btn img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: filter 0.3s; }
-    .photo-btn:hover img { filter: brightness(1.06) contrast(1.04); }
+    /* About: three pillars */
+    .pillars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1.5rem, 4vw, 3rem); }
+    .pillar { border-top: 1px solid var(--navy); padding-top: 1.25rem; }
+    .pillar p { color: var(--ink-2); margin-top: 0.5rem; }
+    .quote { margin-top: clamp(2.5rem, 5vw, 3.5rem); padding-top: 2rem; border-top: 1px solid var(--line); }
+    .quote p { font-family: var(--serif); font-size: clamp(1.5rem, 2.8vw, 2.1rem); line-height: 1.3; max-width: 44rem; text-wrap: balance; }
+    .quote span { display: block; margin-top: 0.75rem; color: var(--ink-2); font-size: 0.95rem; letter-spacing: 0.02em; }
 
-    .record { margin-top: clamp(4rem, 8vw, 6rem); }
-    .record h3 { font-family: var(--sans); font-weight: 800; font-size: 1.6rem; margin-bottom: 1.25rem; }
-    .record-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
-    .record-grid .photo-btn img { aspect-ratio: 4 / 3; }
-    .record-grid figcaption { font-size: 0.85rem; }
+    /* Programs */
+    .programs-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+    .programs-grid .sec-head { margin-bottom: 0; position: sticky; top: 7rem; }
+    .program-list { list-style: none; border-top: 1px solid var(--line); }
+    .program-list li { padding: 1.5rem 0; border-bottom: 1px solid var(--line); }
+    .program-list p { color: var(--ink-2); margin-top: 0.35rem; max-width: 38rem; }
+    .gallery { margin-top: clamp(3rem, 6vw, 4.5rem); }
+    .gallery-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; }
+    .gallery-head span { color: var(--ink-3); font-size: 0.92rem; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+    .gallery-grid figcaption { font-size: 0.88rem; color: var(--ink-2); margin-top: 0.45rem; }
+    .photo-btn { display: block; width: 100%; padding: 0; border: 0; background: var(--line-2); cursor: zoom-in; overflow: hidden; border-radius: var(--radius); }
+    .photo-btn img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform 0.5s var(--ease); }
+    .photo-btn:hover img { transform: scale(1.03); }
 
-    /* SEC. 2 speakers: enumerated paragraphs */
-    .speakers { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 3rem) clamp(2rem, 5vw, 5rem); max-width: 70rem; }
-    .speakers li { display: grid; grid-template-columns: 3rem minmax(0, 1fr); }
-    .speakers .n { font-family: var(--serif); font-weight: 700; font-size: 1.3rem; color: var(--insert); line-height: 1.5; }
-    .speakers .who { font-family: var(--sans); font-weight: 800; font-size: clamp(1.45rem, 2.6vw, 2.1rem); line-height: 1.12; letter-spacing: -0.02em; }
-    .speakers .who.titled { font-weight: 600; font-style: normal; }
-    .speakers .role { color: var(--ink-2); margin-top: 0.35rem; }
-    .after-list { margin-top: clamp(2.5rem, 5vw, 3.5rem); display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: center; }
-    .after-list p { color: var(--ink-2); max-width: 44ch; }
+    /* Speakers */
+    .speakers { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 clamp(1.25rem, 3vw, 2.5rem); }
+    .speakers li { border-top: 1px solid var(--line); padding-top: 1.25rem; }
+    .speakers .who { font-family: var(--serif); font-weight: 600; font-size: 1.25rem; line-height: 1.3; }
+    .speakers .role { color: var(--ink-2); font-size: 0.97rem; margin-top: 0.3rem; }
+    .cta-row { margin-top: clamp(2.5rem, 5vw, 3.25rem); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.25rem 1.5rem; }
+    .cta-row p { color: var(--ink-2); }
+    .cta-row p strong { color: var(--ink); font-weight: 600; }
 
-    /* SEC. 3 chapters: map + roll */
-    .chapters { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
-    .map { position: relative; background: var(--silver-3); aspect-ratio: 600 / 480; }
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem; font: 600 0.97rem/1.2 var(--sans); padding: 0.8rem 1.2rem; background: var(--navy); color: var(--on-navy); text-decoration: none; border: 1px solid var(--navy); border-radius: var(--radius); cursor: pointer; transition: background-color 0.15s, border-color 0.15s, color 0.15s; }
+    .btn:hover { background: var(--navy-2); border-color: var(--navy-2); }
+    .btn svg { width: 15px; height: 15px; transition: transform 0.2s var(--ease); }
+    .btn:hover svg { transform: translateX(2px); }
+    .btn.outline { background: transparent; color: var(--navy); border-color: #a4abba; }
+    .btn.outline:hover { border-color: var(--navy); background: rgba(28, 37, 65, 0.04); }
+    .btn[disabled] { opacity: 0.6; cursor: progress; }
+
+    /* Chapters */
+    .chapters { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+    .map { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); aspect-ratio: 600 / 480; }
     .map img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
     .map svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-    .map .route { stroke: var(--blue); stroke-width: 2; stroke-dasharray: 2 7; stroke-linecap: round; fill: none; opacity: 0.55; }
     .map .dot { cursor: pointer; }
     .map .dot circle.hit { fill: transparent; }
-    .map .dot circle.pin { fill: var(--paper); stroke: var(--blue); stroke-width: 3; transition: fill 0.2s; }
-    .map .dot text { font-family: var(--sans); font-size: 13px; font-weight: 800; fill: var(--ink); paint-order: stroke; stroke: var(--silver-3); stroke-width: 5px; stroke-linejoin: round; }
-    .map .dot:hover circle.pin, .map .dot:focus-visible circle.pin, .map .dot.on circle.pin { fill: var(--blue); }
+    .map .dot circle.pin { fill: var(--panel); stroke: var(--navy); stroke-width: 2.5; transition: fill 0.15s; }
+    .map .dot text { font-family: var(--sans); font-size: 13px; font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+    .map .dot:hover circle.pin, .map .dot:focus-visible circle.pin, .map .dot.on circle.pin { fill: var(--navy); }
     .map .dot:focus-visible { outline: none; }
-    .map .dot:focus-visible circle.pin { stroke: var(--ink); stroke-width: 4; }
-    .map-note { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-2); margin-top: 0.6rem; }
-    .roll { list-style: none; counter-reset: ch; }
-    .roll li { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) auto; gap: 0 1rem; align-items: baseline; padding: 0.95rem 0.75rem; margin: 0 -0.75rem; transition: background-color 0.25s; }
-    .roll li::before { counter-increment: ch; content: '(' counter(ch) ')'; font-family: var(--serif); font-weight: 700; color: var(--insert); }
-    .roll li.on { background: var(--silver-2); }
-    .roll .school { font-family: var(--sans); font-weight: 800; font-size: 1.3rem; letter-spacing: -0.01em; }
-    .roll .city { color: var(--ink-2); font-size: 1rem; }
-    .roll .links { display: flex; gap: 1rem; font-family: var(--sans); font-size: 0.95rem; font-weight: 600; white-space: nowrap; }
-    .roll .links a { color: var(--blue); }
-    .origin { margin-top: 1.5rem; color: var(--ink-2); }
+    .map .dot:focus-visible circle.pin { stroke: var(--link); stroke-width: 4; }
+    .map-note { font-size: 0.9rem; color: var(--ink-3); margin-top: 0.6rem; }
+    .roll { list-style: none; }
+    .roll li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 1.5rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--line); position: relative; }
+    .roll li:first-child { border-top: 1px solid var(--line); }
+    .roll li > * { position: relative; }
+    .roll li::before { content: ''; position: absolute; inset: 0 -0.85rem; background: var(--line-2); opacity: 0; transition: opacity 0.2s; }
+    .roll li.on::before { opacity: 1; }
+    @media (max-width: 600px) { .roll li::before { inset: 0 -0.5rem; } }
+    .roll .school { font-weight: 600; font-size: 1.05rem; }
+    .roll .city { color: var(--ink-2); font-size: 0.92rem; }
+    .roll .links { display: flex; gap: 1.1rem; font-size: 0.92rem; font-weight: 600; white-space: nowrap; }
+    .origin { margin-top: 1.25rem; color: var(--ink-2); font-size: 0.97rem; }
 
-    /* SEC. 4 motions, set on blue */
-    .on-blue { background: var(--blue); color: var(--on-blue); }
-    .on-blue .sec-lede { color: var(--on-blue-2); }
-    .on-blue .sec-lede.amend { color: var(--on-blue); }
-    .motions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 5vw, 5rem); }
-    .motion-item { display: grid; grid-template-columns: 3rem minmax(0, 1fr); }
-    .motion-item .n { font-family: var(--serif); font-weight: 700; font-size: 1.4rem; color: var(--on-blue-2); line-height: 1.3; }
-    .motion-item h3 { font-family: var(--sans); font-weight: 800; font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.6rem; }
-    .motion-item p { color: var(--on-blue-2); max-width: 40ch; margin-bottom: 1.25rem; }
-    .motion-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
-    .status { display: inline-block; font: 800 0.8rem var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); background: var(--silver); padding: 0.25rem 0.55rem; margin-left: 0.6rem; vertical-align: 0.35em; }
+    /* Get involved */
+    .ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+    .way { padding: 2rem 2.5rem 2.25rem 0; border-bottom: 1px solid var(--line); }
+    .way:nth-child(even) { padding: 2rem 0 2.25rem 2.5rem; border-left: 1px solid var(--line); }
+    .way p { color: var(--ink-2); margin: 0.5rem 0 1.25rem; max-width: 30rem; }
+    .way-actions { display: flex; flex-wrap: wrap; gap: 0.65rem; }
 
-    /* SEC. 5 contact */
-    .contact { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; }
-    form.message { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+    /* Contact */
+    .contact { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+    form.message { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.25rem, 3vw, 2rem); }
+    .field { display: flex; flex-direction: column; gap: 0.35rem; }
     .field.full { grid-column: 1 / -1; }
-    .field label { font: 700 0.95rem var(--sans); }
-    .field .hint { font-size: 0.95rem; color: var(--ink-2); }
-    .field input, .field select, .field textarea { font: 400 1.05rem/1.4 var(--serif); color: var(--ink); background: #ffffff; padding: 0.85rem 0.9rem; border: 2px solid var(--silver); border-radius: 0; width: 100%; transition: border-color 0.2s; }
-    .field select { font-family: var(--sans); appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2 5l5 5 5-5' fill='none' stroke='%23151a2d' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.9rem center / 14px; padding-right: 2.5rem; }
-    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--blue); outline: none; }
-    .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+    .field label { font-weight: 600; font-size: 0.94rem; }
+    .field .hint { font-size: 0.88rem; color: var(--ink-3); }
+    .field input, .field select, .field textarea { font: 400 1rem/1.4 var(--sans); color: var(--ink); background: #fff; padding: 0.75rem 0.85rem; border: 1px solid var(--line); border-radius: var(--radius); width: 100%; transition: border-color 0.15s; }
+    .field select { appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4.5l4 4 4-4' fill='none' stroke='%23485064' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 0.85rem center / 12px; padding-right: 2.4rem; }
+    .field input:hover, .field select:hover, .field textarea:hover { border-color: #aab0bd; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--navy); outline: none; }
+    .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
     .field input:user-invalid, .field textarea:user-invalid { border-color: var(--red); }
     .field textarea { min-height: 9rem; resize: vertical; }
     .field ::placeholder { color: var(--ink-3); opacity: 1; }
     .form-foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
-    .form-status { font-family: var(--sans); font-weight: 600; }
-    .form-status.ok { color: var(--blue); }
+    .form-status { font-weight: 600; font-size: 0.95rem; }
+    .form-status.ok { color: var(--link); }
     .form-status.err { color: var(--red); }
-    .btn[disabled] { opacity: 0.6; cursor: progress; }
-    .contact-aside dl { display: grid; gap: 1.5rem; }
-    .contact-aside dt { font: 800 0.95rem var(--sans); margin-bottom: 0.15rem; }
+    .contact-aside dl { display: grid; gap: 1.4rem; }
+    .contact-aside div { border-top: 1px solid var(--line); padding-top: 1rem; }
+    .contact-aside dt { font-weight: 600; font-size: 0.94rem; margin-bottom: 0.15rem; }
     .contact-aside dd { color: var(--ink-2); }
-    .contact-aside dd a { color: var(--blue); font-weight: 700; }
+    .contact-aside dd a { font-weight: 600; }
 
-    /* Footer, the enacting clause */
-    footer { background: var(--blue); color: var(--on-blue-2); }
-    footer .col { padding-top: 3.5rem; padding-bottom: 2.5rem; }
-    .foot-top { display: flex; align-items: center; gap: clamp(1.5rem, 4vw, 3rem); }
-    .seal { width: clamp(96px, 11vw, 140px); height: auto; flex: none; }
-    .enact { font-family: var(--serif); font-size: clamp(1.25rem, 2.4vw, 1.75rem); line-height: 1.4; max-width: 46ch; color: var(--on-blue); }
-    .enact em { color: var(--on-blue-2); }
-    .foot-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 2rem; margin-top: 2.5rem; font-family: var(--sans); font-size: 0.95rem; }
-    .foot-row nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
-    .foot-row a { color: var(--on-blue); text-decoration: none; }
-    .foot-row a:hover { text-decoration: underline; }
-    footer :focus-visible { outline-color: var(--on-blue); }
-    footer ::selection { background: var(--on-blue); color: var(--blue); }
+    /* Footer */
+    footer { background: var(--navy-3); color: var(--on-navy-2); font-size: 0.94rem; }
+    .foot-top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 2rem clamp(1.5rem, 4vw, 3rem); align-items: center; padding: 3.5rem 0 2.5rem; }
+    .seal { width: 104px; height: auto; }
+    .foot-name { font-family: var(--serif); font-weight: 600; font-size: 1.25rem; color: var(--on-navy); }
+    .foot-motto { margin-top: 0.3rem; letter-spacing: 0.02em; }
+    .foot-nav { display: grid; grid-template-columns: repeat(2, auto); gap: 0.45rem 2.25rem; }
+    footer a { color: var(--on-navy); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .foot-base { border-top: 1px solid var(--on-navy-line); padding: 1.25rem 0 1.75rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 2rem; font-size: 0.88rem; }
 
     /* Lightbox */
     dialog.viewer { border: 0; padding: 0; background: transparent; max-width: min(92vw, 1100px); max-height: 92vh; margin: auto; color: #fff; }
-    dialog.viewer::backdrop { background: rgba(18, 22, 44, 0.94); }
-    dialog.viewer img { max-height: 80vh; width: auto; margin: 0 auto; }
-    dialog.viewer figcaption { color: #e3e3ea; text-align: center; }
-    dialog.viewer figcaption b { color: #fff; }
-    .viewer-close { position: fixed; top: 1rem; right: 1rem; display: inline-flex; align-items: center; gap: 0.4rem; background: #fff; color: var(--ink); border: 0; font: 700 0.95rem/1.3 var(--sans); padding: 0.6rem 0.9rem; cursor: pointer; }
-    .viewer-close svg { width: 14px; height: 14px; }
+    dialog.viewer::backdrop { background: rgba(14, 19, 34, 0.92); }
+    dialog.viewer img { max-height: 80vh; width: auto; margin: 0 auto; border-radius: var(--radius); }
+    dialog.viewer figcaption { color: #d6dae4; text-align: center; margin-top: 0.75rem; font-size: 0.95rem; }
+    dialog.viewer figcaption b { color: #fff; font-weight: 600; }
+    .viewer-close { position: fixed; top: 1rem; right: 1rem; display: inline-flex; align-items: center; gap: 0.4rem; background: #fff; color: var(--ink); border: 0; border-radius: var(--radius); font: 600 0.92rem/1.2 var(--sans); padding: 0.6rem 0.9rem; cursor: pointer; }
+    .viewer-close svg { width: 12px; height: 12px; }
 
+    @media (max-width: 1080px) {
+      .nav { gap: 1.15rem; font-size: 0.9rem; }
+      .brand-text small { display: none; }
+    }
     @media (max-width: 960px) {
-      :root { --margin: 2.4rem; }
-      .linenos { font-size: 0.7rem; width: calc(var(--margin) - 0.6rem); }
-      .face-grid, .digest, .chapters, .contact { grid-template-columns: 1fr; }
-      .face-photo { display: none; }
-      .digest .picker { order: -1; }
-      .face-meta span:last-child { font-size: 0.85rem; }
-      .face-photo-m { display: block; padding-top: 1.5rem; }
-      .face-photo-m img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 62%; }
-      .program { grid-template-columns: 2.5rem minmax(0, 1fr); }
-      .program .photo-btn, .program .exhibit-amend { grid-column: 2; margin-top: 1.25rem; }
-      .speakers, .motions { grid-template-columns: 1fr; }
-      .record-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 860px) {
       .menu-btn { display: inline-flex; }
-      .nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--paper); padding: 0.5rem var(--gutter) 1.25rem calc(var(--gutter) + var(--margin)); border-bottom: 6px solid var(--blue); }
+      .nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; gap: 0; background: var(--navy); padding: 0.25rem var(--gutter) 1.25rem; border-bottom: 1px solid var(--on-navy-line); font-size: 1.05rem; }
       .masthead.open .nav { display: flex; }
-      .nav a { display: block; padding: 0.85rem 0; font-size: 1.1rem; }
-      .masthead-inner { padding-left: calc(var(--gutter) + var(--margin)); }
+      .nav a { display: block; padding: 0.8rem 0; border-bottom: 1px solid var(--on-navy-line); }
+      .nav a[aria-current="true"] { box-shadow: none; }
+      .nav .login { margin-top: 1rem; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.35); }
+      .brand-text small { display: block; }
+      .hero-grid, .programs-grid, .chapters, .contact { grid-template-columns: 1fr; }
+      .programs-grid .sec-head { position: static; }
+      .pillars { grid-template-columns: 1fr; gap: 2rem; }
+      .speakers { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 1.5rem; }
+      .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ways { grid-template-columns: 1fr; }
+      .way, .way:nth-child(even) { padding: 1.75rem 0; border-left: 0; }
+      .foot-top { grid-template-columns: auto minmax(0, 1fr); }
+      .foot-nav { grid-column: 1 / -1; grid-template-columns: repeat(3, auto); justify-content: start; }
     }
-    @media (max-width: 560px) {
-      :root { --margin: 1.9rem; --gutter: 1rem; }
-      .brand small { display: none; }
+    @media (max-width: 600px) {
+      body { font-size: 1rem; }
+      .brand-text small { display: none; }
+      .hero-photo { order: 2; }
+      .picker { padding: 1.15rem 1.1rem 1rem; }
+      .speakers { grid-template-columns: 1fr; }
       form.message { grid-template-columns: 1fr; }
-      .foot-top { flex-direction: column; align-items: flex-start; }
-      .roll li { grid-template-columns: 2.2rem minmax(0, 1fr); }
-      .roll .links { grid-column: 2; margin-top: 0.35rem; }
-      .status { margin-left: 0; margin-top: 0.4rem; vertical-align: 0; }
+      .roll li { grid-template-columns: 1fr; }
+      .foot-top { grid-template-columns: 1fr; }
+      .foot-nav { grid-template-columns: repeat(2, auto); }
+      .cta-row .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="masthead">
-  <div class="masthead-inner">
+<header class="masthead dark">
+  <div class="wrap">
     <a class="brand" href="#top" aria-label="AMPL, back to top">
       <svg class="mark" viewBox="30 22 140 140" aria-hidden="true"><g fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M49.1 48 A66 66 0 1 0 150.9 48 A60.1 60.1 0 1 1 49.1 48 Z" stroke="none"/><circle cx="100" cy="31" r="4" stroke="none"/><path d="M100 34 V134" fill="none" stroke-width="5"/><path d="M86 140 H114 L107 131 H93 Z" stroke="none"/><path d="M76 50 H124" fill="none" stroke-width="4.5"/><path d="M76 50 C70 50 68 44 72 42 M124 50 C130 50 132 44 128 42" fill="none" stroke-width="3"/><path d="M76 50 L63 92 M76 50 L89 92 M124 50 L111 92 M124 50 L137 92" fill="none" stroke-width="2"/><path d="M60 92 Q76 104 92 92 Z M108 92 Q124 104 140 92 Z" stroke-width="2"/></g></svg>
-      <span>AMPL</span><small>Association of Muslims in Politics and Law</small>
+      <span class="brand-text"><b>AMPL</b><small>Association of Muslims in Politics and Law</small></span>
     </a>
     <button class="menu-btn" aria-expanded="false" aria-controls="site-nav">
-      <svg viewBox="0 0 22 22" aria-hidden="true"><path d="M2 5h18M2 11h18M2 17h18" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
       Menu
     </button>
     <ul class="nav" id="site-nav">
+      <li><a href="#about">About</a></li>
       <li><a href="#programs">Programs</a></li>
       <li><a href="#speakers">Speakers</a></li>
       <li><a href="#chapters">Chapters</a></li>
@@ -303,235 +294,217 @@
   </div>
 </header>
 
-<main id="main" class="bill">
-  <div class="linenos" aria-hidden="true"></div>
-
-  <section id="top" class="face" aria-labelledby="headline">
-    <div class="col">
-      <div class="face-meta">
-        <span><strong>AMPL BILL No. 1.</strong> An act relating to representation in law and policy.</span>
-        <span>Introduced by students at six University of California campuses</span>
-      </div>
-      <div class="face-grid">
-        <div>
-          <h1 id="headline" data-amend aria-label="Muslim students belong in every courtroom, legislature, and policy room.">
-            Muslim students <del>are underrepresented in</del> <ins>belong in</ins> every courtroom, legislature, and policy room.
-          </h1>
-        </div>
-        <div class="face-photo">
-          <figure>
-            <img src="images/moektails-mock-trials.jpg" alt="Six AMPL members at night under string lights, holding a chalkboard sign that reads Mocktails and Mock Trials" width="900" height="675" fetchpriority="high" />
-            <figcaption><b>Mocktails &amp; Mock Trials,</b> our signature night.</figcaption>
-          </figure>
-        </div>
-      </div>
-    </div>
-    <div class="band" style="margin-top:clamp(1.5rem,4vh,2.75rem)">
-      <div class="col">
-        <div class="digest">
-          <div>
-            <h2>Digest</h2>
-            <p><strong>AMPL, the Association of Muslims in Politics and Law,</strong> is a student network that began at UC San Diego and now has chapters at six UC campuses. Members meet the people who work in law and policy, practice the skills, and find each other. Membership is free and open to all students.</p>
+<main id="main">
+  <section id="top" class="hero dark" aria-labelledby="headline">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 id="headline">Muslim students belong in every courtroom, legislature, and policy room.</h1>
+        <p class="lede"><strong>AMPL, the Association of Muslims in Politics and Law,</strong> is a student network that began at UC San Diego and now has chapters at six UC campuses. Members meet the people who work in law and policy, practice the skills, and find each other. Membership is free and open to all students.</p>
+        <div class="picker">
+          <label for="campus">Find your chapter</label>
+          <div class="select-wrap">
+            <select id="campus" class="campus">
+              <option value="">Choose your campus</option>
+              <option value="ucsd">UC San Diego</option>
+              <option value="berkeley">UC Berkeley</option>
+              <option value="uci">UC Irvine</option>
+              <option value="ucla">UCLA</option>
+              <option value="ucsc">UC Santa Cruz</option>
+              <option value="davis">UC Davis</option>
+              <option value="none">My campus isn't listed</option>
+            </select>
+            <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
           </div>
-          <div class="picker">
-            <label for="campus">Find your chapter</label>
-            <div class="picker-row">
-              <div class="select-wrap">
-                <select id="campus" class="campus">
-                  <option value="">Choose your campus</option>
-                  <option value="ucsd">UC San Diego</option>
-                  <option value="berkeley">UC Berkeley</option>
-                  <option value="uci">UC Irvine</option>
-                  <option value="ucla">UCLA</option>
-                  <option value="ucsc">UC Santa Cruz</option>
-                  <option value="davis">UC Davis</option>
-                  <option value="none">My campus isn't listed</option>
-                </select>
-                <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" fill="none" stroke="#151a2d" stroke-width="2"/></svg>
-              </div>
-            </div>
-            <div class="result" id="campus-result" aria-live="polite">
-              <p class="result-empty">Pick your campus to see how to join.</p>
-            </div>
+          <div class="result" id="campus-result" aria-live="polite">
+            <p class="result-empty">Pick your campus to see how to join.</p>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col face-photo-m">
-      <figure>
-        <img src="images/moektails-mock-trials.jpg" alt="Six AMPL members at night under string lights, holding a chalkboard sign that reads Mocktails and Mock Trials" width="900" height="675" loading="lazy" />
-        <figcaption><b>Mocktails &amp; Mock Trials,</b> our signature night.</figcaption>
+      <figure class="hero-photo">
+        <img src="images/moektails-mock-trials.jpg" alt="Six AMPL members at night under string lights, holding a chalkboard sign that reads Mocktails and Mock Trials" width="900" height="675" fetchpriority="high" />
+        <figcaption>Mocktails &amp; Mock Trials, our signature night.</figcaption>
       </figure>
     </div>
   </section>
 
-  <section id="programs" class="sec" aria-labelledby="programs-title">
-    <div class="col">
+  <div class="strip">
+    <div class="wrap">
+      <strong>Chapters at</strong>
+      <ul>
+        <li><a href="#join-ucsd">UC San Diego</a></li>
+        <li><a href="#join-berkeley">UC Berkeley</a></li>
+        <li><a href="#join-uci">UC Irvine</a></li>
+        <li><a href="#join-ucla">UCLA</a></li>
+        <li><a href="#join-ucsc">UC Santa Cruz</a></li>
+        <li><a href="#join-davis">UC Davis</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <section id="about" class="sec" aria-labelledby="about-title">
+    <div class="wrap">
       <div class="sec-head">
-        <h2 class="sec-title" id="programs-title"><span class="sec-no">SEC. 1.</span>Signature programs</h2>
-        <p class="sec-lede amend" data-amend>Law and policy, <del>studied alone</del> <ins>practiced together</ins>.</p>
+        <h2 id="about-title">A home for Muslims in policy and law</h2>
+        <p class="lede">AMPL is a student-founded network across the University of California system. Each chapter is an independent student organization at its university, united by a shared mission.</p>
       </div>
-      <div class="programs">
-        <article class="program">
-          <div class="program-letter" aria-hidden="true">(a)</div>
-          <div class="program-text">
+      <div class="pillars">
+        <div class="pillar">
+          <h3>Education</h3>
+          <p>Workshops, panels, and speaker series on legal systems and policy.</p>
+        </div>
+        <div class="pillar">
+          <h3>Mentorship <span class="tag">Coming soon</span></h3>
+          <p>Connecting students with practicing Muslim attorneys, policymakers, and public servants.</p>
+        </div>
+        <div class="pillar">
+          <h3>Advocacy</h3>
+          <p>Training members to engage with campus policy and state legislation.</p>
+        </div>
+      </div>
+      <div class="quote">
+        <p>Representation is not just symbolic. It changes outcomes.</p>
+        <span>Justice. Representation. Leadership.</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="programs" class="sec alt" aria-labelledby="programs-title">
+    <div class="wrap">
+      <div class="programs-grid">
+        <div class="sec-head">
+          <h2 id="programs-title">Signature programs</h2>
+          <p class="lede">Law and policy, practiced together. Every chapter runs a mix of these through the year.</p>
+        </div>
+        <ul class="program-list">
+          <li>
             <h3>Mocktails &amp; Mock Trials</h3>
             <p>Our signature night: a mock trial, a mocktail bar, and a room of students who want to argue a case and meet each other.</p>
-          </div>
-          <button class="photo-btn" data-photo="images/moektails-night.jpg" data-title="Mocktails Night" data-caption="Community building over mocktails">
-            <img src="images/moektails-night.jpg" alt="Two AMPL members serving drinks at an outdoor Mocktails night" loading="lazy" width="900" height="675" />
-          </button>
-        </article>
-        <article class="program">
-          <div class="program-letter" aria-hidden="true">(b)</div>
-          <div class="program-text">
+          </li>
+          <li>
             <h3>Speaker panels</h3>
             <p>People working in government, the courts, and legal education talk with students about the paths they took.</p>
-          </div>
-          <button class="photo-btn" data-photo="images/large-lecture.jpg" data-title="Speaker event" data-caption="Students at a speaker panel">
-            <img src="images/large-lecture.jpg" alt="Two speakers at the front of a hall addressing rows of seated students" loading="lazy" width="900" height="675" />
-          </button>
-        </article>
-        <article class="program">
-          <div class="program-letter" aria-hidden="true">(c)</div>
-          <div class="program-text">
+          </li>
+          <li>
             <h3>Policy workshops</h3>
             <p>Skill-building sessions for students heading into law and policy, such as writing for policy change.</p>
-          </div>
-          <p class="exhibit-amend">Policy, written by the people it affects.</p>
-        </article>
-        <article class="program">
-          <div class="program-letter" aria-hidden="true">(d)</div>
-          <div class="program-text">
+          </li>
+          <li>
             <h3>Community nights</h3>
             <p>General meetings, movie nights, and socials. The part where a chapter becomes the people you call.</p>
-          </div>
-          <button class="photo-btn" data-photo="images/ampl-movie-night.jpg" data-title="Community night" data-caption="AMPL members together">
-            <img src="images/ampl-movie-night.jpg" alt="Eight AMPL members standing together in a row in an event hall" loading="lazy" width="900" height="675" />
-          </button>
-        </article>
+          </li>
+        </ul>
       </div>
 
-      <div class="record">
-        <h3>From the record</h3>
-        <div class="record-grid">
-          <figure><button class="photo-btn" data-photo="images/panel-discussion.jpg" data-title="Panel Discussion" data-caption="Speakers on law and policy"><img src="images/panel-discussion.jpg" alt="Panelists seated at the front of a room during an AMPL panel" loading="lazy" width="900" height="675" /></button><figcaption>Panel discussion</figcaption></figure>
+      <div class="gallery">
+        <div class="gallery-head">
+          <h3>From our chapters</h3>
+          <span>Select a photo to enlarge it</span>
+        </div>
+        <div class="gallery-grid">
+          <figure><button class="photo-btn" data-photo="images/large-lecture.jpg" data-title="Speaker panel" data-caption="Students at a speaker panel"><img src="images/large-lecture.jpg" alt="Two speakers at the front of a hall addressing rows of seated students" loading="lazy" width="900" height="675" /></button><figcaption>Speaker panel</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/moektails-night.jpg" data-title="Mocktails night" data-caption="Community building over mocktails"><img src="images/moektails-night.jpg" alt="Two AMPL members serving drinks at an outdoor Mocktails night" loading="lazy" width="900" height="675" /></button><figcaption>Mocktails night</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/panel-discussion.jpg" data-title="Panel discussion" data-caption="Speakers on law and policy"><img src="images/panel-discussion.jpg" alt="Panelists seated at the front of a room during an AMPL panel" loading="lazy" width="900" height="675" /></button><figcaption>Panel discussion</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/ampl-movie-night.jpg" data-title="Community night" data-caption="AMPL members together"><img src="images/ampl-movie-night.jpg" alt="Eight AMPL members standing together in a row in an event hall" loading="lazy" width="900" height="675" /></button><figcaption>Community night</figcaption></figure>
           <figure><button class="photo-btn" data-photo="images/speaker-series.jpg" data-title="Speaker series" data-caption="Two speakers at a chapter event"><img src="images/speaker-series.jpg" alt="Two speakers seated in front of a projection screen" loading="lazy" width="900" height="675" /></button><figcaption>Speaker series</figcaption></figure>
-          <figure><button class="photo-btn" data-photo="images/general-meeting.jpg" data-title="General Meeting" data-caption="UCI chapter outdoor gathering"><img src="images/general-meeting.jpg" alt="UC Irvine chapter members at an outdoor general meeting" loading="lazy" width="900" height="675" /></button><figcaption>General meeting, UCI</figcaption></figure>
-          <figure><button class="photo-btn" data-photo="images/chapter-members.jpg" data-title="Speaker event" data-caption="Two speakers addressing a full room"><img src="images/chapter-members.jpg" alt="Two speakers at the front of a hall addressing a seated audience" loading="lazy" width="900" height="601" /></button><figcaption>Speaker event</figcaption></figure>
-          <figure><button class="photo-btn" data-photo="images/networking-night.jpg" data-title="Networking Night" data-caption="Students connecting after a panel"><img src="images/networking-night.jpg" alt="Students standing and talking in a dim room at a networking night" loading="lazy" width="900" height="675" /></button><figcaption>Networking night</figcaption></figure>
-          <figure><button class="photo-btn" data-photo="images/movie-night-zootopia.jpg" data-title="Movie Night" data-caption="Zootopia 2 screening"><img src="images/movie-night-zootopia.jpg" alt="Five AMPL members holding a hand-lettered sign reading AMPL Movie Night ft. Zootopia" loading="lazy" width="900" height="675" /></button><figcaption>Movie night</figcaption></figure>
-          <figure><button class="photo-btn" data-photo="images/movie-night.jpg" data-title="Movie Night" data-caption="Members in the lounge"><img src="images/movie-night.jpg" alt="AMPL members seated together in a lounge" loading="lazy" width="900" height="675" /></button><figcaption>Lounge night</figcaption></figure>
-          <figure><button class="photo-btn" data-photo="images/about-banner.jpg" data-title="AMPL" data-caption="AMPL members together"><img src="images/about-banner.jpg" alt="AMPL members talking outdoors beside a table under a flowering tree" loading="lazy" width="900" height="675" /></button><figcaption>Outdoor gathering</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/general-meeting.jpg" data-title="General meeting" data-caption="UCI chapter outdoor gathering"><img src="images/general-meeting.jpg" alt="UC Irvine chapter members at an outdoor general meeting" loading="lazy" width="900" height="675" /></button><figcaption>General meeting, UCI</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/networking-night.jpg" data-title="Networking night" data-caption="Students connecting after a panel"><img src="images/networking-night.jpg" alt="Students standing and talking in a dim room at a networking night" loading="lazy" width="900" height="675" /></button><figcaption>Networking night</figcaption></figure>
+          <figure><button class="photo-btn" data-photo="images/movie-night-zootopia.jpg" data-title="Movie night" data-caption="Zootopia 2 screening"><img src="images/movie-night-zootopia.jpg" alt="Five AMPL members holding a hand-lettered sign reading AMPL Movie Night ft. Zootopia" loading="lazy" width="900" height="675" /></button><figcaption>Movie night</figcaption></figure>
         </div>
       </div>
     </div>
   </section>
 
   <section id="speakers" class="sec" aria-labelledby="speakers-title">
-    <div class="col">
+    <div class="wrap">
       <div class="sec-head">
-        <h2 class="sec-title" id="speakers-title"><span class="sec-no">SEC. 2.</span>Who has spoken to AMPL</h2>
-        <p class="sec-lede amend" data-amend>Advice from people <del>you only read about</del> <ins>who came to speak with us</ins>.</p>
+        <h2 id="speakers-title">Past speakers</h2>
+        <p class="lede">Advice from people who came to speak with us.</p>
       </div>
-      <ol class="speakers">
-        <li><span class="n" aria-hidden="true">(1)</span><div><p class="who">Farah Khan</p><p class="role">Former Mayor of Irvine</p></div></li>
-        <li><span class="n" aria-hidden="true">(2)</span><div><p class="who">Haaris M. Syed</p><p class="role">Commissioner, Los Angeles County Superior Court</p></div></li>
-        <li><span class="n" aria-hidden="true">(3)</span><div><p class="who titled">Assistant Dean of Admissions</p><p class="role">UC Irvine School of Law</p></div></li>
-        <li><span class="n" aria-hidden="true">(4)</span><div><p class="who">Siraj Bajwa</p><p class="role">JD candidate, UC Irvine School of Law</p></div></li>
-      </ol>
-      <div class="after-list">
+      <ul class="speakers">
+        <li><p class="who">Farah Khan</p><p class="role">Former Mayor of Irvine</p></li>
+        <li><p class="who">Haaris M. Syed</p><p class="role">Commissioner, Los Angeles County Superior Court</p></li>
+        <li><p class="who">Assistant Dean of Admissions</p><p class="role">UC Irvine School of Law</p></li>
+        <li><p class="who">Siraj Bajwa</p><p class="role">JD candidate, UC Irvine School of Law</p></li>
+      </ul>
+      <div class="cta-row">
+        <p><strong>Work in law, policy, or public service?</strong> We'd like to hear your path.</p>
         <a class="btn" href="#contact" data-topic="Speaking at AMPL">Speak at AMPL
-          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2"/></svg></a>
-        <p>Work in law, policy, or public service? We'd like to hear your path.</p>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a>
       </div>
     </div>
   </section>
 
-  <section id="chapters" class="sec" aria-labelledby="chapters-title" style="padding-top:clamp(2rem,5vw,4rem)">
-    <div class="col">
+  <section id="chapters" class="sec alt" aria-labelledby="chapters-title">
+    <div class="wrap">
       <div class="sec-head">
-        <h2 class="sec-title" id="chapters-title"><span class="sec-no">SEC. 3.</span>Chapters</h2>
-        <p class="sec-lede amend" data-amend>One chapter at UC San Diego, <ins>now six across the UC system</ins>.</p>
+        <h2 id="chapters-title">Chapters</h2>
+        <p class="lede">One chapter at UC San Diego, now six across the UC system.</p>
       </div>
       <div class="chapters">
         <div>
           <div class="map">
             <img src="images/california-map-tint.png" alt="" width="600" height="480" />
             <svg viewBox="0 0 600 480" role="group" aria-label="Map of AMPL chapters in California">
-              <polyline class="route" points="260,185 232,205 210,252 345,355 372,378 385,420" />
-              <g class="dot" data-ch="davis" tabindex="0" role="button" aria-label="UC Davis"><circle class="hit" cx="260" cy="185" r="22"/><circle class="pin" cx="260" cy="185" r="9"/><text x="276" y="181">UC Davis</text></g>
-              <g class="dot" data-ch="berkeley" tabindex="0" role="button" aria-label="UC Berkeley"><circle class="hit" cx="232" cy="205" r="22"/><circle class="pin" cx="232" cy="205" r="9"/><text x="248" y="222">UC Berkeley</text></g>
-              <g class="dot" data-ch="ucsc" tabindex="0" role="button" aria-label="UC Santa Cruz"><circle class="hit" cx="210" cy="252" r="22"/><circle class="pin" cx="210" cy="252" r="9"/><text x="226" y="257">UC Santa Cruz</text></g>
-              <g class="dot" data-ch="ucla" tabindex="0" role="button" aria-label="UCLA"><circle class="hit" cx="345" cy="355" r="22"/><circle class="pin" cx="345" cy="355" r="9"/><text x="290" y="340">UCLA</text></g>
-              <g class="dot" data-ch="uci" tabindex="0" role="button" aria-label="UC Irvine"><circle class="hit" cx="372" cy="378" r="22"/><circle class="pin" cx="372" cy="378" r="9"/><text x="388" y="375">UC Irvine</text></g>
-              <g class="dot" data-ch="ucsd" tabindex="0" role="button" aria-label="UC San Diego"><circle class="hit" cx="385" cy="420" r="22"/><circle class="pin" cx="385" cy="420" r="9"/><text x="401" y="425">UC San Diego</text></g>
+              <g class="dot" data-ch="davis" tabindex="0" role="button" aria-label="UC Davis"><circle class="hit" cx="260" cy="185" r="22"/><circle class="pin" cx="260" cy="185" r="8"/><text x="276" y="181">UC Davis</text></g>
+              <g class="dot" data-ch="berkeley" tabindex="0" role="button" aria-label="UC Berkeley"><circle class="hit" cx="232" cy="205" r="22"/><circle class="pin" cx="232" cy="205" r="8"/><text x="248" y="222">UC Berkeley</text></g>
+              <g class="dot" data-ch="ucsc" tabindex="0" role="button" aria-label="UC Santa Cruz"><circle class="hit" cx="210" cy="252" r="22"/><circle class="pin" cx="210" cy="252" r="8"/><text x="226" y="257">UC Santa Cruz</text></g>
+              <g class="dot" data-ch="ucla" tabindex="0" role="button" aria-label="UCLA"><circle class="hit" cx="345" cy="355" r="22"/><circle class="pin" cx="345" cy="355" r="8"/><text x="290" y="340">UCLA</text></g>
+              <g class="dot" data-ch="uci" tabindex="0" role="button" aria-label="UC Irvine"><circle class="hit" cx="372" cy="378" r="22"/><circle class="pin" cx="372" cy="378" r="8"/><text x="388" y="375">UC Irvine</text></g>
+              <g class="dot" data-ch="ucsd" tabindex="0" role="button" aria-label="UC San Diego"><circle class="hit" cx="385" cy="420" r="22"/><circle class="pin" cx="385" cy="420" r="8"/><text x="401" y="425">UC San Diego</text></g>
             </svg>
           </div>
           <p class="map-note">Select a campus on the map to find it in the list.</p>
         </div>
         <div>
-          <ol class="roll" id="roll"></ol>
+          <ul class="roll" id="roll"></ul>
           <p class="origin">Each chapter is an independent student organization at its university, joined by a shared mission. AMPL began at UC San Diego.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="get-involved" class="sec on-blue" aria-labelledby="involved-title">
-    <div class="col">
+  <section id="get-involved" class="sec" aria-labelledby="involved-title">
+    <div class="wrap">
       <div class="sec-head">
-        <h2 class="sec-title" id="involved-title"><span class="sec-no">SEC. 4.</span>Get involved</h2>
-        <p class="sec-lede amend" data-amend>Your seat at the table <del>is somewhere else</del> <ins>starts here</ins>.</p>
+        <h2 id="involved-title">Get involved</h2>
+        <p class="lede">Your seat at the table starts here.</p>
       </div>
-      <div class="motions">
-        <div class="motion-item">
-          <span class="n" aria-hidden="true">(a)</span>
-          <div>
-            <h3>Join a chapter</h3>
-            <p>Find your campus, follow the chapter, and come to the next meeting. Free and open to all students.</p>
-            <div class="motion-actions"><a class="btn light" href="#top" data-focus="campus">Find your chapter</a></div>
+      <div class="ways">
+        <div class="way">
+          <h3>Join a chapter</h3>
+          <p>Find your campus, follow the chapter, and come to the next meeting. Free and open to all students.</p>
+          <div class="way-actions"><a class="btn" href="#top" data-focus="campus">Find your chapter</a></div>
+        </div>
+        <div class="way">
+          <h3>Start a chapter</h3>
+          <p>No AMPL at your school yet? Tell us your campus and what you have in mind, and we'll help you get it started.</p>
+          <div class="way-actions"><a class="btn" href="#contact" data-topic="Starting a chapter">Start a chapter</a></div>
+        </div>
+        <div class="way">
+          <h3>Speak or partner with us</h3>
+          <p>Professionals and organizations who want to speak at a chapter or work with AMPL can reach the national team directly.</p>
+          <div class="way-actions">
+            <a class="btn" href="#contact" data-topic="Speaking at AMPL">Speak at AMPL</a>
+            <a class="btn outline" href="#contact" data-topic="Partnerships and collaboration">Partner with us</a>
           </div>
         </div>
-        <div class="motion-item">
-          <span class="n" aria-hidden="true">(b)</span>
-          <div>
-            <h3>Start a chapter</h3>
-            <p>No AMPL at your school yet? Tell us your campus and what you have in mind, and we'll help you get it started.</p>
-            <div class="motion-actions"><a class="btn light" href="#contact" data-topic="Starting a chapter">Start a chapter</a></div>
-          </div>
-        </div>
-        <div class="motion-item">
-          <span class="n" aria-hidden="true">(c)</span>
-          <div>
-            <h3>Speak or partner with us</h3>
-            <p>Professionals and organizations who want to speak at a chapter or work with AMPL can reach the national team directly.</p>
-            <div class="motion-actions">
-              <a class="btn light" href="#contact" data-topic="Speaking at AMPL">Speak at AMPL</a>
-              <a class="btn ghost" href="#contact" data-topic="Partnerships and collaboration">Partner with us</a>
-            </div>
-          </div>
-        </div>
-        <div class="motion-item">
-          <span class="n" aria-hidden="true">(d)</span>
-          <div>
-            <h3>Mentorship <span class="status">Pending</span></h3>
-            <p>We're building a mentorship program pairing students with Muslim legal and policy professionals. It hasn't launched yet. Join the interest list and we'll reach out when it does.</p>
-            <div class="motion-actions">
-              <a class="btn light" href="#contact" data-topic="Mentorship interest: I'd like to mentor">I'd like to mentor</a>
-              <a class="btn ghost" href="#contact" data-topic="Mentorship interest: I'd like a mentor">I'd like a mentor</a>
-            </div>
+        <div class="way">
+          <h3>Mentorship <span class="tag">Coming soon</span></h3>
+          <p>We're building a mentorship program pairing students with Muslim legal and policy professionals. It hasn't launched yet. Join the interest list and we'll reach out when it does.</p>
+          <div class="way-actions">
+            <a class="btn outline" href="#contact" data-topic="Mentorship interest: I'd like to mentor">I'd like to mentor</a>
+            <a class="btn outline" href="#contact" data-topic="Mentorship interest: I'd like a mentor">I'd like a mentor</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="contact" class="sec" aria-labelledby="contact-title">
-    <div class="col">
+  <section id="contact" class="sec alt" aria-labelledby="contact-title">
+    <div class="wrap">
       <div class="sec-head">
-        <h2 class="sec-title" id="contact-title"><span class="sec-no">SEC. 5.</span>Contact</h2>
-        <p class="sec-lede amend" data-amend>Every chapter <del>started</del> <ins>starts</ins> with a message.</p>
+        <h2 id="contact-title">Contact</h2>
+        <p class="lede">Every chapter starts with a message.</p>
       </div>
       <div class="contact">
         <form class="message" id="contact-form" action="https://formspree.io/f/mkokqvkl" method="POST" novalidate>
@@ -575,28 +548,33 @@
   </section>
 </main>
 
-<footer class="on-blue">
-  <div class="col">
+<footer class="dark">
+  <div class="wrap">
     <div class="foot-top">
-      <img class="seal" src="images/ampl-seal-silver.svg" alt="AMPL seal: a crescent holding the scales of justice, ringed by Association of Muslims in Politics and Law, National" width="140" height="140" loading="lazy" />
-      <p class="enact">The students of UC San Diego, UC Berkeley, UC Irvine, UCLA, UC Santa Cruz, and UC Davis <em>do enact as follows:</em> show up, speak up, and bring each other along.</p>
-    </div>
-    <div class="foot-row">
-      <p>&copy; <span id="year">2026</span> Association of Muslims in Politics and Law</p>
-      <nav aria-label="Footer">
-        <a href="#programs">Programs</a>
+      <img class="seal" src="images/ampl-seal-silver.svg" alt="AMPL seal: a crescent holding the scales of justice, ringed by Association of Muslims in Politics and Law, National" width="104" height="104" loading="lazy" />
+      <div>
+        <p class="foot-name">Association of Muslims in Politics and Law</p>
+        <p class="foot-motto">Justice. Representation. Leadership.</p>
+      </div>
+      <nav class="foot-nav" aria-label="Footer">
+        <a href="#about">About</a>
         <a href="#chapters">Chapters</a>
+        <a href="#programs">Programs</a>
         <a href="#contact">Contact</a>
         <a href="https://www.instagram.com/amplnational" target="_blank" rel="noopener">Instagram</a>
         <a href="portal.html">Chapter login</a>
       </nav>
+    </div>
+    <div class="foot-base">
+      <p>&copy; <span id="year">2026</span> Association of Muslims in Politics and Law</p>
+      <p>Chapters at UC San Diego, UC Berkeley, UC Irvine, UCLA, UC Santa Cruz, and UC Davis</p>
     </div>
   </div>
 </footer>
 
 <dialog class="viewer" id="viewer" aria-label="Photo viewer">
   <button class="viewer-close" type="button" id="viewer-close">
-    <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="2"/></svg>
+    <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.6"/></svg>
     Close
   </button>
   <figure id="viewer-figure">
@@ -605,10 +583,7 @@
 </dialog>
 
 <script>
-  var root = document.documentElement;
-  root.classList.add('js');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (!reduceMotion.matches) root.classList.add('motion');
 
   document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -630,7 +605,7 @@
     return out;
   }
 
-  // Chapter roll (SEC. 3)
+  // Chapter list
   var roll = document.getElementById('roll');
   roll.innerHTML = order.map(function (id) {
     var ch = chapters[id];
@@ -656,7 +631,7 @@
     dot.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
   });
 
-  // Campus picker (first viewport)
+  // Campus picker (hero)
   var campus = document.getElementById('campus');
   var result = document.getElementById('campus-result');
   function showCampus(id) {
@@ -685,10 +660,14 @@
     if (f) { setTimeout(function () { document.getElementById(f.dataset.focus).focus({ preventScroll: true }); }, reduceMotion.matches ? 0 : 450); }
   });
 
-  // Deep links: #join-uci selects that campus
+  // Deep links: #join-uci selects that campus and brings the picker into view
   function fromHash() {
     var m = location.hash.match(/^#join-(\w+)$/);
-    if (m && chapters[m[1]]) { campus.value = m[1]; showCampus(m[1]); }
+    if (m && chapters[m[1]]) {
+      campus.value = m[1];
+      showCampus(m[1]);
+      document.getElementById('top').scrollIntoView({ behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+    }
   }
   window.addEventListener('hashchange', fromHash);
   fromHash();
@@ -718,39 +697,6 @@
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
   document.querySelectorAll('main > section').forEach(function (s) { sectionObserver.observe(s); });
-
-  // Signature motion: each section's key line performs its amendment once
-  var amendObserver = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) { entry.target.classList.add('amended'); amendObserver.unobserve(entry.target); }
-    });
-  }, { threshold: 0.6 });
-  document.querySelectorAll('[data-amend]').forEach(function (el) { amendObserver.observe(el); });
-
-  // Margin line numbers
-  var linenos = document.querySelector('.linenos');
-  function drawLinenos() {
-    var step = parseFloat(getComputedStyle(linenos).lineHeight) || 32;
-    var main = document.getElementById('main');
-    var count = Math.ceil(main.scrollHeight / step);
-    var top = main.getBoundingClientRect().top;
-    var bands = Array.prototype.map.call(document.querySelectorAll('.band, .on-blue'), function (b) {
-      var r = b.getBoundingClientRect(); return [r.top - top, r.bottom - top];
-    });
-    var html = '';
-    for (var i = 1; i <= count; i++) {
-      var y = (i - 0.5) * step, cls = '', edge = false;
-      bands.forEach(function (b) {
-        if (y > b[0] && y < b[1]) cls = ' class="b"';
-        if (Math.abs(y - b[0]) < step * 0.75 || Math.abs(y - b[1]) < step * 0.75) edge = true;
-      });
-      html += '<span' + cls + '>' + ((i % 5 === 0 || i === 1) && !edge ? i : '') + '</span>';
-    }
-    linenos.innerHTML = html;
-  }
-  drawLinenos();
-  window.addEventListener('resize', drawLinenos);
-  window.addEventListener('load', drawLinenos);
 
   // Photo viewer
   var viewer = document.getElementById('viewer');

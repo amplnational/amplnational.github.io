@@ -5,118 +5,147 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chapter Portal - AMPL National</title>
   <meta name="robots" content="noindex" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="icon" href="images/ampl-mark.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --ink: #0d1b2e;
-      --cream: #d3cab7;
-      --gold-light: #e8e0d0;
-      --forest: #363e62;
-      --sage: #5a78b8;
-      --white: #ffffff;
-      --muted: #7a7a8a;
-      --border: #c8c0b0;
-      --bg: #f7f8fc;
-      --ok: #2f7a4f;
-      --warn: #a0701a;
-      --bad: #a33a3a;
+      --bg: #edeff3;
+      --surface: #f6f7f9;
+      --panel: #fbfbfc;
+      --ink: #1a2133;
+      --ink-2: #485064;
+      --muted: #5f6678;
+      --border: #d3d7df;
+      --line-2: #e2e5ea;
+      --navy: #1c2541;
+      --navy-2: #27315a;
+      --link: #2d3c74;
+      --on-navy: #ffffff;
+      --on-navy-2: #b8c0d4;
+      --silver: #c3c8d2;
+      --ok: #2c6e49;
+      --warn: #8a5a12;
+      --bad: #a8322b;
+      /* Older names still referenced by the portal's templates */
+      --forest: var(--navy);
+      --sage: var(--link);
+      --radius: 3px;
+      --sans: 'Public Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-    .nav-logo { display:flex; align-items:center; gap:0.7rem; text-decoration:none; }
-    .nav-logo img { height:46px; width:46px; object-fit:cover; border-radius:50%; box-shadow:0 2px 8px rgba(54,62,98,0.18); }
-    .nav-logo span { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:900; color:var(--forest); }
-    .nav-logo span em { color:var(--cream); font-style:normal; }
-    .nav-logo small { font-family:'DM Mono',monospace; font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--sage); margin-left:0.4rem; }
-    .nav-right { display:flex; align-items:center; gap:1.5rem; }
-    .nav-right a, .nav-right button { font-size:0.8rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink); text-decoration:none; background:none; border:none; cursor:pointer; font-family:inherit; }
-    .nav-right a:hover, .nav-right button:hover { color:var(--sage); }
-    .nav-user { font-size:0.82rem; color:var(--muted); }
+    body { font-family: var(--sans); font-size: 0.97rem; line-height: 1.55; background: var(--bg); color: var(--ink); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    ::selection { background: var(--navy); color: var(--on-navy); }
+    :focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+    nav :focus-visible { outline-color: var(--on-navy); }
+    a { color: var(--link); text-underline-offset: 0.2em; }
+    input, select, textarea { caret-color: var(--navy); }
+    html { scrollbar-color: #9aa1b0 var(--bg); }
 
-    main { padding-top:88px; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; height: 64px; padding: 0 2rem; background: var(--navy); color: var(--on-navy); }
+    .nav-logo { display:flex; align-items:center; gap:0.7rem; text-decoration:none; color:var(--on-navy); }
+    .nav-logo svg { width:32px; height:32px; color:var(--silver); flex:none; }
+    .nav-logo span { font-family:var(--serif); font-size:1.2rem; font-weight:600; letter-spacing:0.04em; }
+    .nav-logo small { font-size:0.85rem; color:var(--on-navy-2); padding-left:0.75rem; margin-left:0.1rem; border-left:1px solid rgba(255,255,255,0.2); }
+    .nav-right { display:flex; align-items:center; gap:1.4rem; }
+    .nav-right a, .nav-right button { font-size:0.9rem; font-weight:500; color:var(--on-navy-2); text-decoration:none; background:none; border:none; cursor:pointer; font-family:inherit; }
+    .nav-right a:hover, .nav-right button:hover { color:var(--on-navy); }
+    .nav-right button { border:1px solid rgba(255,255,255,0.35); border-radius:var(--radius); padding:0.4rem 0.8rem; color:var(--on-navy); }
+    .nav-right button:hover { background:rgba(255,255,255,0.08); }
+    .nav-user { font-size:0.85rem; color:var(--on-navy-2); }
+
+    main { padding-top:64px; }
     .hidden { display:none !important; }
 
-    .auth-wrap { max-width:440px; margin:4rem auto; background:var(--white); border:1px solid var(--border); padding:3rem; }
-    .section-label { font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--sage); margin-bottom:0.8rem; }
-    .section-title { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; line-height:1.15; color:var(--forest); margin-bottom:1rem; }
-    .muted { color:var(--muted); font-size:0.92rem; line-height:1.6; }
+    .auth-wrap { max-width:440px; margin:4rem auto; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:2.5rem; }
+    .section-label { font-size:0.8rem; font-weight:600; color:var(--muted); margin-bottom:0.25rem; }
+    .section-title { font-family:var(--serif); font-size:1.85rem; font-weight:600; line-height:1.2; color:var(--ink); margin-bottom:0.75rem; text-wrap:balance; }
+    .muted { color:var(--muted); font-size:0.94rem; line-height:1.6; }
     .auth-tabs { display:flex; border-bottom:1px solid var(--border); margin:1.5rem 0; }
-    .auth-tab { flex:1; padding:0.8rem; background:none; border:none; border-bottom:2px solid transparent; font-family:inherit; font-size:0.82rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); cursor:pointer; }
-    .auth-tab.active { color:var(--forest); border-bottom-color:var(--forest); }
-    .link-btn { background:none; border:none; color:var(--sage); font-family:inherit; font-size:0.85rem; cursor:pointer; text-decoration:underline; padding:0; }
+    .auth-tab { flex:1; padding:0.75rem; background:none; border:none; box-shadow:inset 0 -2px 0 transparent; font-family:inherit; font-size:0.92rem; font-weight:600; color:var(--muted); cursor:pointer; }
+    .auth-tab:hover { color:var(--ink); }
+    .auth-tab.active { color:var(--navy); box-shadow:inset 0 -2px 0 var(--navy); }
+    .link-btn { background:none; border:none; color:var(--link); font-family:inherit; font-size:0.9rem; cursor:pointer; text-decoration:underline; text-underline-offset:0.2em; padding:0; }
 
     form.stack { display:flex; flex-direction:column; gap:1rem; }
     .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-    .form-group { display:flex; flex-direction:column; gap:0.4rem; }
-    .form-label { font-size:0.74rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); }
-    .form-input, .form-textarea, .form-select { padding:0.75rem 0.9rem; border:1px solid var(--border); background:var(--white); font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--ink); outline:none; width:100%; }
-    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color:var(--forest); }
+    .form-group { display:flex; flex-direction:column; gap:0.35rem; }
+    .form-label { font-size:0.88rem; font-weight:600; color:var(--ink); }
+    .form-input, .form-textarea, .form-select { padding:0.65rem 0.8rem; border:1px solid var(--border); border-radius:var(--radius); background:#fff; font-family:inherit; font-size:0.95rem; color:var(--ink); width:100%; transition:border-color 0.15s; }
+    .form-select { appearance:none; background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4.5l4 4 4-4' fill='none' stroke='%23485064' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 0.8rem center / 12px; padding-right:2.2rem; }
+    .form-input:hover, .form-textarea:hover, .form-select:hover { border-color:#aab0bd; }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color:var(--navy); outline:none; }
+    .form-input:focus-visible, .form-textarea:focus-visible, .form-select:focus-visible { outline:2px solid var(--link); outline-offset:2px; }
     .form-textarea { resize:vertical; min-height:110px; }
-    .btn { background:var(--forest); color:var(--cream); padding:0.75rem 1.6rem; font-weight:600; font-size:0.85rem; letter-spacing:0.04em; border:none; cursor:pointer; font-family:inherit; width:fit-content; transition:opacity 0.2s; }
-    .btn:hover { opacity:0.88; }
-    .btn:disabled { opacity:0.5; cursor:default; }
-    .btn-sm { padding:0.4rem 0.9rem; font-size:0.75rem; }
-    .btn-light { background:var(--cream); color:var(--forest); }
-    .btn-ok { background:var(--ok); color:#fff; }
-    .btn-bad { background:var(--bad); color:#fff; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; background:var(--navy); color:var(--on-navy); padding:0.7rem 1.25rem; font-weight:600; font-size:0.92rem; border:1px solid var(--navy); border-radius:var(--radius); cursor:pointer; font-family:inherit; width:fit-content; transition:background-color 0.15s, border-color 0.15s; }
+    .btn:hover { background:var(--navy-2); border-color:var(--navy-2); }
+    .btn:disabled { opacity:0.55; cursor:default; }
+    .btn-sm { padding:0.35rem 0.75rem; font-size:0.84rem; }
+    .btn-light { background:var(--panel); color:var(--navy); border-color:var(--border); }
+    .btn-light:hover { background:#fff; border-color:var(--navy); }
+    .btn-ok { background:var(--ok); border-color:var(--ok); color:#fff; }
+    .btn-ok:hover { background:#24593b; border-color:#24593b; }
+    .btn-bad { background:var(--bad); border-color:var(--bad); color:#fff; }
+    .btn-bad:hover { background:#8e2a24; border-color:#8e2a24; }
     .btn-ghost { background:transparent; color:var(--bad); border:1px solid var(--border); }
-    .msg { font-size:0.88rem; padding:0.7rem 0.9rem; border-left:3px solid var(--sage); background:var(--bg); }
-    .msg.error { border-color:var(--bad); color:var(--bad); }
+    .btn-ghost:hover { background:#fff; border-color:var(--bad); }
+    .msg { font-size:0.9rem; padding:0.7rem 0.9rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); }
+    .msg.error { border-color:#e0b4b0; background:#fbf1f0; color:var(--bad); }
 
-    .layout { display:grid; grid-template-columns:230px 1fr; min-height:calc(100vh - 88px); }
-    .sidebar { background:var(--forest); padding:2rem 0; }
-    .sidebar-chapter { padding:0 1.6rem 1.5rem; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:1rem; }
-    .sidebar-chapter .section-label { color:rgba(211,202,183,0.6); margin-bottom:0.3rem; }
-    .sidebar-chapter div { font-family:'Playfair Display',serif; color:var(--cream); font-size:1.15rem; font-weight:700; }
-    .tab-btn { display:block; width:100%; text-align:left; padding:0.85rem 1.6rem; background:none; border:none; border-left:3px solid transparent; color:rgba(211,202,183,0.75); font-family:inherit; font-size:0.9rem; cursor:pointer; }
-    .tab-btn:hover { color:var(--cream); background:rgba(255,255,255,0.04); }
-    .tab-btn.active { color:#fff; border-left-color:var(--cream); background:rgba(255,255,255,0.07); }
-    .tab-btn .count { background:var(--cream); color:var(--forest); font-size:0.7rem; font-weight:700; padding:1px 7px; border-radius:10px; margin-left:6px; }
+    .layout { display:grid; grid-template-columns:240px 1fr; min-height:calc(100vh - 64px); }
+    .sidebar { background:var(--surface); border-right:1px solid var(--border); padding:1.75rem 0.75rem; }
+    .sidebar-chapter { padding:0 0.75rem 1.25rem; border-bottom:1px solid var(--border); margin-bottom:0.75rem; }
+    .sidebar-chapter .section-label { margin:0.1rem 0 0; }
+    .sidebar-chapter div { font-family:var(--serif); color:var(--ink); font-size:1.15rem; font-weight:600; }
+    .tab-btn { display:flex; align-items:center; width:100%; text-align:left; padding:0.6rem 0.75rem; margin-bottom:2px; background:none; border:none; border-radius:var(--radius); color:var(--ink-2); font-family:inherit; font-size:0.94rem; font-weight:500; cursor:pointer; transition:background-color 0.15s, color 0.15s; }
+    .tab-btn:hover { color:var(--ink); background:var(--line-2); }
+    .tab-btn.active { color:var(--on-navy); background:var(--navy); font-weight:600; }
+    .tab-btn .count { background:var(--bad); color:#fff; font-size:0.72rem; font-weight:700; line-height:1; padding:3px 7px; border-radius:9px; margin-left:auto; font-variant-numeric:tabular-nums; }
     .content { padding:2.5rem 3rem 4rem; max-width:1100px; }
-    .content-head { display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; flex-wrap:wrap; margin-bottom:2rem; }
+    .content-head { display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; flex-wrap:wrap; margin-bottom:1.75rem; }
     .content-head .section-title { margin-bottom:0; }
 
-    .card { background:var(--white); border:1px solid var(--border); padding:1.8rem; margin-bottom:1.5rem; }
-    .card-title { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; color:var(--forest); margin-bottom:1rem; }
-    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-bottom:1.5rem; }
-    .stat { background:var(--white); padding:1.4rem; }
-    .stat-num { font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:900; color:var(--forest); line-height:1.1; }
-    .stat-label { font-size:0.76rem; color:var(--muted); font-weight:500; letter-spacing:0.04em; margin-top:0.3rem; }
-    .list-item { padding:1.1rem 0; border-bottom:1px solid var(--border); }
+    .card { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:1.6rem; margin-bottom:1.25rem; }
+    .card-title { font-family:var(--serif); font-size:1.2rem; font-weight:600; color:var(--ink); margin-bottom:1rem; }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:1.25rem; }
+    .stat { background:var(--panel); padding:1.25rem 1.4rem; }
+    .stat-num { font-size:1.6rem; font-weight:600; color:var(--ink); line-height:1.15; font-variant-numeric:tabular-nums; letter-spacing:-0.01em; }
+    .stat-label { font-size:0.84rem; color:var(--muted); margin-top:0.3rem; }
+    .list-item { padding:1rem 0; border-bottom:1px solid var(--line-2); }
     .list-item:last-child { border-bottom:none; }
-    .item-title { font-weight:600; color:var(--forest); }
-    .item-meta { font-size:0.8rem; color:var(--muted); margin-top:0.2rem; }
-    .item-body { font-size:0.92rem; line-height:1.65; color:#444; margin-top:0.5rem; white-space:pre-wrap; }
+    .item-title { font-weight:600; color:var(--ink); }
+    a.item-title { color:var(--link); }
+    .item-meta { font-size:0.84rem; color:var(--muted); margin-top:0.15rem; }
+    .item-body { font-size:0.94rem; line-height:1.65; color:var(--ink-2); margin-top:0.5rem; white-space:pre-wrap; }
     .item-row { display:flex; justify-content:space-between; gap:1rem; align-items:flex-start; }
     .item-actions { display:flex; gap:0.5rem; flex-shrink:0; flex-wrap:wrap; }
-    .empty { color:var(--muted); font-size:0.9rem; font-style:italic; padding:0.5rem 0; }
+    .empty { color:var(--muted); font-size:0.94rem; padding:0.5rem 0; }
 
-    table { width:100%; border-collapse:collapse; font-size:0.88rem; }
-    th { text-align:left; font-size:0.7rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); padding:0.6rem 0.5rem; border-bottom:1px solid var(--border); }
-    td { padding:0.75rem 0.5rem; border-bottom:1px solid #ebe6dc; vertical-align:top; }
+    table { width:100%; border-collapse:collapse; font-size:0.9rem; }
+    th { text-align:left; font-size:0.8rem; font-weight:600; color:var(--muted); padding:0.6rem 0.5rem; border-bottom:1px solid var(--border); }
+    td { padding:0.75rem 0.5rem; border-bottom:1px solid var(--line-2); vertical-align:top; }
     td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
     .table-wrap { overflow-x:auto; }
-    .badge { display:inline-block; font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:0.2rem 0.6rem; border:1px solid currentColor; }
-    .badge.pending { color:var(--warn); }
-    .badge.approved, .badge.income { color:var(--ok); }
-    .badge.denied, .badge.expense { color:var(--bad); }
-    .badge.admin { color:var(--forest); }
-    .badge.chapter { color:var(--sage); }
+    .badge { display:inline-block; text-transform:capitalize; font-size:0.74rem; font-weight:600; line-height:1; padding:0.3rem 0.5rem; border-radius:2px; border:1px solid currentColor; }
+    .badge.pending { color:var(--warn); background:#fbf5ea; }
+    .badge.approved, .badge.income { color:var(--ok); background:#eef6f1; }
+    .badge.denied, .badge.expense { color:var(--bad); background:#fbf1f0; }
+    .badge.admin { color:var(--navy); background:#eceef5; }
+    .badge.chapter { color:var(--ink-2); background:var(--surface); }
 
-    .setup-notice { max-width:640px; margin:4rem auto; background:var(--white); border:1px solid var(--border); border-top:4px solid var(--warn); padding:2.5rem; }
-    .setup-notice code { font-family:'DM Mono',monospace; background:var(--bg); padding:1px 5px; font-size:0.85rem; }
+    .setup-notice { max-width:640px; margin:4rem auto; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:2.5rem; }
+    .setup-notice code { font-family:ui-monospace, 'SFMono-Regular', Menlo, monospace; background:var(--surface); border:1px solid var(--line-2); border-radius:2px; padding:1px 5px; font-size:0.85rem; }
 
     @media (max-width:900px) {
-      nav { padding:1rem 1.25rem; }
+      nav { padding:0 1.25rem; }
       .nav-logo small, .nav-user { display:none; }
-      main { padding-top:78px; }
       .auth-wrap { margin:1.5rem 1rem; padding:2rem 1.5rem; }
       .layout { grid-template-columns:1fr; }
-      .sidebar { padding:0; display:flex; overflow-x:auto; }
+      .sidebar { padding:0.5rem; display:flex; gap:0.25rem; overflow-x:auto; border-right:0; border-bottom:1px solid var(--border); }
       .sidebar-chapter { display:none; }
-      .tab-btn { white-space:nowrap; width:auto; border-left:none; border-bottom:3px solid transparent; padding:0.9rem 1rem; }
-      .tab-btn.active { border-bottom-color:var(--cream); }
+      .tab-btn { white-space:nowrap; width:auto; margin:0; }
       .content { padding:1.5rem 1rem 3rem; }
       .stats { grid-template-columns:1fr 1fr; }
       .form-row { grid-template-columns:1fr; }
@@ -127,14 +156,14 @@
 </head>
 <body>
 <nav>
-  <a href="index.html" class="nav-logo">
-    <img src="images/logo.jpg" alt="AMPL logo" />
-    <span>AMPL<em>.</em></span><small>Chapter Portal</small>
+  <a href="index.html" class="nav-logo" aria-label="AMPL Chapter Portal, back to the main site">
+    <svg viewBox="30 22 140 140" aria-hidden="true"><g fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M49.1 48 A66 66 0 1 0 150.9 48 A60.1 60.1 0 1 1 49.1 48 Z" stroke="none"/><circle cx="100" cy="31" r="4" stroke="none"/><path d="M100 34 V134" fill="none" stroke-width="5"/><path d="M86 140 H114 L107 131 H93 Z" stroke="none"/><path d="M76 50 H124" fill="none" stroke-width="4.5"/><path d="M76 50 C70 50 68 44 72 42 M124 50 C130 50 132 44 128 42" fill="none" stroke-width="3"/><path d="M76 50 L63 92 M76 50 L89 92 M124 50 L111 92 M124 50 L137 92" fill="none" stroke-width="2"/><path d="M60 92 Q76 104 92 92 Z M108 92 Q124 104 140 92 Z" stroke-width="2"/></g></svg>
+    <span>AMPL</span><small>Chapter Portal</small>
   </a>
   <div class="nav-right">
     <span id="nav-user" class="nav-user"></span>
-    <a href="index.html">Main Site</a>
-    <button id="signout-btn" class="hidden">Sign Out</button>
+    <a href="index.html">Main site</a>
+    <button id="signout-btn" class="hidden">Sign out</button>
   </div>
 </nav>
 
@@ -142,45 +171,42 @@
   <div id="view-loading" class="auth-wrap"><p class="muted">Loading…</p></div>
 
   <div id="view-setup" class="setup-notice hidden">
-    <p class="section-label">Setup Needed</p>
     <h1 class="section-title">The portal isn't connected yet.</h1>
     <p class="muted">Fill in <code>firebase-config.js</code> with your Firebase project's web config. Instructions are in <code>PORTAL_SETUP.md</code>.</p>
   </div>
 
   <div id="view-auth" class="auth-wrap hidden">
-    <p class="section-label">Chapter Portal</p>
-    <h1 class="section-title">Welcome back.</h1>
+    <h1 class="section-title">Chapter Portal</h1>
     <p class="muted">For AMPL chapter officers and National board members.</p>
     <div class="auth-tabs">
-      <button class="auth-tab active" data-auth="signin">Sign In</button>
-      <button class="auth-tab" data-auth="signup">Request Access</button>
+      <button class="auth-tab active" data-auth="signin">Sign in</button>
+      <button class="auth-tab" data-auth="signup">Request access</button>
     </div>
     <form id="signin-form" class="stack">
       <div class="form-group"><label class="form-label" for="si-email">Email</label><input id="si-email" type="email" class="form-input" required autocomplete="email" /></div>
       <div class="form-group"><label class="form-label" for="si-pass">Password</label><input id="si-pass" type="password" class="form-input" required autocomplete="current-password" /></div>
-      <button class="btn" type="submit">Sign In</button>
+      <button class="btn" type="submit">Sign in</button>
       <button class="link-btn" type="button" id="forgot-btn" style="width:fit-content">Forgot password?</button>
     </form>
     <form id="signup-form" class="stack hidden">
-      <div class="form-group"><label class="form-label" for="su-name">Full Name</label><input id="su-name" type="text" class="form-input" required autocomplete="name" /></div>
+      <div class="form-group"><label class="form-label" for="su-name">Full name</label><input id="su-name" type="text" class="form-input" required autocomplete="name" /></div>
       <div class="form-group"><label class="form-label" for="su-email">Email</label><input id="su-email" type="email" class="form-input" required autocomplete="email" /></div>
-      <div class="form-group"><label class="form-label" for="su-chapter">Your Chapter</label><select id="su-chapter" class="form-select" required></select></div>
+      <div class="form-group"><label class="form-label" for="su-chapter">Your chapter</label><select id="su-chapter" class="form-select" required></select></div>
       <div class="form-group"><label class="form-label" for="su-pass">Password (8+ characters)</label><input id="su-pass" type="password" class="form-input" required minlength="8" autocomplete="new-password" /></div>
-      <button class="btn" type="submit">Request Access</button>
+      <button class="btn" type="submit">Request access</button>
       <p class="muted" style="font-size:0.82rem">AMPL National will review and approve your account.</p>
     </form>
     <div id="auth-msg" class="msg hidden" style="margin-top:1rem"></div>
   </div>
 
   <div id="view-pending" class="auth-wrap hidden">
-    <p class="section-label">Almost There</p>
     <h1 class="section-title">Your account is awaiting approval.</h1>
-    <p class="muted">AMPL National has been notified of your request. Once an admin assigns you to your chapter, refresh this page to get in. Questions? Email <a href="mailto:amplnational@gmail.com" style="color:var(--sage)">amplnational@gmail.com</a>.</p>
+    <p class="muted">AMPL National has been notified of your request. Once an admin assigns you to your chapter, refresh this page to get in. Questions? Email <a href="mailto:amplnational@gmail.com">amplnational@gmail.com</a>.</p>
   </div>
 
   <div id="view-app" class="layout hidden">
     <aside class="sidebar">
-      <div class="sidebar-chapter"><p class="section-label" id="side-role"></p><div id="side-chapter"></div></div>
+      <div class="sidebar-chapter"><div id="side-chapter"></div><p class="section-label" id="side-role"></p></div>
       <button class="tab-btn" data-tab="overview">Announcements</button>
       <button class="tab-btn" data-tab="resources">Resources</button>
       <button class="tab-btn" data-tab="profile">Chapter Profile</button>
@@ -372,7 +398,7 @@
           ${Object.values(state.chapters).map(c => `<option value="${esc(c.id)}" ${c.id === state.chapterId ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}
         </select>
       </div>` : '';
-    return `<div class="content-head"><div><p class="section-label">${esc(label)}</p><h1 class="section-title">${esc(title)}</h1></div>${picker}</div>`;
+    return `<div class="content-head"><div><h1 class="section-title">${esc(title)}</h1></div>${picker}</div>`;
   }
   function bindChapterPicker() {
     const picker = $('#chapter-picker');
@@ -396,7 +422,7 @@
   async function renderOverview(content) {
     const items = await allDocs('announcements');
     content.innerHTML = `
-      <div class="content-head"><div><p class="section-label">From AMPL National</p><h1 class="section-title">Announcements</h1></div></div>
+      <div class="content-head"><div><h1 class="section-title">Announcements</h1></div></div>
       ${isAdmin() ? `
       <div class="card"><div class="card-title">Post an announcement</div>
         <form id="ann-form" class="stack">
@@ -423,7 +449,7 @@
     const groups = {};
     items.forEach(r => (groups[r.category || 'General'] ??= []).push(r));
     content.innerHTML = `
-      <div class="content-head"><div><p class="section-label">Toolkits &amp; Templates</p><h1 class="section-title">Resources</h1></div></div>
+      <div class="content-head"><div><h1 class="section-title">Resources</h1></div></div>
       ${isAdmin() ? `
       <div class="card"><div class="card-title">Add a resource</div>
         <form id="res-form" class="stack">
@@ -644,10 +670,10 @@
     ]);
     const requests = reqSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort(byNewest);
     content.innerHTML = `
-      <div class="content-head"><div><p class="section-label">Needs Your Review</p><h1 class="section-title">Approvals</h1></div></div>
+      <div class="content-head"><div><h1 class="section-title">Approvals</h1></div></div>
       <div class="card"><div class="card-title">Pending budget requests</div>${requestRows(requests, { showChapter: true })}</div>
       <div class="card"><div class="card-title">Pending account requests</div>
-        ${userSnap.size ? `<p class="muted">${userSnap.size} account${userSnap.size > 1 ? 's are' : ' is'} waiting. <button class="link-btn" id="go-accounts">Review in Accounts →</button></p>` : '<p class="empty">No pending accounts.</p>'}
+        ${userSnap.size ? `<p class="muted">${userSnap.size} account${userSnap.size > 1 ? 's are' : ' is'} waiting. <button class="link-btn" id="go-accounts">Review in Accounts</button></p>` : '<p class="empty">No pending accounts.</p>'}
       </div>`;
     bindRequestActions(content);
     const go = $('#go-accounts');
@@ -662,7 +688,7 @@
     const requested = (u) => DEFAULT_CHAPTERS[u.requestedChapter]?.name || state.chapters[u.requestedChapter]?.name || u.requestedChapter || '';
     const chapterOpts = (sel) => '<option value="">— none —</option>' + Object.values(state.chapters).map(c => `<option value="${esc(c.id)}" ${c.id === sel ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
     content.innerHTML = `
-      <div class="content-head"><div><p class="section-label">Admin</p><h1 class="section-title">Accounts</h1></div></div>
+      <div class="content-head"><div><h1 class="section-title">Accounts</h1></div></div>
       <div class="card">
         <p class="muted" style="margin-bottom:1rem">Approve a new account by assigning a chapter and setting the role to <strong>Chapter officer</strong>. Set <strong>National admin</strong> only for AMPL National board members.</p>
         <div class="table-wrap"><table>
@@ -699,7 +725,7 @@
     const missing = Object.keys(DEFAULT_CHAPTERS).filter(id => !state.chapters[id]);
     const list = Object.values(state.chapters).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     content.innerHTML = `
-      <div class="content-head"><div><p class="section-label">Admin</p><h1 class="section-title">Chapters &amp; Budgets</h1></div></div>
+      <div class="content-head"><div><h1 class="section-title">Chapters &amp; Budgets</h1></div></div>
       ${missing.length ? `<div class="card"><p class="muted" style="margin-bottom:1rem">${missing.length} of the chapters listed on the main site ${missing.length > 1 ? "aren't" : "isn't"} in the portal yet.</p><button class="btn" id="seed-btn">Add ${missing.map(id => esc(DEFAULT_CHAPTERS[id].name)).join(', ')}</button></div>` : ''}
       <div class="card"><div class="card-title">Base budget allocation per chapter</div>
         ${list.length ? `<div class="table-wrap"><table>

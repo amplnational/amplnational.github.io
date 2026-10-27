@@ -1,262 +1,291 @@
 ---
 name: AMPL
-description: Association of Muslims in Politics and Law, set as an amended bill in California legislative print.
+description: Association of Muslims in Politics and Law. A sober, institutional student network set beside the bar associations.
 colors:
-  bond-paper: "#fbfbfc"
-  ink: "#151a2d"
-  ink-secondary: "#464c5e"
-  ink-tertiary: "#676d7d"
-  ampl-navy: "#26305e"
-  insertion-blue: "#3a4f9f"
-  on-navy: "#ffffff"
-  on-navy-secondary: "#c4cce2"
+  navy: "#1c2541"
+  navy-hover: "#27315a"
+  navy-deep: "#141b31"
+  link-navy: "#2d3c74"
   silver: "#c3c8d2"
-  silver-wash: "#e8eaef"
-  silver-pale: "#f1f2f5"
-  strike-gray: "#646b7b"
-  error-red: "#b3261e"
+  page-gray: "#edeff3"
+  surface: "#f6f7f9"
+  panel: "#fbfbfc"
+  field-white: "#ffffff"
+  ink: "#1a2133"
+  ink-secondary: "#485064"
+  ink-tertiary: "#5f6678"
+  hairline: "#d3d7df"
+  hairline-soft: "#e2e5ea"
+  on-navy: "#ffffff"
+  on-navy-secondary: "#b8c0d4"
+  error-red: "#a8322b"
+  success-green: "#2c6e49"
+  warning-amber: "#8a5a12"
 typography:
   display:
-    fontFamily: "Public Sans, system-ui, sans-serif"
-    fontSize: "clamp(2rem, min(5.6vw, 8.6vh), 5.25rem)"
-    fontWeight: 900
-    lineHeight: 1
-    letterSpacing: "-0.035em"
-  headline:
-    fontFamily: "Public Sans, system-ui, sans-serif"
-    fontSize: "clamp(1.9rem, 3.6vw, 3.1rem)"
-    fontWeight: 800
-    lineHeight: 1.05
-    letterSpacing: "-0.03em"
-  title:
-    fontFamily: "Public Sans, system-ui, sans-serif"
-    fontSize: "clamp(1.5rem, 2.6vw, 2.2rem)"
-    fontWeight: 800
+    fontFamily: "Source Serif 4, Georgia, Times New Roman, serif"
+    fontSize: "clamp(2.15rem, 4vw, 3.25rem)"
+    fontWeight: 600
     lineHeight: 1.1
-    letterSpacing: "-0.02em"
-  amendment:
-    fontFamily: "Tinos, Times New Roman, serif"
-    fontSize: "clamp(1.35rem, 2.4vw, 1.8rem)"
-    fontWeight: 400
-    lineHeight: 1.35
-  body:
-    fontFamily: "Tinos, Times New Roman, serif"
-    fontSize: "1.125rem"
-    fontWeight: 400
-    lineHeight: 1.6
-  label:
-    fontFamily: "Public Sans, system-ui, sans-serif"
-    fontSize: "0.95rem"
+    letterSpacing: "-0.015em"
+  headline:
+    fontFamily: "Source Serif 4, Georgia, Times New Roman, serif"
+    fontSize: "clamp(1.75rem, 3vw, 2.4rem)"
+    fontWeight: 600
+    lineHeight: 1.15
+    letterSpacing: "-0.01em"
+  title:
+    fontFamily: "Source Serif 4, Georgia, Times New Roman, serif"
+    fontSize: "1.3rem"
     fontWeight: 600
     lineHeight: 1.3
-  enumerator:
-    fontFamily: "Tinos, Times New Roman, serif"
+  quote:
+    fontFamily: "Source Serif 4, Georgia, Times New Roman, serif"
+    fontSize: "clamp(1.5rem, 2.8vw, 2.1rem)"
+    fontWeight: 500
+    lineHeight: 1.3
+  wordmark:
+    fontFamily: "Source Serif 4, Georgia, Times New Roman, serif"
     fontSize: "1.3rem"
-    fontWeight: 700
-  line-number:
-    fontFamily: "Tinos, Times New Roman, serif"
-    fontSize: "0.8rem"
+    fontWeight: 600
+    letterSpacing: "0.04em"
+  lede:
+    fontFamily: "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "1.2rem"
     fontWeight: 400
-    lineHeight: 2
+    lineHeight: 1.6
+  body:
+    fontFamily: "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "1.0625rem"
+    fontWeight: 400
+    lineHeight: 1.65
+  label:
+    fontFamily: "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "0.94rem"
+    fontWeight: 600
+    lineHeight: 1.2
+  tag:
+    fontFamily: "Public Sans, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "0.72rem"
+    fontWeight: 600
+    lineHeight: 1
+    letterSpacing: "0.06em"
 rounded:
-  none: "0px"
+  tag: "2px"
+  base: "3px"
 spacing:
-  line: "2rem"
-  margin: "4.5rem"
-  gutter: "clamp(1.25rem, 4vw, 4rem)"
-  section-top: "clamp(4rem, 9vw, 7.5rem)"
-  section-bottom: "clamp(3rem, 6vw, 5rem)"
+  wrap: "72rem"
+  gutter: "clamp(1.25rem, 4vw, 2.5rem)"
+  section: "clamp(4rem, 8vw, 6rem)"
+  section-head: "clamp(2.25rem, 4vw, 3rem)"
+  hero-top: "clamp(2.75rem, 5.5vw, 4.25rem)"
+  hero-bottom: "clamp(3rem, 6vw, 4.5rem)"
+  column-gap: "clamp(2rem, 5vw, 4rem)"
 components:
   button-primary:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.bond-paper}"
+    backgroundColor: "{colors.navy}"
+    textColor: "{colors.on-navy}"
     typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    padding: "0.85rem 1.1rem"
+    rounded: "{rounded.base}"
+    padding: "0.8rem 1.2rem"
   button-primary-hover:
-    backgroundColor: "{colors.ampl-navy}"
-    textColor: "{colors.bond-paper}"
-  button-light:
-    backgroundColor: "{colors.silver}"
-    textColor: "{colors.ampl-navy}"
-    typography: "{typography.label}"
-    rounded: "{rounded.none}"
-    padding: "0.85rem 1.1rem"
-  button-light-hover:
-    backgroundColor: "{colors.on-navy}"
-    textColor: "{colors.ampl-navy}"
-  button-ghost:
+    backgroundColor: "{colors.navy-hover}"
+    textColor: "{colors.on-navy}"
+  button-outline:
     backgroundColor: "transparent"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
-    padding: "0.85rem 1.1rem"
-  button-ghost-hover:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.bond-paper}"
+    textColor: "{colors.navy}"
+    typography: "{typography.label}"
+    rounded: "{rounded.base}"
+    padding: "0.8rem 1.2rem"
+  button-outline-hover:
+    backgroundColor: "rgba(28, 37, 65, 0.04)"
+    textColor: "{colors.navy}"
+  button-on-navy:
+    backgroundColor: "transparent"
+    textColor: "{colors.on-navy}"
+    rounded: "{rounded.base}"
+    padding: "0.45rem 0.9rem"
+  button-on-navy-hover:
+    backgroundColor: "rgba(255, 255, 255, 0.08)"
+    textColor: "{colors.on-navy}"
   input-field:
-    backgroundColor: "{colors.on-navy}"
+    backgroundColor: "{colors.field-white}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
-    padding: "0.85rem 0.9rem"
-  select-campus:
-    backgroundColor: "{colors.on-navy}"
+    rounded: "{rounded.base}"
+    padding: "0.75rem 0.85rem"
+  picker-panel:
+    backgroundColor: "{colors.panel}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
-    padding: "0.95rem 2.75rem 0.95rem 1rem"
+    rounded: "{rounded.base}"
+    padding: "1.4rem 1.5rem 1.25rem"
+  panel-card:
+    backgroundColor: "{colors.panel}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.base}"
+    padding: "1.25rem 1.5rem"
   status-tag:
-    backgroundColor: "{colors.silver}"
-    textColor: "{colors.ampl-navy}"
-    rounded: "{rounded.none}"
-    padding: "0.25rem 0.55rem"
+    backgroundColor: "{colors.panel}"
+    textColor: "{colors.ink-secondary}"
+    typography: "{typography.tag}"
+    rounded: "{rounded.tag}"
+    padding: "0.3rem 0.45rem"
+  nav-link:
+    textColor: "{colors.on-navy-secondary}"
+    typography: "{typography.label}"
+  nav-link-active:
+    textColor: "{colors.on-navy}"
 ---
 
 # Design System: AMPL
 
 ## Overview
 
-**Creative North Star: "The Amended Bill"**
+**Creative North Star: "The Bar Association Standard"**
 
-The public site is printed like a California legislative bill: white bond paper, black ink, a line-numbered left margin, numbered sections (SEC. 1., SEC. 2.), lettered subsections ((a), (b)) and enumerated paragraphs ((1), (2)). Amendment is the voice. Struck silver-gray text names the status quo AMPL changes; bold blue italic insertions name what it builds. The bill's structure is the composition, never decoration laid over a generic page.
+AMPL sits on the same shelf as the Muslim Bar Association, NAPABA and the American Constitution Society, and looks like it belongs there. The system is the category standard played straight: a muted cool-gray page, deep AMPL navy owning the header, the hero and the footer, a serif for headings and a plain civic sans for everything a person reads or operates. There is no conceit and no ornament. Credibility comes from restraint, clear hierarchy and real photographs of members.
 
-AMPL navy is a field, not a trim color. It owns whole full-bleed bands (the digest under the headline, the Get Involved motions section, the footer's enacting clause) and inverts everything inside them. Outside those bands the page is ink on paper with navy reserved for links, pins and active states, and the calmer insertion blue for inserted text, section numbers and enumerators. Density is generous and readable: statute body text at 1.125rem Tinos, set against heavy Public Sans headings in the voice of civic signage.
+Density is calm and readable. Content sits in a 72rem column, sections breathe on generous vertical padding, and structure is drawn with 1px hairlines and quiet tonal steps between the page gray, a lighter alternate band and near-white panels. Navy is reserved for the institutional frame (top and bottom of the page, plus the hero) and for primary actions, links and the active state.
 
-This system replaces the earlier navy, gold and cream serif editorial look entirely. The rejected references are the "law nonprofit" navy-gold template and the broadsheet-editorial look.
+This world replaces the earlier "Amended Bill" system entirely, and the navy, gold and cream serif template before it. Both are rejected.
 
 **Key Characteristics:**
-- Bond paper, black ink, AMPL navy owning full-width bands, silver for strikes and quiet surfaces.
-- Public Sans for headings, labels and controls; Tinos for statute text, insertions, enumerators and line numbers.
-- Line-numbered left margin running the full height of the page.
-- Hard rectangular edges everywhere; no radius, no elevation.
-- One amendment animation per section; nothing else moves.
+- Muted cool-gray page, never stark white; a slightly lighter band alternates sections.
+- Deep navy header, hero and footer, with the AMPL mark in silver.
+- Source Serif 4 at 600 for headings; Public Sans for body, labels and controls.
+- Gently squared corners (3px), 1px hairlines, no shadows, no gradients.
+- Motion is near-silent: a 4px rise, a 3% photo scale, a 2px arrow nudge.
 
 ## Colors
 
-Blue and silver, from the AMPL emblem: AMPL navy for fields and marks, silver for every quiet surface and every strike, black ink for the statute. Chosen by the site owner over the first build's saturated blue and red.
+A restrained institutional palette: one deep navy, a family of cool grays, silver for the mark, and status colors used only for status.
 
 ### Primary
-- **AMPL Navy** (`ampl-navy`): full-bleed band backgrounds (digest, motions section, footer), the 6px masthead rule, primary links, map pins, nav underline, focus outlines, selection, the mark in the masthead.
-- **Insertion Blue** (`insertion-blue`): inserted (`<ins>`) text on paper, section numbers, program letters ((a), (b)) and the italic exhibit insertions. Calmer than navy so insertions stay distinct from body ink.
+- **AMPL Navy** (`navy`): the masthead, the hero band, primary button fills, the active portal tab, map pins when selected, pillar top rules, text selection. Hover on navy fills steps to **Navy Hover** (`navy-hover`).
+- **Navy Deep** (`navy-deep`): the footer only, one step darker so the page closes firmly.
+- **Link Navy** (`link-navy`): inline links, the focus outline on light grounds, the success status line. Slightly lifted from navy so links read as links against ink.
 
 ### Secondary
-- **Silver** (`silver`): light buttons and the Pending tag on navy, form field borders, the footer seal.
-- **Strike Gray** (`strike-gray`): struck (`<del>`) text and its strike on paper. Inside navy fields, strikes use `on-navy-secondary`.
+- **Silver** (`silver`): the AMPL mark on navy, the footer seal, and the 2px active-nav underline. Nothing else.
 
 ### Neutral
-- **Bond Paper** (`bond-paper`), **Ink** (`ink`), **Ink Secondary** (`ink-secondary`), **Ink Tertiary** (`ink-tertiary`): ground, headings and body, ledes and captions, placeholders.
-- **On Navy** / **On Navy Secondary**: text and secondary copy, numerals and strikes inside navy fields.
-- **Silver Wash** (`silver-wash`): selected chapter row. **Silver Pale** (`silver-pale`): ground behind the chapter map (the silhouette asset is pre-tinted `#d9dce3`).
-- **Error Red** (`error-red`): validation errors only.
+- **Page Gray** (`page-gray`): the body ground. **Surface** (`surface`): alternate section bands, the chapter strip, the map ground, the portal sidebar. **Panel** (`panel`): cards, the picker, the contact form, the call-to-action row. **Field White** (`field-white`): input and select fills only.
+- **Ink** (`ink`), **Ink Secondary** (`ink-secondary`), **Ink Tertiary** (`ink-tertiary`): headings and body, ledes and supporting copy, hints, placeholders and empty states.
+- **Hairline** (`hairline`): every border and divider. **Hairline Soft** (`hairline-soft`): row dividers inside portal cards, the selected chapter row, photo placeholders.
+- **On Navy** / **On Navy Secondary** (`on-navy`, `on-navy-secondary`): headings and lede text inside navy bands, nav links at rest; on-navy hairlines are white at 14% opacity.
+- **Error Red** (`error-red`): validation errors and destructive portal actions. **Success Green** (`success-green`) and **Warning Amber** (`warning-amber`): portal status badges and approve actions only.
 
 ### Named Rules
-**The Navy Owns Bands Rule.** Navy appears either as a full-bleed field that inverts its contents, or as small marks. Never a tinted card, gradient or partial panel.
+**The Navy Frame Rule.** Navy owns the header, the hero and the footer as full-width bands, and otherwise appears only as small marks: primary buttons, links, the active tab, selected pins. Never a navy card or a navy section in the middle of the page.
 
-**The Silver Strikes Rule.** Deletions are struck in silver-gray, never red. Red exists only for form errors.
+**The No Stark White Rule.** The page is page gray and alternate bands are surface. Pure white is for form fields; panels are the near-white panel tone.
 
 ## Typography
 
-**Display Font:** Public Sans (with system-ui, sans-serif)
-**Body Font:** Tinos (with Times New Roman, serif)
+**Display Font:** Source Serif 4 (with Georgia, Times New Roman, serif)
+**Body Font:** Public Sans (with system-ui, -apple-system, Segoe UI, sans-serif)
 
-**Character:** Public Sans at weight 800 to 900 with tight negative tracking is the civic sign; Tinos is the bill's own Times, carrying the statute text, the insertions and every enumerator. The two never swap jobs.
+**Character:** A sober text serif at semibold for anything that names a thing, set against a neutral government-grade sans for reading and operating. The pairing reads as legal publishing, not as a campaign.
 
 ### Hierarchy
-- **Display** (900, clamp(2rem, min(5.6vw, 8.6vh), 5.25rem), line-height 1, tracking -0.035em, balanced): the amended headline in the first viewport only. Its insertion drops to Tinos bold italic 700.
-- **Headline** (800, clamp(1.9rem, 3.6vw, 3.1rem), 1.05): section titles, prefixed by a 900-weight "SEC. n." in insertion blue.
-- **Title** (800, clamp(1.5rem, 2.6vw, 2.2rem), 1.1): program names, speaker names, motion titles. Band and chapter-roll titles step down to 1.2 to 1.6rem at the same weight.
-- **Amendment** (Tinos 400, clamp(1.35rem, 2.4vw, 1.8rem), 1.35): the one amended lede beneath each section title. Plain ledes use 1.3rem in ink-secondary, max 46ch.
-- **Body** (Tinos 400, 1.125rem, 1.6): statute text; program paragraphs step to 1.2rem. Measure 40 to 60ch.
-- **Label** (Public Sans 600 to 700, 0.95 to 1.05rem): nav, buttons, field labels, links in result blocks, meta strip.
-- **Enumerator** (Tinos 700, 1.3 to 1.6rem): (a), (1), and the chapter roll's counter, in a fixed 2.5 to 3.5rem left column. All enumerators are insertion blue on paper; inside navy fields they turn on-navy-secondary.
-- **Line number** (Tinos 400, 0.8rem, tabular, #8d93a1 on paper, on-navy-secondary in navy fields): the margin numerals, every fifth line labelled, on the 2rem line grid.
+- **Display** (600, clamp(2.15rem, 4vw, 3.25rem), 1.1, tracking -0.015em, balanced): the hero headline only, white on navy.
+- **Headline** (600, clamp(1.75rem, 3vw, 2.4rem), 1.15): section titles. Portal page titles use 1.85rem.
+- **Title** (600, 1.3rem, 1.3): program names, ways to get involved; speaker names at 1.25rem; portal card titles at 1.2rem.
+- **Quote** (Source Serif 4, clamp(1.5rem, 2.8vw, 2.1rem), 1.3, max 44rem): the single pull quote in About.
+- **Wordmark** (600, 1.3rem, tracking 0.04em): "AMPL" beside the mark, with the full name below in Public Sans 0.78rem on-navy-secondary.
+- **Lede** (Public Sans 400, 1.2rem, 1.6, max 40rem): one line or short paragraph under each section title, ink-secondary; 1.15rem on-navy-secondary in the hero.
+- **Body** (Public Sans 400, 1.0625rem, 1.65; 1rem under 600px): running text, measure held near 30 to 40rem. The portal runs denser at 0.97rem, 1.55.
+- **Label** (Public Sans 600, 0.92 to 0.97rem): buttons, field labels, nav (500 at rest), roll links, result links.
+- **Tag** (Public Sans 600, 0.72rem, uppercase, 0.06em tracking): status tags only.
 
 ### Named Rules
-**The Statute Voice Rule.** Running text, insertions, enumerators and line numbers are Tinos; anything a person reads as a heading, label or control is Public Sans. Insertions are always Tinos italic bold, insertion blue on paper and white inside navy fields.
-
-**The One Amendment Rule.** Each section carries exactly one amended line (a `del` and/or `ins` pair). Amendment is the voice of a key line, not a styling for emphasis elsewhere.
+**The Serif Names, Sans Works Rule.** Source Serif 4 is for headings, names, the wordmark and the one pull quote; everything read at length or clicked is Public Sans. Serif headings stay at 600; they are never light, never italic, never uppercase.
 
 ## Layout
 
-A single column of sections on the line-numbered bill. Every content block sits inside a left padding of gutter plus margin (`spacing.gutter` + `spacing.margin`); the margin column holds the line numbers, generated in JS on the 2rem `spacing.line` grid and labelled every fifth line. Navy bands run full-bleed while their content keeps the same left edge, and the margin numerals inside them turn on-navy-secondary.
+A centered 72rem column (`spacing.wrap`) with a fluid gutter (`spacing.gutter`), stacked as full-width bands: navy masthead (sticky, 4.5rem tall), navy hero, a surface-colored chapter strip at the fold, then sections alternating page gray and surface (the alternate band adds a hairline top and bottom), ending in the navy-deep footer.
 
-Sections use `section-top` / `section-bottom` padding with a 62rem max-width header block. Content inside sections is grid-based: two-column digest and picker (1.1fr / 1fr), program rows of enumerator / text / photo (3.5rem / 1fr / clamp(16rem, 32vw, 28rem)), two-column enumerated lists for speakers and motions, map plus roll for chapters, and form plus aside for contact. Column gaps scale with clamp(1.5rem to 6rem).
+Sections use `spacing.section` vertical padding with a `spacing.section-head` gap below the title block. Inside sections the grids are simple: hero at 1.15fr / 1fr (copy and picker left, photo right); three equal pillars; programs at 0.8fr / 1.2fr with a sticky heading; a four-up gallery and four-up speaker list; map beside chapter roll; two ways to get involved split by a vertical hairline; contact form at 1.5fr beside a 1fr details column. Column gaps follow `spacing.column-gap`.
 
-Breakpoints: at 960px the margin narrows to 2.4rem, every two-column grid stacks, the picker moves above the digest copy and the first-viewport photo moves below the band. At 860px the nav collapses into a Menu button dropdown. At 560px the margin is 1.9rem, the gutter 1rem, and the form goes to one column.
+Breakpoints: at 1080px the nav tightens and the name under the wordmark hides. At 960px the nav collapses into a Menu button with a full-width navy dropdown, every two-column grid stacks, pillars go to one column, and the gallery and speakers go two-up. At 600px body text drops to 1rem, the hero photo moves below the picker, speakers and the form go to one column, and CTA buttons go full width. The portal is a 240px sidebar beside content up to 1100px, collapsing at 900px into a horizontal tab strip.
 
 ## Elevation & Depth
 
-Flat. Depth comes from the navy fields, not from shadows: a surface is either paper or navy, and the line between them is a full-bleed color change. There are no drop shadows, gradients or layered cards. The ghost button's outline is drawn as an inset 2px stroke, which is a border technique and not elevation. The photo viewer dims the page with a near-opaque navy-black backdrop (rgba(18, 22, 44, 0.94)).
+Flat. Depth is tonal: page gray, a lighter surface band, a near-white panel with a 1px hairline, and navy for the frame. There are no drop shadows and no gradients. The active nav underline and the portal's active auth tab are drawn as an inset 2px box-shadow, which is a line technique, not elevation. The photo viewer dims the page with a navy-black backdrop (rgba(14, 19, 34, 0.92)).
 
 ### Named Rules
-**The Paper Or Blue Rule.** Surfaces are flat at rest and in every state. Separate regions with a navy field, a section number or space, never with a shadow or a tinted card.
+**The Hairline Not Shadow Rule.** Separate regions with a tonal step or a 1px hairline. If a panel needs to lift, it gets the panel tone and a border, never a shadow.
 
 ## Shapes
 
-Hard rectangles throughout (`rounded.none`): buttons, selects, inputs, tags, photos and bands are square-cornered. The only round forms belong to the AMPL mark (the crescent and the scales' finial). Photos are cropped to 4:3 (programs, record grid), 1:1 (first-viewport photo) or 3:2 (mobile first-viewport photo). Brackets are the button's silhouette: a Tinos "[" and "]" frame each action label.
-
-The system has no decorative divider rules. Structure is carried by section numbers, margin numerals and navy fields. The lines it does draw are functional: the strike through deleted text, the 6px navy masthead rule, the 3px active-nav underline, and 2px field strokes.
+Gently squared: every control, panel, photo and card takes a 3px radius (`rounded.base`); status tags and badges take 2px (`rounded.tag`). Lines are 1px hairlines throughout; the only heavier lines are the 1px navy rule over each pillar and the 2px silver active-nav underline. Photos crop to 4:3 (hero and gallery). The only round forms belong to the AMPL mark and the map pins.
 
 ## Components
 
 ### Buttons
-Bracketed statute actions: hard-edged, heavy and plain.
-- **Shape:** square corners (0px), Public Sans 700 at 1rem, 0.85rem by 1.1rem padding, label framed by Tinos brackets at 70% opacity.
-- **Primary:** ink fill, paper text; hover turns the fill AMPL navy (0.2s) while the brackets step out 3px each way (cubic-bezier(0.16, 1, 0.3, 1)).
-- **Light (on navy):** silver fill, navy text; hover goes white.
-- **Ghost:** transparent with a 2px inset ink stroke; hover fills ink. On navy fields the stroke and text are white, and the hover fill is white with navy text.
-- **Disabled / sending:** 60% opacity with a progress cursor.
-- **Focus:** 3px solid AMPL navy outline at a 3px offset; white inside navy fields.
+Plain, solid and quiet.
+- **Shape:** 3px corners, 1px border, Public Sans 600 at 0.97rem, 0.8rem by 1.2rem padding. An optional 15px trailing arrow nudges 2px right on hover.
+- **Primary:** navy fill and border, white text; hover steps to navy hover (0.15s).
+- **Outline:** transparent, navy text, a gray border (#a4abba); hover turns the border navy over a 4% navy wash.
+- **On navy:** the Chapter login and Menu buttons: transparent, white text, a white border at 35%; hover adds an 8% white wash.
+- **Portal variants:** a light button (panel fill, hairline border, navy text), a small size (0.35rem by 0.75rem, 0.84rem), and success-green and error-red fills for approve and deny.
+- **Disabled / sending:** 55 to 60% opacity.
+- **Focus:** 2px link-navy outline at a 3px offset; white inside navy bands.
 
 ### Status Tag
-- **Style:** Public Sans 800 at 0.8rem, uppercase, 0.08em tracking, navy on silver, square. Used only to state a real program status (Mentorship "Pending") inline after a title on navy.
+- **Style:** uppercase Public Sans 600 at 0.72rem, 0.06em tracking, ink-secondary on panel with a hairline border, 2px corners, set inline after a title. Used only to state a real status ("Coming soon").
+- **Portal badges:** the same shape in sentence case, colored by state with a 1px currentColor border on a pale tint: amber pending, green approved or income, red denied or expense, navy admin.
+
+### Cards / Containers
+- **Corner Style:** 3px.
+- **Background:** panel on page gray or surface.
+- **Shadow Strategy:** none (see Elevation & Depth).
+- **Border:** 1px hairline.
+- **Internal Padding:** 1.25 to 2rem; the contact form scales with clamp(1.25rem, 3vw, 2rem), portal cards use 1.6rem.
 
 ### Inputs / Fields
-- **Style:** white fill, 2px silver border, square, Tinos 1.05rem input text; selects use Public Sans with a drawn chevron. Labels are Public Sans 700 above the field, with hints in ink-secondary.
-- **Focus:** border turns AMPL navy, plus a 3px navy outline on keyboard focus.
-- **Error:** border turns error red (`:user-invalid`); the status line reports errors in error red and success in navy.
-
-### Campus Picker
-The primary action, set inside the navy digest band: a borderless white full-width select (Public Sans 600, 1.05rem) under a 1.35rem Public Sans 800 label, with an `aria-live` result block below it showing the chapter name, city and links in white.
+- **Style:** white fill, 1px hairline border, 3px corners, Public Sans 1rem, 0.75rem by 0.85rem padding; selects draw a 12px chevron at the right. Labels sit above in Public Sans 600, hints in ink-tertiary.
+- **Hover / Focus:** border darkens to #aab0bd on hover and turns navy on focus, plus a 2px link-navy outline at a 2px offset for keyboard focus.
+- **Error:** border turns error red on `:user-invalid`; the status line reports errors in error red and success in link navy.
 
 ### Navigation
-- **Style:** sticky paper masthead with a 6px AMPL navy top rule. The 40px navy mark leads a Public Sans 900 wordmark with the full name in Tinos beside it. Links are Public Sans 600 at 0.95rem; "Chapter login" sits last at weight 400 in ink-secondary.
-- **States:** hover turns links navy; the current section is navy with a 3px underline at a 0.45em offset (`aria-current`).
-- **Mobile (860px and below):** a "Menu" button with a three-line icon opens a full-width paper dropdown of 1.1rem links.
+- **Style:** sticky navy masthead with a white 14% hairline below. The 38px silver mark leads the serif wordmark. Links are Public Sans 500 at 0.94rem in on-navy-secondary; "Chapter login" sits last as an on-navy outline button.
+- **States:** hover and the current section turn white; the current section adds a 2px silver underline (`aria-current`).
+- **Mobile (960px and below):** a bordered Menu button opens a full-width navy dropdown of 1.05rem links divided by on-navy hairlines, with Chapter login centered at the bottom.
+- **Portal:** a fixed 64px navy bar with a 32px silver mark; sidebar tabs fill navy when active and hairline-soft on hover.
 
-### Enumerated Lists
-Speakers, motions and the chapter roll share one grammar: a fixed narrow column holding a Tinos bold enumerator ((1), (a)), then a Public Sans 800 title and Tinos secondary text. The selected chapter row takes the silver-wash fill, linked to its pin on the map.
+### Campus Picker
+The primary action, a panel set inside the navy hero: a bold "Find your chapter" label over a full-width white select, with an `aria-live` result block below showing the chapter name, city and links. Each new result rises 4px into place over 0.35s; reduced motion removes it.
 
-### Chapter Map
-The California map image on the silver-pale ground, with campus pins drawn as paper circles with a 3px navy stroke that fill navy on hover, focus or selection, joined by a dotted navy route at 55% opacity. Pin labels are Public Sans 800 at 13px with a silver-pale halo.
+### Chapter Map and Roll
+The California map on the surface ground inside a hairline frame, with pins drawn as panel circles with a 2.5px navy stroke that fill navy on hover, focus or selection; labels are Public Sans 600 at 13px with a surface halo. The roll beside it lists school, city and links between hairlines; the selected row takes a hairline-soft fill.
 
-### Amendment Motion
-Each section's key line performs its amendment once when it enters view: the strike draws left to right (0.7s), then the insertion resolves from a 6px blur to sharp (0.8s, 0.6s delay), both on cubic-bezier(0.16, 1, 0.3, 1). With reduced motion or without JS the final amended text shows static. Apart from button hover and the photo hover lift, nothing else animates.
+### Photo Gallery
+Four-up 4:3 photos with 3px corners and a short caption below in ink-secondary; hover scales the image 3% over 0.5s, and a click opens the photo viewer.
 
 ## Logo
 
-The mark is the incumbent AMPL emblem redrawn as one-colour vector: a crescent, horns up, holding the scales of justice. The design is unchanged from `images/logo.jpg`; only the file and colouring are new.
+The mark is the incumbent AMPL emblem redrawn as one-colour vector: a crescent, horns up, holding the scales of justice. The SVG files in `images/` are unchanged by this redesign.
 
-- `images/ampl-mark.svg`: crescent and scales only. Use at 40px and below (masthead, favicon). Inline it with `fill="currentColor"` so it takes `--blue` on paper and `--on-blue` on bands.
-- `images/ampl-seal.svg` (navy) / `images/ampl-seal-silver.svg`: the full seal with "Association of Muslims in Politics and Law" on the ring and "National" below. Use at 96px and up (footer, social avatars, print). Ring text is live Tinos with a Times fallback; outline it in a design tool before sending it to print.
-- `images/ampl-lockup.svg`: the mark beside "AMPL" in Public Sans 900.
-- One colour only: AMPL navy on paper, silver `#c3c8d2` or white on navy (`images/ampl-seal-silver.svg` in the footer). No gradients, outlines or drop shadows.
-- `images/logo.jpg` stays as the legacy raster (favicon fallback, portal.html until it migrates).
+- `images/ampl-mark.svg`: crescent and scales only. Use at 40px and below (masthead, portal bar, favicon). Inline it with `fill="currentColor"` so it takes the color of its context; both index.html and portal.html inline it.
+- `images/ampl-seal.svg` (navy) / `images/ampl-seal-silver.svg`: the full seal with "Association of Muslims in Politics and Law" on the ring and "National" below. Use at 96px and up (footer, social avatars, print). The ring text is live text in the file; outline it in a design tool before sending it to print.
+- `images/ampl-lockup.svg`: the mark beside "AMPL".
+- One colour only. On the public site the mark renders silver (`#c3c8d2`) on navy, and the footer uses `images/ampl-seal-silver.svg` at 104px. No gradients, outlines or drop shadows.
+- `images/logo.jpg` stays as the legacy raster favicon fallback.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** set every surface as paper or a full-bleed AMPL navy field, and invert all content inside the field (white text, on-navy-secondary secondary text, white focus rings).
-- **Do** number structure the way a bill does: "SEC. n." on section titles, (a) for subsections, (1) for enumerated items, in Tinos bold, with the section number in 900-weight Public Sans insertion blue.
-- **Do** keep the line-numbered left margin and align all content to the gutter-plus-margin edge.
-- **Do** give each section one amended line, with insertions in Tinos bold italic insertion blue and deletions struck in strike gray (on-navy-secondary inside navy fields).
-- **Do** keep every control square-cornered, and frame button labels with Tinos brackets.
+- **Do** keep the page muted: page gray ground, surface for alternate bands, panel for cards, white only inside form fields.
+- **Do** frame every page in navy: navy header and hero, navy-deep footer, silver mark.
+- **Do** set headings, names and the wordmark in Source Serif 4 at 600, and everything else in Public Sans.
+- **Do** use 3px corners and 1px hairlines on every control, panel and photo.
+- **Do** make the primary action a navy-filled button and secondary actions outline buttons.
+- **Do** keep motion to the 4px picker rise, the 3% photo scale and the 2px arrow nudge, all on cubic-bezier(0.22, 1, 0.36, 1), and remove the rise under reduced motion.
 
 ### Don't:
-- **Don't** use rounded corners, drop shadows, gradients or tinted cards; depth is paper versus navy.
-- **Don't** use error red for anything except validation errors; strikes are never red.
-- **Don't** separate sections with divider rules; use section numbers, margin numerals and navy fields.
-- **Don't** return to the navy, gold and cream serif palette or the broadsheet-editorial layout this system replaced.
-- **Don't** animate anything beyond the one amendment per section and the small hover responses.
-
-## Not yet migrated
-
-`portal.html` (the private Chapter Portal) still uses the previous navy and cream style and was out of scope for this redesign. Its tokens are not part of this system; when it is migrated it should adopt the tokens above.
+- **Don't** return to the amended-bill concept: no line-numbered margin, no section numbering, no strike-and-insert amendments, no bracketed buttons. The user rejected it as too unique and playful.
+- **Don't** return to the navy, gold and cream serif template; it is also rejected.
+- **Don't** use a bright or stark white page, drop shadows or gradients.
+- **Don't** put navy cards or navy bands in the middle of the page; navy is the frame and the primary action.
+- **Don't** use silver for anything but the mark, the seal and the active-nav underline.
+- **Don't** use red, green or amber outside status, validation and destructive actions.
