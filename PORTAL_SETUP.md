@@ -34,7 +34,17 @@ These values are meant to be public. The security rules are what protect your da
 ## Day-to-day use
 - **New chapter officers** go to the portal and click **Request Access**. They then show up under **Approvals** and **Accounts**. Assign them a chapter, set the role to **Chapter officer**, and click **Save**.
 - **Additional National board members:** set their role to **National admin**.
-- **Budgets:** set each chapter's base allocation under **Chapters & Budgets**. Chapters request more money through **Finances**, and you approve or deny each request under **Approvals**.
+- **Budgets:** set each chapter's base allocation under **Chapters & Budgets**. Chapters request grants through **Finances**, and you approve or deny each request under **Approvals**.
+- **Reimbursements:** after an event, an officer submits a request under **Reimbursements**: the approved grant, the event, each expense, who paid and their Zelle or Venmo, and photos of the receipts. You review it under **Approvals** or **Reimbursements**: **Approve** (you can lower the amount, for example to the grant amount), **Deny**, then **Mark paid** once you've sent the money. Marking paid records the payment in the **National Ledger** automatically.
+- **National Ledger:** National's own books, replacing the "Budget & Finance Tracker" sheet: fundraising, income, banquet expenses and national expenses, with the remaining balance and how much is approved but not yet paid. **Download CSV** gives you a copy to open in Google Sheets.
+
+## Updating the security rules
+Whenever `firestore.rules` changes in this repo, paste the whole file into **Firestore Database → Rules** again (replacing everything) and click **Publish**. The reimbursements and ledger features need the version that includes `reimbursements`, `receipts` and `ledger`.
+
+## Importing the old budget sheet (one time)
+`ledger-import.csv` in the repo folder holds the rows from "AMPL National — Budget & Finance Tracker v2". It is excluded from git so the finances never become public. In the portal, open **National Ledger → Import CSV** and choose that file. Only import it once; importing again adds the rows a second time.
+
+Receipts are stored in Firestore (Firebase Storage requires the paid plan). Photos are shrunk in the browser; PDFs must be under 700 KB.
 - **Removing someone:** click **Remove** in **Accounts**. To delete their login entirely, also go to Firebase console → **Authentication** → **Users**.
 
 ## What each role can do
@@ -44,6 +54,8 @@ These values are meant to be public. The security rules are what protect your da
 | Edit chapter profile | — | own chapter | all |
 | Submit event reports | — | own chapter | view all |
 | Budget requests | — | submit / withdraw own | approve / deny |
+| Reimbursements | — | submit / withdraw own | approve / deny / mark paid |
+| National Ledger | — | — | ✓ |
 | Ledger (expenses & income) | — | own chapter | all |
 | Set budget allocations | — | — | ✓ |
 | Approve accounts | — | — | ✓ |

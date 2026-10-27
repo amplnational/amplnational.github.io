@@ -84,5 +84,40 @@ service cloud.firestore {
         && positiveAmount();
       allow delete: if canSeeChapter(resource.data.chapterId);
     }
+
+    // Reimbursement requests for events whose grant National already approved.
+    match /reimbursements/{id} {
+      allow read: if canSeeChapter(resource.data.chapterId);
+      allow create: if ownsChapter(request.resource.data.chapterId)
+        && request.resource.data.submittedBy == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.approvedAmount == null
+        && positiveAmount();
+      // Only national approves, denies, or marks paid.
+      allow update: if isAdmin();
+      allow delete: if isAdmin()
+        || (ownsChapter(resource.data.chapterId) && resource.data.status == 'pending');
+    }
+
+    // Receipt files (stored inline; Firebase Storage needs the paid plan).
+    // Each is written in the same batch as its reimbursement request.
+    match /receipts/{id} {
+      function parent(rid) { return /databases/$(database)/documents/reimbursements/$(rid); }
+      allow read: if canSeeChapter(resource.data.chapterId);
+      allow create: if ownsChapter(request.resource.data.chapterId)
+        && request.resource.data.uploadedBy == request.auth.uid
+        && request.resource.data.data is string
+        && request.resource.data.data.size() < 1000000
+        && getAfter(parent(request.resource.data.reimbursementId)).data.submittedBy == request.auth.uid;
+      allow update: if false;
+      allow delete: if isAdmin()
+        || (ownsChapter(resource.data.chapterId)
+            && get(parent(resource.data.reimbursementId)).data.status == 'pending');
+    }
+
+    // National's own books (fundraising, income, banquet and national expenses).
+    match /ledger/{id} {
+      allow read, write: if isAdmin();
+    }
   }
 }
