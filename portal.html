@@ -139,33 +139,14 @@
     .badge.paid { color:var(--navy); background:#eceef5; }
     .badge.as-is { text-transform:none; }
 
-    /* Reimbursement form */
-    .fs { border:0; border-top:1px solid var(--line-2); padding:1.1rem 0 0; margin:0.25rem 0 0; display:flex; flex-direction:column; gap:1rem; min-width:0; }
-    .fs legend { font-family:var(--serif); font-weight:600; font-size:1.05rem; color:var(--ink); padding:0 0.6rem 0 0; }
+    /* Reimbursements and ledger */
     .hint { font-size:0.84rem; color:var(--muted); }
-    .choices { display:flex; flex-wrap:wrap; gap:0.5rem 1.5rem; }
-    .choice { display:flex; align-items:center; gap:0.5rem; font-size:0.95rem; cursor:pointer; }
-    .choice input { width:1.05rem; height:1.05rem; accent-color:var(--navy); margin:0; flex:none; }
-    .static-field { padding:0.65rem 0.8rem; border:1px solid var(--line-2); border-radius:var(--radius); background:var(--surface); font-size:0.95rem; }
-    .expense-rows { display:flex; flex-direction:column; gap:0.5rem; }
-    .expense-row { display:grid; grid-template-columns:minmax(0,1fr) 9rem auto; gap:0.5rem; align-items:center; }
-    .expense-total { display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid var(--border); padding-top:0.6rem; font-weight:600; font-variant-numeric:tabular-nums; }
-    .icon-btn { background:none; border:1px solid transparent; border-radius:var(--radius); color:var(--muted); cursor:pointer; width:2.2rem; height:2.2rem; display:inline-flex; align-items:center; justify-content:center; }
-    .icon-btn:hover { color:var(--bad); border-color:var(--border); background:#fff; }
-    .icon-btn svg { width:12px; height:12px; }
     .msg.warn { border-color:#e6cf9f; background:#fbf5ea; color:var(--warn); }
-    .detail-grid { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:0.75rem 1.5rem; margin-top:0.75rem; font-size:0.92rem; }
-    .detail-grid dt { font-size:0.8rem; font-weight:600; color:var(--muted); }
-    .detail-grid dd { color:var(--ink); overflow-wrap:anywhere; }
-    .detail-grid .wide { grid-column:1 / -1; }
-    details.more > summary { cursor:pointer; color:var(--link); font-size:0.9rem; font-weight:600; margin-top:0.6rem; width:fit-content; }
     .receipts { display:flex; flex-wrap:wrap; gap:0.75rem; margin-top:0.5rem; }
     .receipts a { display:flex; flex-direction:column; gap:0.3rem; font-size:0.84rem; max-width:140px; overflow-wrap:anywhere; }
     .receipts img { width:140px; height:105px; object-fit:cover; border:1px solid var(--border); border-radius:var(--radius); background:#fff; }
     .ledger-section + .ledger-section { margin-top:1.75rem; }
     .ledger-section h3 { font-size:0.95rem; font-weight:600; margin-bottom:0.4rem; display:flex; justify-content:space-between; gap:1rem; }
-    .flag-btn { background:none; border:1px solid var(--border); border-radius:2px; font:inherit; font-size:0.8rem; padding:0.15rem 0.45rem; cursor:pointer; color:var(--muted); }
-    .flag-btn.on { color:var(--ok); background:#eef6f1; border-color:#b9d8c6; }
     .toolbar { display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; }
 
     .setup-notice { max-width:640px; margin:4rem auto; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:2.5rem; }
@@ -184,8 +165,6 @@
       .form-row { grid-template-columns:1fr; }
       .item-row { flex-direction:column; }
       .setup-notice { margin:1.5rem 1rem; padding:1.5rem; }
-      .detail-grid { grid-template-columns:1fr; }
-      .expense-row { grid-template-columns:minmax(0,1fr) 7rem auto; }
     }
   </style>
 </head>
@@ -690,7 +669,6 @@
   // shrunk in the browser and each file is kept under Firestore's 1 MB document limit.
   const RECEIPT_MAX_BYTES = 700 * 1024;
   const RECEIPT_MAX_FILES = 5;
-  const REIMB_STATUS = { pending: 'Pending review', approved: 'Approved, awaiting payment', paid: 'Paid', denied: 'Denied' };
   const today = () => new Date().toLocaleDateString('en-CA');
   const sumAmounts = (list, key = 'amount') => list.reduce((t, x) => t + (Number(x[key]) || 0), 0);
 
@@ -738,80 +716,32 @@
   }
 
   function reimbursementForm(grants) {
-    const grantOpts = grants.map(g => `<option value="${esc(g.id)}">${esc(g.title)} · ${money(g.amount)}${g.decidedAt ? ', approved ' + esc(fmtDate(g.decidedAt)) : ''}</option>`).join('');
+    const grantOpts = grants.map(g => `<option value="${esc(g.id)}">${esc(g.title)} (${money(g.amount)})</option>`).join('');
     return `
       <div class="card"><div class="card-title">Request a reimbursement</div>
-        <p class="muted" style="margin:-0.5rem 0 1.25rem">For events whose grant National has already approved. Submit one request per person who paid.</p>
+        <p class="muted" style="margin:-0.5rem 0 1.25rem">For events National already approved a grant for. Submitting as ${esc(state.profile.name || state.user.email)} (${esc(state.user.email)}).</p>
         <form id="reimb-form" class="stack" novalidate>
-          <fieldset class="fs"><legend>About you</legend>
-            <div class="form-row">
-              <div class="form-group"><label class="form-label" for="rb-name">Your name</label><input id="rb-name" name="requesterName" class="form-input" required value="${esc(state.profile.name || '')}" autocomplete="name" /></div>
-              <div class="form-group"><label class="form-label" for="rb-position">Position</label><input id="rb-position" name="position" class="form-input" required placeholder="e.g. Treasurer" /></div>
-            </div>
-            <div class="form-row">
-              <div class="form-group"><label class="form-label" for="rb-email">Email</label><input id="rb-email" name="email" type="email" class="form-input" required value="${esc(state.user.email || '')}" autocomplete="email" /></div>
-              <div class="form-group"><span class="form-label">Chapter</span><div class="static-field">${esc(state.chapters[state.chapterId]?.name || state.chapterId)}</div></div>
-            </div>
-          </fieldset>
-
-          <fieldset class="fs"><legend>Approved grant</legend>
-            <div class="form-group"><label class="form-label" for="rb-grant">Which approved grant is this for?</label>
-              <select id="rb-grant" name="grantRequestId" class="form-select" required>
-                <option value="">Choose a grant</option>${grantOpts}
-                <option value="outside">It was approved outside the portal</option>
-              </select>
-              ${grants.length ? '' : '<span class="hint">Your chapter has no grants approved in the portal yet. If National approved yours by email or in a meeting, choose "approved outside the portal".</span>'}
-            </div>
-            <div class="form-row hidden" id="rb-outside">
-              <div class="form-group"><label class="form-label" for="rb-gamount">Approved grant amount (USD)</label><input id="rb-gamount" name="grantAmount" type="number" min="0.01" step="0.01" class="form-input" /></div>
-              <div class="form-group"><label class="form-label" for="rb-gdate">Approval date</label><input id="rb-gdate" name="grantApprovedOn" type="date" class="form-input" max="${today()}" /></div>
-            </div>
-          </fieldset>
-
-          <fieldset class="fs"><legend>The event</legend>
-            <div class="form-group"><label class="form-label" for="rb-event">Event name</label><input id="rb-event" name="eventName" class="form-input" required /></div>
-            <div class="form-row">
-              <div class="form-group"><label class="form-label" for="rb-edate">Event date</label><input id="rb-edate" name="eventDate" type="date" class="form-input" required max="${today()}" /></div>
-              <div class="form-group"><label class="form-label" for="rb-loc">Location</label><input id="rb-loc" name="eventLocation" class="form-input" required placeholder="e.g. UCI Student Center, Room 310" /></div>
-            </div>
-            <div class="form-group"><span class="form-label" id="rb-changed-label">Did anything differ from the original request (venue, turnout, speakers, budget)?</span>
-              <div class="choices" role="radiogroup" aria-labelledby="rb-changed-label">
-                <label class="choice"><input type="radio" name="changed" value="no" required /> No, it went as planned</label>
-                <label class="choice"><input type="radio" name="changed" value="yes" /> Yes</label>
-              </div>
-            </div>
-            <div class="form-group hidden" id="rb-changes-wrap"><label class="form-label" for="rb-changes">What changed, and why?</label><textarea id="rb-changes" name="changes" class="form-textarea" style="min-height:80px"></textarea></div>
-            <div class="form-group"><label class="form-label" for="rb-ig">Instagram post for the event (optional)</label><input id="rb-ig" name="igLink" type="url" class="form-input" placeholder="https://www.instagram.com/p/…" /></div>
-          </fieldset>
-
-          <fieldset class="fs"><legend>Expenses</legend>
-            <span class="hint" style="margin-top:-0.5rem">List each purchase on its own line, matching your receipts.</span>
-            <div class="expense-rows" id="rb-items"></div>
-            <button type="button" class="link-btn" id="rb-add-item" style="width:fit-content">Add another item</button>
-            <div class="expense-total"><span>Total</span><span id="rb-total">$0.00</span></div>
-            <div class="msg warn hidden" id="rb-over"></div>
-          </fieldset>
-
-          <fieldset class="fs"><legend>Payment</legend>
-            <div class="form-group"><label class="form-label" for="rb-paidby">Who paid for these items?</label><input id="rb-paidby" name="paidBy" class="form-input" required value="${esc(state.profile.name || '')}" /><span class="hint">This person receives the reimbursement.</span></div>
-            <div class="form-row">
-              <div class="form-group"><span class="form-label" id="rb-method-label">Pay them by</span>
-                <div class="choices" role="radiogroup" aria-labelledby="rb-method-label" style="min-height:2.6rem;align-items:center">
-                  <label class="choice"><input type="radio" name="payMethod" value="Zelle" required checked /> Zelle</label>
-                  <label class="choice"><input type="radio" name="payMethod" value="Venmo" /> Venmo</label>
-                </div>
-              </div>
-              <div class="form-group"><label class="form-label" for="rb-handle" id="rb-handle-label">Zelle phone number or email</label><input id="rb-handle" name="payHandle" class="form-input" required /></div>
-            </div>
-          </fieldset>
-
-          <fieldset class="fs"><legend>Receipts</legend>
-            <div class="form-group"><label class="form-label" for="rb-files">Upload a photo or PDF of every receipt</label>
-              <input id="rb-files" type="file" class="form-input" accept="image/*,application/pdf" multiple required />
-              <span class="hint">Up to ${RECEIPT_MAX_FILES} files. Photos are shrunk automatically; PDFs must be under 700 KB.</span></div>
-            <label class="choice"><input type="checkbox" name="certify" required /> I confirm these expenses were for this AMPL event and haven't been reimbursed by anyone else.</label>
-          </fieldset>
-
+          <div class="form-group"><label class="form-label" for="rb-grant">Which grant is this for?</label>
+            <select id="rb-grant" name="grantRequestId" class="form-select" required data-err="Choose which grant this is for.">
+              <option value="">Choose a grant</option>${grantOpts}
+              <option value="outside">A grant approved outside the portal</option>
+            </select>
+          </div>
+          <div class="form-group hidden" id="rb-outside"><label class="form-label" for="rb-gamount">Approved grant amount (USD)</label><input id="rb-gamount" name="grantAmount" type="number" min="0.01" step="0.01" class="form-input" data-err="Enter the approved grant amount." /></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="rb-event">Event name</label><input id="rb-event" name="eventName" class="form-input" required data-err="Enter the event name." /></div>
+            <div class="form-group"><label class="form-label" for="rb-edate">Event date</label><input id="rb-edate" name="eventDate" type="date" class="form-input" required max="${today()}" data-err="Enter the event date (it can't be in the future)." /></div>
+          </div>
+          <div class="form-group"><label class="form-label" for="rb-amount">Total spent (USD)</label><input id="rb-amount" name="amount" type="number" min="0.01" step="0.01" class="form-input" required style="max-width:14rem" data-err="Enter the total you spent." /></div>
+          <div class="msg warn hidden" id="rb-over"></div>
+          <div class="form-group"><label class="form-label" for="rb-changes" id="rb-changes-label">Anything different from the original request? (optional)</label><textarea id="rb-changes" name="changes" class="form-textarea" style="min-height:70px" placeholder="Venue, turnout, speakers or budget changes" data-err="Explain why it cost more than the grant."></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="rb-paidby">Who should we pay back?</label><input id="rb-paidby" name="paidBy" class="form-input" required data-err="Enter who should be paid back." value="${esc(state.profile.name || '')}" /></div>
+            <div class="form-group"><label class="form-label" for="rb-handle">Their Zelle or Venmo</label><input id="rb-handle" name="payHandle" class="form-input" required placeholder="Phone, email, or @venmo-name" data-err="Enter their Zelle or Venmo." /></div>
+          </div>
+          <div class="form-group"><label class="form-label" for="rb-files">Receipts</label>
+            <input id="rb-files" type="file" class="form-input" accept="image/*,application/pdf" multiple required data-err="Attach your receipts." />
+            <span class="hint">Photos or PDFs, up to ${RECEIPT_MAX_FILES} files. If several people paid, send one request per person.</span></div>
           <div class="toolbar"><button class="btn" type="submit">Submit request</button><span class="msg hidden" id="rb-msg"></span></div>
         </form>
       </div>`;
@@ -819,84 +749,46 @@
 
   function bindReimbursementForm(grants) {
     const form = $('#reimb-form');
-    const items = $('#rb-items');
     const grantById = Object.fromEntries(grants.map(g => [g.id, g]));
-    const removeIcon = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.6"/></svg>';
-
     const grantAmount = () => {
       const g = grantById[form.grantRequestId.value];
       return g ? Number(g.amount) : Number(form.grantAmount.value) || 0;
     };
-    const lineItems = () => [...items.querySelectorAll('.expense-row')].map(row => ({
-      description: row.querySelector('[data-desc]').value.trim(), amount: Number(row.querySelector('[data-amt]').value) || 0
-    })).filter(i => i.description || i.amount);
-    const updateTotal = () => {
-      const total = sumAmounts(lineItems());
-      $('#rb-total').textContent = money(total);
-      const cap = grantAmount();
-      const over = cap && total > cap + 0.004;
+    // Spending more than the grant is allowed, but then the officer has to say why.
+    const checkOver = () => {
+      const cap = grantAmount(), spent = Number(form.amount.value) || 0;
+      const over = cap > 0 && spent > cap + 0.004;
       $('#rb-over').classList.toggle('hidden', !over);
-      if (over) $('#rb-over').textContent = `This is ${money(total - cap)} over the approved grant of ${money(cap)}. National usually reimburses up to the approved amount; explain the difference under "What changed".`;
+      if (over) $('#rb-over').textContent = `That's ${money(spent - cap)} more than the ${money(cap)} grant. Please explain the difference below.`;
+      form.changes.required = over;
+      $('#rb-changes-label').textContent = over ? 'Why did it cost more than the grant?' : 'Anything different from the original request? (optional)';
     };
-    const addRow = () => {
-      const n = items.children.length + 1;
-      items.insertAdjacentHTML('beforeend', `<div class="expense-row">
-        <input class="form-input" data-desc aria-label="Item ${n}" placeholder="e.g. Pizza from Domino's" />
-        <input class="form-input" data-amt aria-label="Item ${n} amount" type="number" min="0.01" step="0.01" placeholder="0.00" style="text-align:right" />
-        <button type="button" class="icon-btn" aria-label="Remove item ${n}">${removeIcon}</button></div>`);
-      const row = items.lastElementChild;
-      row.querySelector('.icon-btn').onclick = () => { if (items.children.length > 1) { row.remove(); updateTotal(); } };
-      row.querySelectorAll('input').forEach(i => i.oninput = updateTotal);
-      return row;
-    };
-    addRow(); addRow();
-    $('#rb-add-item').onclick = () => addRow().querySelector('[data-desc]').focus();
-
     form.grantRequestId.onchange = () => {
       const outside = form.grantRequestId.value === 'outside';
       $('#rb-outside').classList.toggle('hidden', !outside);
-      form.grantAmount.required = form.grantApprovedOn.required = outside;
+      form.grantAmount.required = outside;
       const g = grantById[form.grantRequestId.value];
       if (g && !form.eventName.value) form.eventName.value = g.title;
-      updateTotal();
+      checkOver();
     };
-    form.grantAmount.oninput = updateTotal;
-    form.querySelectorAll('[name="changed"]').forEach(r => r.onchange = () => {
-      const yes = form.changed.value === 'yes';
-      $('#rb-changes-wrap').classList.toggle('hidden', !yes);
-      form.changes.required = yes;
-    });
-    form.querySelectorAll('[name="payMethod"]').forEach(r => r.onchange = () => {
-      const venmo = form.payMethod.value === 'Venmo';
-      $('#rb-handle-label').textContent = venmo ? 'Venmo username' : 'Zelle phone number or email';
-      form.payHandle.placeholder = venmo ? '@username' : '';
-    });
+    form.grantAmount.oninput = form.amount.oninput = checkOver;
 
     form.onsubmit = async (e) => {
       e.preventDefault();
       const msg = $('#rb-msg');
       const fail = (text, el) => { flash(msg, text, true); if (el) el.focus(); };
       const bad = [...form.elements].find(el => el.willValidate && !el.checkValidity());
-      if (bad) {
-        const label = bad.type === 'radio' ? 'whether anything changed' : bad.type === 'checkbox' ? 'the confirmation box' : bad.type === 'file' ? 'your receipts' : (form.querySelector(`label[for="${bad.id}"]`)?.textContent || 'this field').toLowerCase();
-        return fail(bad.type === 'email' && bad.value ? 'That email address looks incomplete.' : `Please fill in ${label}.`, bad);
-      }
-      const list = lineItems();
-      if (!list.length) return fail('Add at least one expense.', items.querySelector('[data-desc]'));
-      const incomplete = list.findIndex(i => !i.description || !(i.amount > 0));
-      if (incomplete >= 0) return fail(`Expense line ${incomplete + 1} needs both a description and an amount.`, items.children[incomplete].querySelector(list[incomplete].description ? '[data-amt]' : '[data-desc]'));
+      if (bad) return fail(bad.dataset.err || 'Please fill in the highlighted field.', bad);
       const files = [...form.querySelector('#rb-files').files];
-      if (files.length > RECEIPT_MAX_FILES) return fail(`Upload at most ${RECEIPT_MAX_FILES} receipt files. Combine photos if you have more.`);
+      if (files.length > RECEIPT_MAX_FILES) return fail(`Upload at most ${RECEIPT_MAX_FILES} receipt files.`);
 
       const btn = form.querySelector('[type="submit"]');
-      btn.disabled = true; btn.textContent = 'Preparing receipts…';
+      btn.disabled = true; btn.textContent = 'Uploading receipts…';
       try {
         const receipts = [];
         for (const f of files) receipts.push(await prepareReceipt(f));
-        btn.textContent = 'Submitting…';
         const v = formValues(form);
         const g = grantById[v.grantRequestId];
-        const total = Math.round(sumAmounts(list) * 100) / 100;
         const ref = doc(collection(db, 'reimbursements'));
         const batch = writeBatch(db);
         receipts.forEach(r => batch.set(doc(collection(db, 'receipts')), {
@@ -904,14 +796,11 @@
         }));
         batch.set(ref, {
           chapterId: state.chapterId,
-          requesterName: v.requesterName.trim(), position: v.position.trim(), email: v.email.trim(),
-          grantRequestId: g ? g.id : '', grantTitle: g ? g.title : '',
-          grantAmount: g ? Number(g.amount) : Number(v.grantAmount), grantApprovedOn: g ? (g.decidedAt?.toDate?.().toLocaleDateString('en-CA') || '') : v.grantApprovedOn,
-          eventName: v.eventName.trim(), eventDate: v.eventDate, eventLocation: v.eventLocation.trim(),
-          changed: v.changed === 'yes', changes: v.changed === 'yes' ? v.changes.trim() : '', igLink: v.igLink.trim(),
-          items: list, amount: total,
-          paidBy: v.paidBy.trim(), payMethod: v.payMethod, payHandle: v.payHandle.trim(),
-          receiptCount: receipts.length, certified: true,
+          requesterName: state.profile.name || state.user.email, email: state.user.email,
+          grantRequestId: g ? g.id : '', grantTitle: g ? g.title : '', grantAmount: g ? Number(g.amount) : Number(v.grantAmount),
+          eventName: v.eventName.trim(), eventDate: v.eventDate, changes: v.changes.trim(),
+          amount: Math.round(Number(v.amount) * 100) / 100,
+          paidBy: v.paidBy.trim(), payHandle: v.payHandle.trim(), receiptCount: receipts.length,
           status: 'pending', adminNote: '', approvedAmount: null,
           submittedBy: state.user.uid, submittedByName: state.profile.name || state.user.email, createdAt: serverTimestamp()
         });
@@ -929,44 +818,40 @@
     if (!list.length) return `<p class="empty">${opts.empty || 'No reimbursement requests yet.'}</p>`;
     return list.map(r => {
       const chapter = state.chapters[r.chapterId]?.name || r.chapterId;
-      const actions = [];
-      if (isAdmin() && r.status === 'pending') actions.push(`<button class="btn btn-sm btn-ok" data-reimb="approve" data-id="${r.id}">Approve</button>`, `<button class="btn btn-sm btn-bad" data-reimb="deny" data-id="${r.id}">Deny</button>`);
-      if (isAdmin() && r.status === 'approved') actions.push(`<button class="btn btn-sm" data-reimb="pay" data-id="${r.id}">Mark paid</button>`);
-      if (isAdmin() && (r.status === 'approved' || r.status === 'denied')) actions.push(`<button class="btn btn-sm btn-ghost" data-reimb="reopen" data-id="${r.id}">Reopen</button>`);
-      if (!isAdmin() && r.status === 'pending') actions.push(`<button class="btn btn-sm btn-ghost" data-reimb="withdraw" data-id="${r.id}">Withdraw</button>`);
-      const amountLine = r.approvedAmount != null && r.approvedAmount !== r.amount
-        ? `${money(r.approvedAmount)} approved of ${money(r.amount)} requested` : `${money(r.amount)} requested`;
+      const paid = r.approvedAmount ?? r.amount;
+      const status = r.status === 'paid' ? `Paid ${money(paid)}${r.paidOn ? ' on ' + fmtDate(r.paidOn) : ''}` : r.status === 'denied' ? 'Denied' : 'Waiting for National';
+      const canPay = isAdmin() && r.status === 'pending';
       return `<div class="list-item" data-rid="${r.id}">
         <div class="item-row">
           <div>
-            <div class="item-title">${esc(r.eventName)} <span class="badge as-is ${esc(r.status)}">${esc(REIMB_STATUS[r.status] || r.status)}</span></div>
-            <div class="item-meta">${opts.showChapter ? esc(chapter) + ' · ' : ''}${esc(amountLine)} · to ${esc(r.paidBy)} via ${esc(r.payMethod)} · submitted ${esc(fmtDate(r.createdAt))} by ${esc(r.requesterName)}</div>
+            <div class="item-title">${esc(r.eventName)} · ${money(r.amount)}</div>
+            <div class="item-meta">${opts.showChapter ? esc(chapter) + ' · ' : ''}${esc(fmtDate(r.eventDate))} · grant ${money(r.grantAmount)}${r.grantTitle ? '' : ' (outside the portal)'} · submitted by ${esc(r.requesterName)}${r.email ? ` (<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>)` : ''}</div>
+            <div class="item-meta">Pay ${esc(r.paidBy)} · ${esc(r.payHandle)}</div>
+            ${r.changes ? `<div class="item-body">${esc(r.changes)}</div>` : ''}
             ${r.adminNote ? `<div class="item-meta"><strong>National:</strong> ${esc(r.adminNote)}</div>` : ''}
-            ${r.status === 'paid' && r.paidOn ? `<div class="item-meta">Paid ${esc(fmtDate(r.paidOn))}</div>` : ''}
+            <div class="item-meta" style="margin-top:0.35rem"><button type="button" class="link-btn" data-receipts="${r.id}">View ${r.receiptCount || ''} receipt${r.receiptCount === 1 ? '' : 's'}</button></div>
+            <div class="receipts"></div>
           </div>
-          ${actions.length ? `<div class="item-actions">${actions.join('')}</div>` : ''}
+          <div class="item-actions" style="align-items:center">
+            <span class="badge as-is ${esc(r.status)}">${esc(status)}</span>
+            ${!isAdmin() && r.status === 'pending' ? `<button class="btn btn-sm btn-ghost" data-reimb="withdraw" data-id="${r.id}">Withdraw</button>` : ''}
+            ${isAdmin() && r.status !== 'pending' ? `<button class="btn btn-sm btn-ghost" data-reimb="undo" data-id="${r.id}">Undo</button>` : ''}
+          </div>
         </div>
-        <details class="more"><summary>Details and receipts</summary>
-          <dl class="detail-grid">
-            <div><dt>Requested by</dt><dd>${esc(r.requesterName)}, ${esc(r.position)} · <a href="mailto:${esc(r.email)}">${esc(r.email)}</a></dd></div>
-            <div><dt>Chapter</dt><dd>${esc(chapter)}</dd></div>
-            <div><dt>Approved grant</dt><dd>${money(r.grantAmount)}${r.grantTitle ? ' for ' + esc(r.grantTitle) : ' (approved outside the portal)'}${r.grantApprovedOn ? ', ' + esc(fmtDate(r.grantApprovedOn)) : ''}</dd></div>
-            <div><dt>Event</dt><dd>${esc(fmtDate(r.eventDate))} at ${esc(r.eventLocation)}${r.igLink ? ` · <a href="${esc(safeUrl(r.igLink))}" target="_blank" rel="noopener">Instagram post</a>` : ''}</dd></div>
-            <div class="wide"><dt>Changes from the original request</dt><dd>${r.changed ? esc(r.changes) : 'None, it went as planned.'}</dd></div>
-            <div class="wide"><dt>Expenses</dt><dd><table>${(r.items || []).map(i => `<tr><td>${esc(i.description)}</td><td class="num">${money(i.amount)}</td></tr>`).join('')}<tr><td><strong>Total</strong></td><td class="num"><strong>${money(r.amount)}</strong></td></tr></table></dd></div>
-            <div><dt>Pay to</dt><dd>${esc(r.paidBy)} · ${esc(r.payMethod)} ${esc(r.payHandle)}</dd></div>
-            <div><dt>Receipts</dt><dd><button type="button" class="link-btn" data-receipts="${r.id}">Show ${r.receiptCount || ''} receipt${r.receiptCount === 1 ? '' : 's'}</button><div class="receipts"></div></dd></div>
-          </dl>
-        </details>
+        ${canPay ? `<div class="toolbar" style="margin-top:0.75rem">
+          <label class="form-label" for="pay-${r.id}">Amount to pay</label>
+          <input id="pay-${r.id}" class="form-input" type="number" min="0.01" step="0.01" value="${Math.min(r.amount, r.grantAmount || r.amount).toFixed(2)}" style="width:8rem;text-align:right" />
+          <button class="btn btn-sm btn-ok" data-reimb="pay" data-id="${r.id}">Mark as paid</button>
+          <button class="btn btn-sm btn-ghost" data-reimb="deny" data-id="${r.id}">Deny</button>
+        </div>` : ''}
       </div>`;
     }).join('');
   }
 
   function bindReimbursementActions(root, list) {
     const byId = Object.fromEntries(list.map(r => [r.id, r]));
-    const deciderName = () => state.profile.name || state.user.email;
     root.querySelectorAll('[data-receipts]').forEach(b => b.onclick = async () => {
-      const box = b.nextElementSibling;
+      const box = b.closest('.list-item').querySelector('.receipts');
       b.disabled = true; b.textContent = 'Loading…';
       try {
         const receipts = await loadReceipts(byId[b.dataset.receipts]);
@@ -982,38 +867,38 @@
       const r = byId[b.dataset.id];
       const ref = doc(db, 'reimbursements', r.id);
       const act = b.dataset.reimb;
-      if (act === 'approve') {
-        const suggested = Math.min(r.amount, r.grantAmount || r.amount);
-        const amt = prompt(`Amount to reimburse ${r.paidBy} (requested ${money(r.amount)}, grant ${money(r.grantAmount)}):`, suggested.toFixed(2));
-        if (amt === null) return;
-        const approvedAmount = Math.round(Number(amt) * 100) / 100;
-        if (!(approvedAmount > 0)) return alert('Enter an amount greater than zero.');
-        const note = prompt('Optional note to the chapter:', '');
-        if (note === null) return;
-        run(async () => { await updateDoc(ref, { status: 'approved', approvedAmount, adminNote: note.trim(), decidedBy: deciderName(), decidedAt: serverTimestamp() }); refreshPendingCount(); });
-      } else if (act === 'deny') {
-        const note = prompt('Reason for denying (shown to the chapter):', '');
-        if (note === null) return;
-        run(async () => { await updateDoc(ref, { status: 'denied', adminNote: note.trim(), decidedBy: deciderName(), decidedAt: serverTimestamp() }); refreshPendingCount(); });
-      } else if (act === 'reopen') {
-        run(async () => { await updateDoc(ref, { status: 'pending', approvedAmount: null }); refreshPendingCount(); });
-      } else if (act === 'pay') {
-        const amount = r.approvedAmount ?? r.amount;
-        if (!confirm(`Record that ${money(amount)} was sent to ${r.paidBy} by ${r.payMethod} (${r.payHandle})?\n\nThis adds the payment to the National Ledger under National expenses.`)) return;
+      if (act === 'pay') {
+        const amount = Math.round(Number($(`#pay-${r.id}`).value) * 100) / 100;
+        if (!(amount > 0)) return alert('Enter the amount you paid.');
+        if (!confirm(`Mark ${money(amount)} as sent to ${r.paidBy} (${r.payHandle})?\n\nThis also adds it to the National Ledger.`)) return;
         run(async () => {
           const entry = doc(collection(db, 'ledger'));
           const batch = writeBatch(db);
           batch.set(entry, {
-            section: 'national', date: today(), amount, category: r.grantTitle ? 'Grant' : 'Reimbursement',
+            section: 'national', date: today(), amount, category: 'Reimbursement',
             description: `${state.chapters[r.chapterId]?.name || r.chapterId}: ${r.eventName}`,
-            person: r.decidedBy || deciderName(), flag: true, notes: `Paid to ${r.paidBy} via ${r.payMethod}`,
+            person: state.profile.name || state.user.email, flag: true, notes: `Paid to ${r.paidBy}`,
             reimbursementId: r.id, createdBy: state.user.uid, createdAt: serverTimestamp()
           });
-          batch.update(ref, { status: 'paid', paidOn: today(), ledgerEntryId: entry.id });
+          batch.update(ref, { status: 'paid', approvedAmount: amount, paidOn: today(), ledgerEntryId: entry.id, decidedBy: state.profile.name || state.user.email, decidedAt: serverTimestamp() });
           await batch.commit();
+          refreshPendingCount();
+        });
+      } else if (act === 'deny') {
+        const note = prompt('Why is this denied? The chapter will see your reason.', '');
+        if (note === null) return;
+        run(async () => { await updateDoc(ref, { status: 'denied', adminNote: note.trim(), decidedBy: state.profile.name || state.user.email, decidedAt: serverTimestamp() }); refreshPendingCount(); });
+      } else if (act === 'undo') {
+        if (!confirm(r.status === 'paid' ? 'Move this back to waiting? Its National Ledger entry is removed.' : 'Move this back to waiting?')) return;
+        run(async () => {
+          const batch = writeBatch(db);
+          if (r.ledgerEntryId) batch.delete(doc(db, 'ledger', r.ledgerEntryId));
+          batch.update(ref, { status: 'pending', approvedAmount: null, adminNote: '', paidOn: null, ledgerEntryId: null });
+          await batch.commit();
+          refreshPendingCount();
         });
       } else if (act === 'withdraw') {
-        if (!confirm('Withdraw this reimbursement request? Its receipts are deleted too.')) return;
+        if (!confirm('Withdraw this request?')) return;
         run(async () => {
           const batch = writeBatch(db);
           (await loadReceipts(r)).forEach(rc => batch.delete(doc(db, 'receipts', rc.id)));
@@ -1027,12 +912,11 @@
   async function renderReimbursements(content) {
     if (isAdmin()) {
       const list = await allDocs('reimbursements');
-      const group = (s) => list.filter(r => s.includes(r.status));
+      const waiting = list.filter(r => r.status === 'pending');
       content.innerHTML = `
         <div class="content-head"><div><h1 class="section-title">Reimbursements</h1></div></div>
-        <div class="card"><div class="card-title">Needs review</div>${reimbursementList(group(['pending']), { showChapter: true, empty: 'Nothing waiting for review.' })}</div>
-        <div class="card"><div class="card-title">Approved, awaiting payment</div>${reimbursementList(group(['approved']), { showChapter: true, empty: 'Nothing waiting to be paid.' })}</div>
-        <div class="card"><div class="card-title">Paid and denied</div>${reimbursementList(group(['paid', 'denied']), { showChapter: true, empty: 'No completed requests yet.' })}</div>`;
+        <div class="card"><div class="card-title">To pay</div>${reimbursementList(waiting, { showChapter: true, empty: 'Nothing waiting. New requests from chapters show up here.' })}</div>
+        <div class="card"><div class="card-title">Done</div>${reimbursementList(list.filter(r => r.status !== 'pending'), { showChapter: true, empty: 'No paid or denied requests yet.' })}</div>`;
       bindReimbursementActions(content, list);
       return;
     }
@@ -1097,43 +981,37 @@
     entries.sort((a, b) => (b.date || '').localeCompare(a.date || '') || ts(b.createdAt) - ts(a.createdAt));
     const total = (s) => sumAmounts(entries.filter(e => e.section === s));
     const balance = total('fundraising') + total('income') - total('banquet') - total('national');
-    const committed = sumAmounts(reimbs.filter(r => r.status === 'approved'), 'approvedAmount');
-    const pendingReview = reimbs.filter(r => r.status === 'pending');
+    const waiting = reimbs.filter(r => r.status === 'pending');
 
     content.innerHTML = `
       <div class="content-head"><div><h1 class="section-title">National Ledger</h1></div>
         <div class="toolbar">
-          <button class="btn btn-light btn-sm" id="ledger-export" ${entries.length ? '' : 'disabled'}>Download CSV</button>
-          <label class="btn btn-light btn-sm" for="ledger-import" style="cursor:pointer">Import CSV</label>
-          <input type="file" id="ledger-import" accept=".csv,text/csv" class="sr-only" style="position:absolute;width:1px;height:1px;opacity:0" />
+          ${entries.length ? '<button class="btn btn-light btn-sm" id="ledger-export">Download for Google Sheets</button>' : `
+            <label class="btn btn-light btn-sm" for="ledger-import" style="cursor:pointer">Import from CSV</label>
+            <input type="file" id="ledger-import" accept=".csv,text/csv" style="position:absolute;width:1px;height:1px;opacity:0" />`}
         </div>
       </div>
       <div class="stats">
         <div class="stat"><div class="stat-num">${money(total('fundraising'))}</div><div class="stat-label">Raised from fundraising</div></div>
         <div class="stat"><div class="stat-num">${money(total('income'))}</div><div class="stat-label">Other income</div></div>
-        <div class="stat"><div class="stat-num">${money(total('banquet') + total('national'))}</div><div class="stat-label">Expenses (banquet ${money(total('banquet'))}, national ${money(total('national'))})</div></div>
+        <div class="stat"><div class="stat-num">${money(total('banquet') + total('national'))}</div><div class="stat-label">Spent</div></div>
         <div class="stat"><div class="stat-num" style="color:${balance < 0 ? 'var(--bad)' : 'var(--ink)'}">${money(balance)}</div><div class="stat-label">Remaining balance</div></div>
       </div>
-      ${committed || pendingReview.length ? `<div class="msg" style="margin-bottom:1.25rem">${committed ? `${money(committed)} is approved for reimbursement but not paid yet, leaving <strong>${money(balance - committed)}</strong> available. ` : ''}${pendingReview.length ? `${pendingReview.length} reimbursement request${pendingReview.length > 1 ? 's are' : ' is'} waiting for review (${money(sumAmounts(pendingReview))}). <button class="link-btn" id="go-reimb">Review</button>` : ''}</div>` : ''}
+      ${waiting.length ? `<div class="msg" style="margin-bottom:1.25rem">${waiting.length} reimbursement${waiting.length > 1 ? 's' : ''} waiting to be paid (${money(sumAmounts(waiting))}). <button class="link-btn" id="go-reimb">Review</button></div>` : ''}
 
       <div class="card"><div class="card-title">Add an entry</div>
         <form id="ledger-form" class="stack">
           <div class="form-row">
-            <div class="form-group"><label class="form-label" for="lg-section">Section</label><select id="lg-section" name="section" class="form-select">${Object.entries(LEDGER_SECTIONS).map(([k, s]) => `<option value="${k}" ${k === 'national' ? 'selected' : ''}>${s.label}</option>`).join('')}</select></div>
+            <div class="form-group"><label class="form-label" for="lg-section">Type</label><select id="lg-section" name="section" class="form-select">${Object.entries(LEDGER_SECTIONS).map(([k, s]) => `<option value="${k}" ${k === 'national' ? 'selected' : ''}>${s.label}</option>`).join('')}</select></div>
+            <div class="form-group"><label class="form-label" for="lg-amount">Amount (USD)</label><input id="lg-amount" name="amount" type="number" min="0.01" step="0.01" class="form-input" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label" for="lg-desc">Description</label><input id="lg-desc" name="description" class="form-input" required placeholder="e.g. Venue deposit for the spring banquet" /></div>
             <div class="form-group"><label class="form-label" for="lg-date">Date</label><input id="lg-date" name="date" type="date" class="form-input" value="${today()}" /></div>
           </div>
-          <div class="form-row">
-            <div class="form-group"><label class="form-label" for="lg-amount">Amount (USD)</label><input id="lg-amount" name="amount" type="number" min="0.01" step="0.01" class="form-input" required /></div>
-            <div class="form-group"><label class="form-label" for="lg-category">Category</label><input id="lg-category" name="category" class="form-input" placeholder="e.g. Grant, Venue, Food" list="lg-categories" /></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label class="form-label" for="lg-desc">Description</label><input id="lg-desc" name="description" class="form-input" required /></div>
-            <div class="form-group"><label class="form-label" for="lg-person" id="lg-person-label">Approved by</label><input id="lg-person" name="person" class="form-input" /></div>
-          </div>
-          <div class="form-group"><label class="form-label" for="lg-notes">Notes (optional)</label><input id="lg-notes" name="notes" class="form-input" /></div>
-          <datalist id="lg-categories">${[...new Set(entries.map(e => e.category).filter(Boolean))].map(c => `<option value="${esc(c)}">`).join('')}</datalist>
           <button class="btn">Add entry</button>
         </form>
+        <p class="hint" style="margin-top:0.75rem">Paid reimbursements are added here automatically.</p>
       </div>
 
       <div class="card">
@@ -1141,40 +1019,44 @@
           const rows = entries.filter(e => e.section === key);
           return `<div class="ledger-section"><h3><span>${s.label}</span><span>${money(total(key))}</span></h3>
             ${rows.length ? `<div class="table-wrap"><table>
-              <tr><th>Date</th><th>Category</th><th>Description</th><th>${s.person}</th><th>${s.flag}</th><th class="num">Amount</th><th></th></tr>
-              ${rows.map(e => `<tr>
-                <td>${esc(fmtDate(e.date)) || '<span class="item-meta">No date</span>'}</td><td>${esc(e.category)}</td>
-                <td>${esc(e.description)}${e.notes ? `<div class="item-meta">${esc(e.notes)}</div>` : ''}</td>
-                <td>${esc(e.person)}</td>
-                <td><button class="flag-btn ${e.flag ? 'on' : ''}" data-flag="${e.id}" aria-pressed="${!!e.flag}">${e.flag ? 'Yes' : 'No'}</button></td>
-                <td class="num">${s.sign < 0 ? '−' : ''}${money(e.amount)}</td>
-                <td><button class="btn btn-sm btn-ghost" data-delentry="${e.id}">Delete</button></td>
-              </tr>`).join('')}
-            </table></div>` : '<p class="empty">No entries.</p>'}</div>`;
+              <tr><th>Date</th><th>Description</th><th class="num">Amount</th><th></th></tr>
+              ${rows.map(e => {
+                const meta = [e.category, e.person && `${s.person} ${e.person}`, e.notes].filter(Boolean).join(' · ');
+                return `<tr>
+                  <td>${esc(fmtDate(e.date)) || '<span class="item-meta">No date</span>'}</td>
+                  <td>${esc(e.description || e.category)}${meta && e.description ? `<div class="item-meta">${esc(meta)}</div>` : ''}</td>
+                  <td class="num">${s.sign < 0 ? '−' : ''}${money(e.amount)}</td>
+                  <td><button class="btn btn-sm btn-ghost" data-delentry="${e.id}">Delete</button></td>
+                </tr>`;
+              }).join('')}
+            </table></div>` : '<p class="empty">Nothing yet.</p>'}</div>`;
         }).join('')}
       </div>`;
 
     const go = $('#go-reimb');
     if (go) go.onclick = () => openTab('reimbursements');
     const form = $('#ledger-form');
-    const syncPersonLabel = () => { $('#lg-person-label').textContent = LEDGER_SECTIONS[form.section.value].person; };
-    form.section.onchange = syncPersonLabel; syncPersonLabel();
     form.onsubmit = (e) => { e.preventDefault(); const v = formValues(form);
       run(() => addDoc(collection(db, 'ledger'), {
-        section: v.section, date: v.date, amount: Math.round(Number(v.amount) * 100) / 100, category: v.category.trim(), description: v.description.trim(),
-        person: v.person.trim(), flag: false, notes: v.notes.trim(), createdBy: state.user.uid, createdAt: serverTimestamp()
+        section: v.section, date: v.date, amount: Math.round(Number(v.amount) * 100) / 100, category: '', description: v.description.trim(),
+        person: state.profile.name || state.user.email, flag: false, notes: '', createdBy: state.user.uid, createdAt: serverTimestamp()
       })); };
-    content.querySelectorAll('[data-flag]').forEach(b => b.onclick = () => run(() => updateDoc(doc(db, 'ledger', b.dataset.flag), { flag: b.getAttribute('aria-pressed') !== 'true' })));
-    content.querySelectorAll('[data-delentry]').forEach(b => b.onclick = () => confirm('Delete this ledger entry?') && run(() => deleteDoc(doc(db, 'ledger', b.dataset.delentry))));
+    content.querySelectorAll('[data-delentry]').forEach(b => b.onclick = () => {
+      const e = entries.find(x => x.id === b.dataset.delentry);
+      const linked = e?.reimbursementId ? '\n\nThis entry came from a paid reimbursement. To undo the payment instead, use Undo on the Reimbursements tab.' : '';
+      if (confirm(`Delete "${e?.description || 'this entry'}" (${money(e?.amount)})?${linked}`)) run(() => deleteDoc(doc(db, 'ledger', b.dataset.delentry)));
+    });
 
-    $('#ledger-export').onclick = () => {
+    const exportBtn = $('#ledger-export');
+    if (exportBtn) exportBtn.onclick = () => {
       const lines = [CSV_COLUMNS.join(',')].concat([...entries].reverse().map(e => CSV_COLUMNS.map(c => csvEscape(c === 'flag' ? (e.flag ? 'yes' : 'no') : e[c])).join(',')));
       const a = document.createElement('a');
       a.href = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/csv' }));
       a.download = `ampl-national-ledger-${today()}.csv`;
       a.click();
     };
-    $('#ledger-import').onchange = async (e) => {
+    const importInput = $('#ledger-import');
+    if (importInput) importInput.onchange = async (e) => {
       const file = e.target.files[0];
       e.target.value = '';
       if (!file) return;
@@ -1183,7 +1065,7 @@
       catch (err) { return alert(err.message); }
       if (!rows.length) return alert('That CSV has no entries.');
       const sums = Object.keys(LEDGER_SECTIONS).map(k => [k, sumAmounts(rows.filter(r => r.section === k))]).filter(([, v]) => v);
-      if (!confirm(`Import ${rows.length} entries?\n\n${sums.map(([k, v]) => `${LEDGER_SECTIONS[k].label}: ${money(v)}`).join('\n')}${entries.length ? '\n\nThe ledger already has entries; these are added alongside them.' : ''}`)) return;
+      if (!confirm(`Import ${rows.length} entries?\n\n${sums.map(([k, v]) => `${LEDGER_SECTIONS[k].label}: ${money(v)}`).join('\n')}`)) return;
       run(async () => {
         for (let i = 0; i < rows.length; i += 400) {
           const batch = writeBatch(db);
@@ -1221,14 +1103,17 @@
     content.innerHTML = `
       <div class="content-head"><div><h1 class="section-title">Approvals</h1></div></div>
       <div class="card"><div class="card-title">Pending budget requests</div>${requestRows(requests, { showChapter: true })}</div>
-      <div class="card"><div class="card-title">Pending reimbursements</div>${reimbursementList(reimbs, { showChapter: true, empty: 'No reimbursements waiting.' })}</div>
+      <div class="card"><div class="card-title">Reimbursements to pay</div>
+        ${reimbs.length ? `<p class="muted">${reimbs.length} request${reimbs.length > 1 ? 's are' : ' is'} waiting (${money(sumAmounts(reimbs))}). <button class="link-btn" id="go-reimb">Review in Reimbursements</button></p>` : '<p class="empty">Nothing waiting.</p>'}
+      </div>
       <div class="card"><div class="card-title">Pending account requests</div>
         ${userSnap.size ? `<p class="muted">${userSnap.size} account${userSnap.size > 1 ? 's are' : ' is'} waiting. <button class="link-btn" id="go-accounts">Review in Accounts</button></p>` : '<p class="empty">No pending accounts.</p>'}
       </div>`;
     bindRequestActions(content);
-    bindReimbursementActions(content, reimbs);
     const go = $('#go-accounts');
     if (go) go.onclick = () => openTab('accounts');
+    const goReimb = $('#go-reimb');
+    if (goReimb) goReimb.onclick = () => openTab('reimbursements');
   }
 
   // ---------- Admin: accounts ----------
